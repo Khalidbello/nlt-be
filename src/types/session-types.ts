@@ -5,6 +5,7 @@ interface CustomSessionData extends SessionData {
     user?: {
         email: string;
         type: 'normal' | 'admin' | 'super';
+        id: number
     }; // Define the type of the user object
 }
 

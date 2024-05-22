@@ -3,26 +3,20 @@ import { CustomSessionData } from "../types/session-types";
 import {
     queryRecentcourse,
     queryCourses,
-    getChapters,
-    querychapterLessonNumber,
     queryEnrolled,
-    queryCourseLessonNumber,
-    queryCourseChapterNumber,
     queryCourseEnrolledStudent,
+    queryEnrolledCourses,
     recentType,
-    chaptersType,
     enrolledType,
     queryCourse,
     courseType
 } from "../services/user-queries";
+import calcProgress, { calcProgressType } from "../modules/course-progress-calc";
 
 const continueLast = async (req: Request, res: Response) => {
     try {
         const email = (req.session as CustomSessionData).user?.email;
-        const lessonNumbers: { [key: number]: number } = {};
-        let totalLessonNumber: number = 0;
-        let completedLessonNumber: number = 0;
-        let percentageCompletion: number = 0;
+        const userId = (req.session as CustomSessionData).user?.id;
         let enrolledData: enrolledType; // variablr to hold course enrolled data
         let courseData: courseType; // variable to hold course data
         const recent: recentType = await queryRecentcourse(email);  // get recent course_id and dates from user table
@@ -32,45 +26,19 @@ const continueLast = async (req: Request, res: Response) => {
         enrolledData = await queryEnrolled(recent.user_id, recent.recent_course_id);
         courseData = await queryCourse(recent.recent_course_id);
 
-        // get all chapters ordered by chapter number
-        const chapters: chaptersType[] = await getChapters(recent.recent_course_id); // ordered in accordanc with chapter number
-        console.log(chapters, 'chapters.......')
+        // @ts-ignore
+        const details: calcProgressType = await calcProgress(userId, recent.recent_course_id)
 
-        for (let index = 0; index < chapters.length; index++) {
-            console.log('chapter detals', chapters[index]);
-            const lessonNumber: number = await querychapterLessonNumber(chapters[index].chapter_id);
-            lessonNumbers[chapters[index].chapter_number] = lessonNumber;
-            totalLessonNumber += lessonNumber;
-        };
-        console.log('lesson numbers..............', lessonNumbers);
-
-        // get where user stopped in course from error
-        console.log(enrolledData, 'enrolled data.......');
-
-        // get lesson completed
-        for (let i = 1; i < enrolledData.current_chapter_number + 1; i++) {
-            console.log('in last loop', i);
-            if (i === enrolledData.current_chapter_number) {
-                console.log(lessonNumbers[i], enrolledData.current_lesson_number, 'ahv d/.............');
-                completedLessonNumber += enrolledData.current_lesson_number - 1;
-            } else {
-                completedLessonNumber += lessonNumbers[i];
-            };
-        };
-
-        // calculate percentage
-        percentageCompletion = (completedLessonNumber / totalLessonNumber) * 100;
-
-        console.log(completedLessonNumber, totalLessonNumber, percentageCompletion, 'complted, total, percentage');
+        console.log('detals', details);
 
         res.json({
             courseName: courseData.course_name,
             title: courseData.course_title,
             courseId: recent.recent_course_id,
-            chapter: enrolledData.current_lesson_number,
-            lesson: enrolledData.current_lesson_number,
             lastVisited: recent.recent_course_date,
-            progress: percentageCompletion,
+            chapter: details.currentChapter,
+            lesson: details.currentLesson,
+            progress: details.percentageCompletion,
         });
     } catch (err) {
         console.log('error in get most recent courses courses', err)
@@ -82,9 +50,15 @@ interface coursesType extends courseType {
     lessonNumber: number;
     chapterNumber: number;
     enrolledStudents: number;
+    isEnrolled: boolean;
+    lastVisited: string;
+    progress: number;
+    image: string;
 }
+
 const getCourses = async (req: Request, res: Response) => {
     try {
+        const userId = (req.session as CustomSessionData).user?.id;
         const { pagin, limit } = req.params;
         //@ts-ignore
         const courses: coursesType[] = await queryCourses(parseInt(pagin), parseInt(limit));
@@ -93,10 +67,16 @@ const getCourses = async (req: Request, res: Response) => {
         // get courses number of nrolled students number of chapters and number of lessons
         for (let i = 0; i < length; i++) {
             const courseId: number = courses[i].course_id;
+            // @ts-ignore
+            const details: calcProgressType = await calcProgress(userId, courses[i].course_id);
 
-            courses[i].lessonNumber = await queryCourseLessonNumber(courseId);
-            courses[i].chapterNumber = await queryCourseChapterNumber(courseId);
-            courses[i].enrolledStudents = await queryCourseEnrolledStudent(courseId)
+            courses[i].chapterNumber = details.numOfChapter;
+            courses[i].lessonNumber = details.numOfLessons;
+            courses[i].isEnrolled = details.enrolled;
+            courses[i].lastVisited = details.lastVisited;
+            courses[i].progress = details.percentageCompletion;
+            courses[i].image = '/images/e-learning-1.jpg';
+            courses[i].enrolledStudents = await queryCourseEnrolledStudent(courseId);
         };
 
         res.json({
@@ -109,16 +89,59 @@ const getCourses = async (req: Request, res: Response) => {
     }
 };
 
-const getEnrolledCourses = (req: Request, res: Response) => {
+const getEnrolledCourses = async (req: Request, res: Response) => {
+    try {
+        const { pagin, limit } = req.params;
+        const userId = (req.session as CustomSessionData).user?.id;
+        let courses: coursesType[] = []
+        // @ts-ignore
+        const enrolledCourses: enrolledType[] = await queryEnrolledCourses(userId, parseInt(pagin), parseInt(limit));
+
+        for (let i = 0; i < enrolledCourses.length; i++) {
+            console.log(i, 'iiiii', enrolledCourses[i]);
+            const course: courseType = await queryCourse(enrolledCourses[i].course_id);
+            // @ts-ignore
+            courses.push(course);
+        };
+
+        for (let i = 0; i < courses.length;) {
+            const courseId: number = courses[i].course_id;
+            // @ts-ignore
+            const details: calcProgressType = await calcProgress(userId, courses[i].course_id);
+
+            courses[i].chapterNumber = details.numOfChapter;
+            courses[i].lessonNumber = details.numOfLessons;
+            courses[i].isEnrolled = details.enrolled;
+            courses[i].lastVisited = details.lastVisited;
+            courses[i].progress = details.percentageCompletion;
+            courses[i].image = '/images/e-learning-1.jpg';
+            courses[i].enrolledStudents = await queryCourseEnrolledStudent(courseId);
+            i++;
+        };
+
+        res.json({
+            data: courses,
+            message: 'courses fethced succesfully'
+        })
+    } catch (err) {
+        console.log('error in get enrolled courses courses', err)
+        res.status(500).json({ message: err });
+    }
+};
+
+const getCourseView = (req: Request, res: Response) => {
     try {
 
     } catch (err) {
-
+        console.log('error in get courses', err)
+        res.status(500).json({ message: err });
     }
 };
+
 
 export {
     continueLast,
     getCourses,
-    getEnrolledCourses
+    getEnrolledCourses,
+    getCourseView,
 };

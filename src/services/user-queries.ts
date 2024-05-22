@@ -4,6 +4,7 @@ import {
     queryCourseLessonNumber,
     queryCourseChapterNumber,
     queryCourseEnrolledStudent,
+    queryEnrolledCourses
 } from './user-queries-2'; //  all this import are re-exported from this file
 
 
@@ -11,7 +12,7 @@ import {
 const checkUserExist = async (email: string | undefined): Promise<[checkUserExistType]> => {
     return new Promise<[checkUserExistType]>((resolve, reject) => {
         // Use parameterized query to prevent SQL injection
-        const query = 'SELECT password, first_name, last_name FROM users WHERE email = ?';
+        const query = 'SELECT user_id, password, first_name, last_name FROM users WHERE email = ?';
 
         pool.query(query, [email], (err, result) => {
             if (err) {
@@ -26,8 +27,8 @@ const checkUserExist = async (email: string | undefined): Promise<[checkUserExis
 
 
 // function to create new user
-const createNewUser = async (firstName: string, lastName: string, email: string, password: string, phoneNumber: string, gender: string, joined: string): Promise<boolean> => {
-    return new Promise<boolean>((resolve, reject) => {
+const createNewUser = async (firstName: string, lastName: string, email: string, password: string, phoneNumber: string, gender: string, joined: string): Promise<[]> => {
+    return new Promise<[]>((resolve, reject) => {
         const query = 'INSERT INTO users (first_name, last_name, email, password, phone_number, gender, joined) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
         pool.query(query, [firstName, lastName, email, password, phoneNumber, gender, joined], (err, result) => {
@@ -35,8 +36,8 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
                 console.log('an eror occured in create User', err);
                 reject(err);
             } else {
-                console.log(result, 'result.........')
-                resolve(result.affectedRows === 1);
+                console.log(result, 'new user created result.........')
+                resolve(result);
             }
         })
     });
@@ -111,13 +112,13 @@ const querychapterLessonNumber = (chapterId: number): Promise<number> => {
 // query enrolled to get wherre user stopped in their study
 const queryEnrolled = (userId: number, courseId: number): Promise<enrolledType> => {
     return new Promise<enrolledType>((resolve, reject) => {
-        const query = 'SELECT payment_type, current_lesson_id, current_lesson_number, current_chapter_number, quiz_performance, enrolled_at FROM enrolled WHERE user_id = ? AND course_id = ?';
+        const query = 'SELECT payment_type, current_lesson_id, current_lesson_number, current_chapter_number, quiz_performance, enrolled_at, last_visited FROM enrolled WHERE user_id = ? AND course_id = ?';
 
         pool.query(query, [userId, courseId], (err, result) => {
             if (err) {
                 reject(err)
             } else {
-                console.log('in lessons count query', result);
+                console.log('in enrolled count query', result);
                 resolve(result[0])
             }
         })
@@ -128,7 +129,7 @@ const queryEnrolled = (userId: number, courseId: number): Promise<enrolledType> 
 // query to get recomended courses for user
 const queryCourses = (pagin: number, limit: number): Promise<courseType[]> => {
     return new Promise<courseType[]>((resolve, reject) => {
-        const query = 'SELECT course_id, course_name, course_title, course_description, created_at FROM courses ORDER BY created_at DESC LIMIT ? OFFSET ?';
+        const query = 'SELECT course_id, course_name, course_title, course_description, created_at FROM courses ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
 
         pool.query(query, [limit, pagin], (err, result) => {
             if (err) {
@@ -164,12 +165,14 @@ interface chaptersType {
 }
 
 interface enrolledType {
+    course_id: number;
     payment_type: string;
     current_lesson_id: number;
     current_chapter_number: number;
     current_lesson_number: number;
     quiz_performance: number;
     enrolled_at: string;
+    last_visited: string;
 }
 
 export {
@@ -184,6 +187,7 @@ export {
     queryCourseLessonNumber,
     queryCourseChapterNumber,
     queryCourseEnrolledStudent,
+    queryEnrolledCourses,
 }
 
 export type {

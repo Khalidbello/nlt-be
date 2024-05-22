@@ -21,9 +21,9 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 
 router.get('/continue-last', (req: Request, res: Response) => continueLast(req, res))
 
-router.get('/courses/:pagin/:limit', (req: Request, res: Response)=> getCourses(req, res))
+router.get('/courses/:pagin/:limit', (req: Request, res: Response) => getCourses(req, res))
 
-router.get('/enrolled-courses', (req: Request, res: Response)=> getEnrolledCourses(req, res));
+router.get('/enrolled-courses/:pagin/:limit', (req: Request, res: Response) => getEnrolledCourses(req, res));
 
 // router.post('/change-email', (req: Request, res: Response)=> changeEmail(req, res));
 

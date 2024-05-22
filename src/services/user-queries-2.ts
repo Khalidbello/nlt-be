@@ -1,4 +1,5 @@
-import pool from "../modules/connnect-db"
+import pool from "../modules/connnect-db";
+import { enrolledType } from "./user-queries";
 
 //get course number of lesons
 const queryCourseLessonNumber = (courseId: number): Promise<number> => {
@@ -47,8 +48,24 @@ const queryCourseEnrolledStudent = (courseId: number): Promise<number> => {
 }
 
 
+// query to get courses user have enrolled for 
+const queryEnrolledCourses = (userId: number, pagin: number, limit: number): Promise<enrolledType[]> => {
+    return new Promise<enrolledType[]>((resolve, reject) => {
+        const query = 'SELECT course_id, payment_type, current_lesson_id, current_lesson_number, current_chapter_number, quiz_performance, enrolled_at, last_visited FROM enrolled WHERE user_id = ?  ORDER BY last_visited DESC LIMIT ? OFFSET ?';
+        pool.query(query, [userId, limit, pagin], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                console.log('user enrolled courses query', result);
+                resolve(result);
+            }
+        })
+    })
+}
+
 export {
     queryCourseLessonNumber,
     queryCourseChapterNumber,
     queryCourseEnrolledStudent,
+    queryEnrolledCourses
 }

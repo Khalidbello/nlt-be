@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { checkUserExist, createNewUser } from '../services/user-queries';
 import { CustomSessionData } from './../types/session-types';
+import { checkUserExistType } from '../types/general';
 
 
 // function to handle user login
@@ -8,12 +9,13 @@ const logInHandler = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     console.log(req.body, 'request body in oginnnnnnnnn');
     try {
-        const response: [{ password: string }] = await checkUserExist(email);
-
+        const response: [checkUserExistType] = await checkUserExist(email);
+        console.log('response for log  in', response);
         if (response.length > 0 && response[0].password === password) {
             (req.session as CustomSessionData).user = {
                 email: email,
                 type: 'normal',
+                id: response[0].user_id
             }
             return res.status(200).json({ message: 'logged in succesfully' });
         };
@@ -37,13 +39,15 @@ const createAccountHandler = async (req: Request, res: Response) => {
             return res.status(409).json({ message: 'user exist' });
         };
 
-        const created: boolean = await createNewUser(firstName, lastName, email, password, phoneNumber, gender, date.toISOString());
+        const created: [] = await createNewUser(firstName, lastName, email, password, phoneNumber, gender, date.toISOString());
         console.log(created, 'createdddddd');
 
-        if (created === true) {
+        if (created.length > 0) {
             (req.session as CustomSessionData).user = {
                 email: email,
                 type: 'normal',
+                // @ts-ignore
+                userId: created[0]?.userId
             };
             return res.json({ message: 'account created successfully' });
         };

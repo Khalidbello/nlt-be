@@ -13,19 +13,20 @@ interface calcProgressType {
 const calcProgress = async (userId: number, courseId: number): Promise<calcProgressType> => {
     return new Promise<calcProgressType>(async (resolve, reject) => {
         try {
+            console.log('in calc progress userID, courseId', userId, courseId)
+
             const lessonNumbers: { [key: number]: number } = {};
             let totalLessonNumber: number = 0;
             let completedLessonNumber: number = 0;
             let percentageCompletion: number;
             let enrolledData: enrolledType; // variablr to hold course enrolled data
             let enrolled: boolean = false;
-            console.log(userId, courseId, 'in cacl prress');
+
             enrolledData = await queryEnrolled(userId, courseId);
 
-            console.log('enrolled response', enrolledData)
+            console.log('enrolled response in calc progress', enrolledData)
             // get all chapters ordered by chapter number
             const chapters: chaptersType[] = await getChapters(courseId); // ordered in accordanc with chapter number
-            console.log(chapters, 'chapters.......')
 
             for (let index = 0; index < chapters.length; index++) {
                 console.log('chapter detals', chapters[index]);
@@ -33,7 +34,6 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
                 lessonNumbers[chapters[index].chapter_number] = lessonNumber;
                 totalLessonNumber += lessonNumber;
             };
-            console.log('lesson numbers..............', lessonNumbers);
 
             // get lesson completed
             if (enrolledData?.current_lesson_number) {

@@ -32,13 +32,13 @@ const continueLast = async (req: Request, res: Response) => {
         console.log('detals', details);
 
         res.json({
-            courseName: courseData.course_name,
-            title: courseData.course_title,
-            courseId: recent.recent_course_id,
-            lastVisited: recent.recent_course_date,
-            chapter: details.currentChapter,
-            lesson: details.currentLesson,
-            progress: details.percentageCompletion,
+            // courseName: courseData.course_name,
+            // title: courseData.course_title,
+            // courseId: recent.recent_course_id,
+            // lastVisited: recent.recent_course_date,
+            // chapter: details.currentChapter,
+            // lesson: details.currentLesson,
+            // progress: details.percentageCompletion,
         });
     } catch (err) {
         console.log('error in get most recent courses courses', err)
@@ -72,7 +72,7 @@ const getCourses = async (req: Request, res: Response) => {
 
             courses[i].chapterNumber = details.numOfChapter;
             courses[i].lessonNumber = details.numOfLessons;
-            courses[i].isEnrolled = details.enrolled;
+            courses[i].isEnrolled = false // details.enrolled;
             courses[i].lastVisited = details.lastVisited;
             courses[i].progress = details.percentageCompletion;
             courses[i].image = '/images/e-learning-1.jpg';
@@ -98,7 +98,6 @@ const getEnrolledCourses = async (req: Request, res: Response) => {
         const enrolledCourses: enrolledType[] = await queryEnrolledCourses(userId, parseInt(pagin), parseInt(limit));
 
         for (let i = 0; i < enrolledCourses.length; i++) {
-            console.log(i, 'iiiii', enrolledCourses[i]);
             const course: courseType = await queryCourse(enrolledCourses[i].course_id);
             // @ts-ignore
             courses.push(course);

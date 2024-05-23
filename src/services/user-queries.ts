@@ -46,13 +46,13 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
 // query to fetch a specifc course data
 const queryCourse = async (courseId: number): Promise<courseType> => {
     return new Promise<courseType>((resolve, reject) => {
-        const query = 'SELECT course_name, course_title, course_description, created_at FROM courses WHERE course_id = ?';
+        const query = 'SELECT course_name, course_id, course_title, course_description, created_at FROM courses WHERE course_id = ?';
 
         pool.query(query, [courseId], (err, result) => {
             if (err) {
                 reject(err);
             } else {
-                console.log('in recent query', result);
+                console.log('in query course', result);
                 resolve(result[0]);
             }
         })

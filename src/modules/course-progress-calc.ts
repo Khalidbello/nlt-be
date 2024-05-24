@@ -3,11 +3,14 @@ import { chaptersType, enrolledType, getChapters, queryEnrolled, querychapterLes
 interface calcProgressType {
     numOfChapter: number;
     numOfLessons: number;
+    quiz: number;
     percentageCompletion: number;
     enrolled: boolean;
     currentLesson: number;
     currentChapter: number;
     lastVisited: string;
+    chapters: chaptersType[];
+    lessonNumbers: { [key: number]: number };
 }
 
 const calcProgress = async (userId: number, courseId: number): Promise<calcProgressType> => {
@@ -15,7 +18,7 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
         try {
             console.log('in calc progress userID, courseId', userId, courseId)
 
-            const lessonNumbers: { [key: number]: number } = {};
+            const lessonNumbers: { [key: number]: number } = {}; // key is chapter number valueis number of lessons
             let totalLessonNumber: number = 0;
             let completedLessonNumber: number = 0;
             let percentageCompletion: number;
@@ -42,8 +45,10 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
                     console.log('in last loop', i);
                     if (i === enrolledData.current_chapter_number) {
                         console.log(lessonNumbers[i], enrolledData.current_lesson_number, 'ahv d/.............');
+                        chapters[i - 1].completed = 'ongoing';
                         completedLessonNumber += enrolledData.current_lesson_number - 1;
                     } else {
+                        chapters[i - 1].completed = 'fnished';
                         completedLessonNumber += lessonNumbers[i];
                     };
                 };
@@ -55,11 +60,14 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
             resolve({
                 numOfChapter: chapters.length,
                 numOfLessons: totalLessonNumber,
+                quiz: enrolledData.quiz_performance,
                 percentageCompletion,
                 enrolled,
                 currentLesson: enrolledData?.current_lesson_number,
                 currentChapter: enrolledData?.current_chapter_number,
-                lastVisited: enrolledData?.last_visited
+                lastVisited: enrolledData?.last_visited,
+                chapters: chapters,
+                lessonNumbers: lessonNumbers,
             })
         }
         catch (error) {

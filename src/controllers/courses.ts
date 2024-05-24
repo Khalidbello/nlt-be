@@ -128,11 +128,29 @@ const getEnrolledCourses = async (req: Request, res: Response) => {
     }
 };
 
-const getCourseView = (req: Request, res: Response) => {
-    try {
 
+const getCourseView = async (req: Request, res: Response) => {
+    try {
+        const userId = (req.session as CustomSessionData).user?.id;
+        const { courseId } = req.params;
+        const courseData: courseType = await queryCourse(parseInt(courseId));
+        // @ts-ignore
+        const details: calcProgressType = await calcProgress(parseInt(userId), parseInt(courseId))
+
+
+        res.json({
+            courseName: courseData.course_name,
+            about: courseData.course_description,
+            enrolled: details.enrolled,
+            quizPerfomace: details.quiz,
+            progress: details.percentageCompletion,
+            currentChapter: details.currentChapter,
+            currentLesson: details.currentLesson,
+            chapters: details.chapters,
+            lessonNumbers: details.lessonNumbers,
+        })
     } catch (err) {
-        console.log('error in get courses', err)
+        console.log('error get course view...........', err)
         res.status(500).json({ message: err });
     }
 };

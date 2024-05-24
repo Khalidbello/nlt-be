@@ -162,6 +162,7 @@ interface chaptersType {
     chapter_id: number;
     chapter_title: string;
     chapter_number: number;
+     completed: 'fnished' | 'ongoing' | 'pending'; // this value woud be assigned in calcprogress
 }
 
 interface enrolledType {

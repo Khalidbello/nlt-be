@@ -6,12 +6,14 @@ import {
     queryEnrolled,
     queryCourseEnrolledStudent,
     queryEnrolledCourses,
+    queryLessons,
     recentType,
     enrolledType,
     queryCourse,
     courseType
 } from "../services/user-queries";
 import calcProgress, { calcProgressType } from "../modules/course-progress-calc";
+import { getLecture } from "./course2";
 
 const continueLast = async (req: Request, res: Response) => {
     try {
@@ -32,13 +34,16 @@ const continueLast = async (req: Request, res: Response) => {
         console.log('detals', details);
 
         res.json({
-            // courseName: courseData.course_name,
-            // title: courseData.course_title,
-            // courseId: recent.recent_course_id,
-            // lastVisited: recent.recent_course_date,
-            // chapter: details.currentChapter,
-            // lesson: details.currentLesson,
-            // progress: details.percentageCompletion,
+            data: {
+                courseName: courseData.course_name,
+                title: courseData.course_title,
+                courseId: recent.recent_course_id,
+                lastVisited: recent.recent_course_date,
+                chapter: details.currentChapter,
+                lesson: details.currentLesson,
+                progress: details.percentageCompletion,
+            },
+            message: 'fethed succesfully'
         });
     } catch (err) {
         console.log('error in get most recent courses courses', err)
@@ -72,7 +77,7 @@ const getCourses = async (req: Request, res: Response) => {
 
             courses[i].chapterNumber = details.numOfChapter;
             courses[i].lessonNumber = details.numOfLessons;
-            courses[i].isEnrolled = false // details.enrolled;
+            courses[i].isEnrolled = details.enrolled;
             courses[i].lastVisited = details.lastVisited;
             courses[i].progress = details.percentageCompletion;
             courses[i].image = '/images/e-learning-1.jpg';
@@ -146,6 +151,7 @@ const getCourseView = async (req: Request, res: Response) => {
             progress: details.percentageCompletion,
             currentChapter: details.currentChapter,
             currentLesson: details.currentLesson,
+            currentChapterId: details.currentChapterId,
             chapters: details.chapters,
             lessonNumbers: details.lessonNumbers,
         })
@@ -156,9 +162,28 @@ const getCourseView = async (req: Request, res: Response) => {
 };
 
 
+const getLesson = async (req: Request, res: Response) => {
+    try {
+        const { courseId, chapterId } = req.params;
+
+        const lessons = await queryLessons(parseInt(courseId), parseInt(chapterId));
+
+        res.json({
+            message: 'succesfull',
+            data: lessons
+        })
+    } catch (err) {
+        console.log('error in get lessons...........', err)
+        res.status(500).json({ message: err });
+    }
+}
+
+
 export {
     continueLast,
     getCourses,
     getEnrolledCourses,
     getCourseView,
+    getLesson,
+    getLecture
 };

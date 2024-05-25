@@ -4,7 +4,11 @@ import {
     queryCourseLessonNumber,
     queryCourseChapterNumber,
     queryCourseEnrolledStudent,
-    queryEnrolledCourses
+    queryEnrolledCourses,
+    queryLessons,
+    queryLecture,
+    updateCurrentLessonAndChapter,
+    lectureType,
 } from './user-queries-2'; //  all this import are re-exported from this file
 
 
@@ -36,7 +40,6 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
                 console.log('an eror occured in create User', err);
                 reject(err);
             } else {
-                console.log(result, 'new user created result.........')
                 resolve(result);
             }
         })
@@ -52,7 +55,6 @@ const queryCourse = async (courseId: number): Promise<courseType> => {
             if (err) {
                 reject(err);
             } else {
-                console.log('in query course', result);
                 resolve(result[0]);
             }
         })
@@ -68,7 +70,6 @@ const queryRecentcourse = async (email: string | undefined): Promise<recentType>
             if (err) {
                 reject(err);
             } else {
-                console.log('in recent query', result);
                 resolve(result[0]);
             }
         })
@@ -85,7 +86,6 @@ const getChapters = (courseId: number): Promise<chaptersType[]> => {
             if (err) {
                 reject(err)
             } else {
-                console.log('in chapters query', result);
                 resolve(result)
             }
         })
@@ -101,7 +101,6 @@ const querychapterLessonNumber = (chapterId: number): Promise<number> => {
             if (err) {
                 reject(err)
             } else {
-                console.log('in lessons count query', result);
                 resolve(result[0]['COUNT(*)'])
             }
         })
@@ -112,13 +111,12 @@ const querychapterLessonNumber = (chapterId: number): Promise<number> => {
 // query enrolled to get wherre user stopped in their study
 const queryEnrolled = (userId: number, courseId: number): Promise<enrolledType> => {
     return new Promise<enrolledType>((resolve, reject) => {
-        const query = 'SELECT payment_type, current_lesson_id, current_lesson_number, current_chapter_number, quiz_performance, enrolled_at, last_visited FROM enrolled WHERE user_id = ? AND course_id = ?';
+        const query = 'SELECT payment_type, current_lesson_id, current_chapter_id, current_lesson_number, current_chapter_number, quiz_performance, enrolled_at, last_visited FROM enrolled WHERE user_id = ? AND course_id = ?';
 
         pool.query(query, [userId, courseId], (err, result) => {
             if (err) {
                 reject(err)
             } else {
-                console.log('in enrolled count query', result);
                 resolve(result[0])
             }
         })
@@ -162,13 +160,14 @@ interface chaptersType {
     chapter_id: number;
     chapter_title: string;
     chapter_number: number;
-     completed: 'fnished' | 'ongoing' | 'pending'; // this value woud be assigned in calcprogress
+    completed: 'finished' | 'ongoing' | 'pending'; // this value woud be assigned in calcprogress
 }
 
 interface enrolledType {
     course_id: number;
     payment_type: string;
     current_lesson_id: number;
+    current_chapter_id: number;
     current_chapter_number: number;
     current_lesson_number: number;
     quiz_performance: number;
@@ -189,6 +188,9 @@ export {
     queryCourseChapterNumber,
     queryCourseEnrolledStudent,
     queryEnrolledCourses,
+    queryLessons,
+    queryLecture,
+    updateCurrentLessonAndChapter
 }
 
 export type {
@@ -196,4 +198,5 @@ export type {
     recentType,
     chaptersType,
     enrolledType,
+    lectureType,
 }

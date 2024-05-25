@@ -4,6 +4,8 @@ import {
     getCourses,
     getEnrolledCourses,
     getCourseView,
+    getLesson,
+    getLecture,
 } from "../controllers/courses";
 import { CustomSessionData } from "../types/session-types";
 
@@ -32,6 +34,9 @@ router.get('/enrolled-courses/:pagin/:limit', (req: Request, res: Response) => g
 
 router.get('/course-view/:courseId', (req: Request, res: Response) => getCourseView(req, res));
 
+router.get('/lessons/:chapterId/:courseId', (req: Request, res: Response)=> getLesson(req, res));
+
+router.get('/lecture/:courseId/:chapterId/:chapterNumber/:lessonNumber', (req: Request, res:Response)=> getLecture(req, res));
 // router.post('/change-email', (req: Request, res: Response)=> changeEmail(req, res));
 
 // router.post('/change-password')

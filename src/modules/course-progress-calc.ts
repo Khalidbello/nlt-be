@@ -8,6 +8,7 @@ interface calcProgressType {
     enrolled: boolean;
     currentLesson: number;
     currentChapter: number;
+    currentChapterId: number;
     lastVisited: string;
     chapters: chaptersType[];
     lessonNumbers: { [key: number]: number };
@@ -27,13 +28,14 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
 
             enrolledData = await queryEnrolled(userId, courseId);
 
-            console.log('enrolled response in calc progress', enrolledData)
+            console.log('enrolled response in calc progress', enrolledData);
+
             // get all chapters ordered by chapter number
             const chapters: chaptersType[] = await getChapters(courseId); // ordered in accordanc with chapter number
 
             for (let index = 0; index < chapters.length; index++) {
-                console.log('chapter detals', chapters[index]);
                 const lessonNumber: number = await querychapterLessonNumber(chapters[index].chapter_id);
+                
                 lessonNumbers[chapters[index].chapter_number] = lessonNumber;
                 totalLessonNumber += lessonNumber;
             };
@@ -44,11 +46,10 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
                 for (let i = 1; i < enrolledData.current_chapter_number + 1; i++) {
                     console.log('in last loop', i);
                     if (i === enrolledData.current_chapter_number) {
-                        console.log(lessonNumbers[i], enrolledData.current_lesson_number, 'ahv d/.............');
                         chapters[i - 1].completed = 'ongoing';
                         completedLessonNumber += enrolledData.current_lesson_number - 1;
                     } else {
-                        chapters[i - 1].completed = 'fnished';
+                        chapters[i - 1].completed = 'finished';
                         completedLessonNumber += lessonNumbers[i];
                     };
                 };
@@ -60,11 +61,12 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
             resolve({
                 numOfChapter: chapters.length,
                 numOfLessons: totalLessonNumber,
-                quiz: enrolledData.quiz_performance,
+                quiz: enrolledData?.quiz_performance,
                 percentageCompletion,
                 enrolled,
                 currentLesson: enrolledData?.current_lesson_number,
                 currentChapter: enrolledData?.current_chapter_number,
+                currentChapterId: enrolledData?.current_chapter_id,
                 lastVisited: enrolledData?.last_visited,
                 chapters: chapters,
                 lessonNumbers: lessonNumbers,

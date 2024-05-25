@@ -63,9 +63,80 @@ const queryEnrolledCourses = (userId: number, pagin: number, limit: number): Pro
     })
 }
 
+interface queryLessonsType {
+    lesson_id: number;
+    lesson_number: number;
+    lesson_title: string;
+    chapter_number: number;
+    course_id: number;
+    chapter_id: number;
+}
+
+const queryLessons = (courseId: number, chapterId: number): Promise<queryLessonsType[]> => {
+    return new Promise<queryLessonsType[]>((resolve, reject) => {
+        const query = 'SELECT lesson_id, lesson_number, lesson_title, chapter_number, course_id,chapter_id FROM lessons WHERE  course_id = ? AND chapter_id = ?  ORDER BY lesson_number ASC';
+
+        pool.query(query, [courseId, chapterId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+
+interface lectureType {
+    open_note: string;
+    close_note: string;
+    chapter_number: number;
+    lesson_number: number;
+    lesson_title: string;
+    lesson_id: number;
+    audio: Blob;
+}
+
+const queryLecture = (courseId: number, chapterNumber: number, lessonNumber: number): Promise<lectureType> => {
+    return new Promise<lectureType>((resolve, reject) => {
+        const query = 'SELECT open_note, close_note, chapter_number, lesson_number, lesson_title, lesson_id, audio FROM lessons WHERE course_id = ? AND chapter_number = ? AND lesson_number = ?';
+
+        pool.query(query, [courseId, chapterNumber, lessonNumber], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result[0]);
+            }
+        })
+    })
+}
+
+
+// function to update users current lessons and current chapter
+const updateCurrentLessonAndChapter = (userId: number, courseId: number, newChapter: number, newLesson: number, newLessonId: number): Promise<[]> => {
+    return new Promise<[]>((resolve, reject) => {
+        const query = 'UPDATE enrolled SET current_chapter_number = ?, current_lesson_number = ?, current_lesson_id = ? WHERE user_id = ? AND course_id = ?';
+
+
+        pool.query(query, [newChapter, newLesson, newLessonId, userId, courseId ], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result);
+            }
+        })
+    })
+}
+
+
 export {
     queryCourseLessonNumber,
     queryCourseChapterNumber,
     queryCourseEnrolledStudent,
-    queryEnrolledCourses
+    queryEnrolledCourses,
+    queryLessons,
+    queryLecture,
+    updateCurrentLessonAndChapter,
 }
+
+export type { lectureType }

@@ -8,7 +8,9 @@ import {
     getLecture,
     getQuiz,
     handleQuizSubmission,
+    getCoursePrice,
 } from "../controllers/courses";
+import { getUserProfileData } from "../controllers/profie";
 import { CustomSessionData } from "../types/session-types";
 
 const router = Router();
@@ -43,6 +45,10 @@ router.get('/lecture/:courseId/:chapterId/:chapterNumber/:lessonNumber', (req: R
 router.get('/quiz/:courseId/:chapterId/:lessonId', (req: Request, res: Response) => getQuiz(req, res));
 
 router.put('/quiz-submit/:courseId/:chapterId/:lessonId', (req: Request, res: Response) => handleQuizSubmission(req, res));
+
+router.get('/profile-data', (req: Request, res: Response) => getUserProfileData(req, res));
+
+router.get('/get-price/:courseId', (req: Request, res: Response)=> getCoursePrice(req, res));
 
 // router.post('/change-email', (req: Request, res: Response)=> changeEmail(req, res));
 

@@ -89,7 +89,7 @@ const getLectureHelper = async (
         return fetchLesson(res, courseId, requestedChapterNumber, requestedLessonNumber, currentChapterNumber, currentLessonNumber, userId);
     } else {
         // user can not view content
-        res.json({
+        res.status(401).json({
             status: 'accessDenied'
         });
     }
@@ -221,8 +221,24 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
 };
 
 
+// handler toge course price
+const getCoursePrice = async (req: Request, res: Response) => {
+    try {
+        const courseId = parseInt(req.params.courseId);
+
+        const courseData = await queryCourse(courseId);
+        res.json({ price: courseData.price })
+    } catch (err) {
+        console.log('error in get submit quiz...........', err)
+        res.status(500).json({ message: err });
+    }
+};
+
+
+
 export {
     getLecture,
     getQuiz,
-    handleQuizSubmission
+    handleQuizSubmission,
+    getCoursePrice,
 }

@@ -54,7 +54,7 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
 // query to fetch a specifc course data
 const queryCourse = async (courseId: number): Promise<courseType> => {
     return new Promise<courseType>((resolve, reject) => {
-        const query = 'SELECT course_name, course_id, course_title, course_description, created_at FROM courses WHERE course_id = ?';
+        const query = 'SELECT course_name, course_id, course_title, course_description, created_at, price FROM courses WHERE course_id = ?';
 
         pool.query(query, [courseId], (err, result) => {
             if (err) {
@@ -153,6 +153,7 @@ interface courseType {
     course_description: string;
     created_at: string;
     course_id: number;
+    price: number;
 }
 
 interface recentType {

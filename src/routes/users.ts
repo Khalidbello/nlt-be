@@ -6,6 +6,8 @@ import {
     getCourseView,
     getLesson,
     getLecture,
+    getQuiz,
+    handleQuizSubmission,
 } from "../controllers/courses";
 import { CustomSessionData } from "../types/session-types";
 
@@ -34,9 +36,14 @@ router.get('/enrolled-courses/:pagin/:limit', (req: Request, res: Response) => g
 
 router.get('/course-view/:courseId', (req: Request, res: Response) => getCourseView(req, res));
 
-router.get('/lessons/:chapterId/:courseId', (req: Request, res: Response)=> getLesson(req, res));
+router.get('/lessons/:chapterId/:courseId', (req: Request, res: Response) => getLesson(req, res));
 
-router.get('/lecture/:courseId/:chapterId/:chapterNumber/:lessonNumber', (req: Request, res:Response)=> getLecture(req, res));
+router.get('/lecture/:courseId/:chapterId/:chapterNumber/:lessonNumber', (req: Request, res: Response) => getLecture(req, res));
+
+router.get('/quiz/:courseId/:chapterId/:lessonId', (req: Request, res: Response) => getQuiz(req, res));
+
+router.put('/quiz-submit/:courseId/:chapterId/:lessonId', (req: Request, res: Response) => handleQuizSubmission(req, res));
+
 // router.post('/change-email', (req: Request, res: Response)=> changeEmail(req, res));
 
 // router.post('/change-password')

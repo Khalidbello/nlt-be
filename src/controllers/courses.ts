@@ -10,10 +10,10 @@ import {
     recentType,
     enrolledType,
     queryCourse,
-    courseType
+    courseType,
 } from "../services/user-queries";
 import calcProgress, { calcProgressType } from "../modules/course-progress-calc";
-import { getLecture } from "./course2";
+import { getLecture, getQuiz, handleQuizSubmission } from "./course2";
 
 const continueLast = async (req: Request, res: Response) => {
     try {
@@ -185,5 +185,7 @@ export {
     getEnrolledCourses,
     getCourseView,
     getLesson,
-    getLecture
+    getLecture,
+    getQuiz,
+    handleQuizSubmission,
 };

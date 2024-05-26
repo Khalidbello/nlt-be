@@ -9,6 +9,11 @@ import {
     queryLecture,
     updateCurrentLessonAndChapter,
     lectureType,
+    queryQuiz,
+    queryQuizType,
+    queryByLessonId,
+    updateUserEnrolledCurrentLessonAndChapter,
+    queryLessonByChapterAndNUmber,
 } from './user-queries-2'; //  all this import are re-exported from this file
 
 
@@ -190,7 +195,11 @@ export {
     queryEnrolledCourses,
     queryLessons,
     queryLecture,
-    updateCurrentLessonAndChapter
+    updateCurrentLessonAndChapter,
+    queryQuiz,
+    queryByLessonId,
+    updateUserEnrolledCurrentLessonAndChapter,
+    queryLessonByChapterAndNUmber
 }
 
 export type {
@@ -199,4 +208,5 @@ export type {
     chaptersType,
     enrolledType,
     lectureType,
+    queryQuizType,
 }

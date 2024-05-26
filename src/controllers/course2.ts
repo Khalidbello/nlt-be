@@ -7,6 +7,14 @@ import {
     queryLecture,
     querychapterLessonNumber,
     updateCurrentLessonAndChapter,
+    queryQuiz,
+    queryQuizType,
+    courseType,
+    queryCourse,
+    queryLessons,
+    queryByLessonId,
+    queryLessonByChapterAndNUmber,
+    updateUserEnrolledCurrentLessonAndChapter,
 } from "../services/user-queries";
 
 
@@ -19,7 +27,8 @@ const getLecture = async (req: Request, res: Response) => {
         const chapterNumber: number = parseInt(req.params.chapterNumber);
         const lessonNumber: number = parseInt(req.params.lessonNumber);
         const chapterId: number = parseInt(req.params.chapterId);
-        console.log('params..............', userId, req.params)
+
+        if (!userId || !courseId || !chapterId || !chapterNumber || !lessonNumber) throw 'incomplete data sent to server';
 
         // heck if user is enrolled and has reached to view this course
         const enrolled: enrolledType = await queryEnrolled(userId, courseId);
@@ -74,35 +83,14 @@ const getLectureHelper = async (
         requestedChapterId,
         requestedLessonNumber
     )
-    if (currentChapterNumber >= requestedChapterNumber) {
-        // get thr number oflessons in the chapter been requested
-        const lengthOfLessons: number = await querychapterLessonNumber(requestedChapterId);
-
-        if (lengthOfLessons >= requestedLessonNumber) {
-            // make sure user can view the next lesson they are requesting
-            if (currentLessonNumber >= requestedLessonNumber - 1) {
-                return fetchLesson(res, courseId, requestedChapterNumber, requestedLessonNumber, currentChapterNumber, currentLessonNumber, userId);
-            } else {
-                return res.json({ status: 'accessDenied', currentLessonNumber, requestedLessonNumber, lengthOfLessons });
-            };
-        } else if ((requestedLessonNumber - currentLessonNumber) > 1) {
-            res.json({ status: 'accessDenied' });
-        } else {
-            // send user first lesson of the next chapter
-            const nextChapterNum: number = requestedChapterId + 1;
-            const chaptersLength: number = await queryCourseChapterNumber(courseId); // to store the number of cahpters in course
-            console.log('nextChapterNum', nextChapterNum, 'chaptersLength', chaptersLength, 'requestedChapterNumber', requestedChapterNumber)
-
-            if (chaptersLength >= nextChapterNum) {
-                return fetchLesson(res, courseId, nextChapterNum, 1, currentChapterNumber, currentLessonNumber, userId); // send back to user first lesson of next chapter
-            } else if (nextChapterNum > chaptersLength) {
-                return res.json({ status: 'finished' });
-            }
-        };
+    if (currentChapterNumber > requestedChapterNumber) {
+        return fetchLesson(res, courseId, requestedChapterNumber, requestedLessonNumber, currentChapterNumber, currentLessonNumber, userId);
+    } else if (currentChapterNumber === requestedChapterNumber && currentLessonNumber >= requestedLessonNumber) {
+        return fetchLesson(res, courseId, requestedChapterNumber, requestedLessonNumber, currentChapterNumber, currentLessonNumber, userId);
     } else {
         // user can not view content
         res.json({
-            status: 'notAvailable'
+            status: 'accessDenied'
         });
     }
 };
@@ -110,13 +98,10 @@ const getLectureHelper = async (
 
 // helper 2 tofech lesson 
 const fetchLesson = async (res: Response, courseId: number, chapterNumber: number, lessonNumber: number, currentChapter: number, currentLesson: number, userId: number) => {
+    const courseData: courseType = await queryCourse(courseId);
     const lecture = await queryLecture(courseId, chapterNumber, lessonNumber);
-
-    // check if requeated resource index higehr than current if so update
-    if (chapterNumber > currentChapter || (currentChapter === chapterNumber && lessonNumber > currentLesson)) {
-        console.log('update enroled...................... lecture', lessonNumber, currentLesson, lecture);
-        await updateCurrentLessonAndChapter(userId, courseId, chapterNumber, lessonNumber, lecture.lesson_id)
-    };
+    //@ts-ignore
+    lecture.course_name = courseData.course_name;
 
     res.json({
         messsage: 'success',
@@ -125,6 +110,119 @@ const fetchLesson = async (res: Response, courseId: number, chapterNumber: numbe
 };
 
 
+// function  to get quiz for a particular lesson
+const getQuiz = async (req: Request, res: Response) => {
+    try {
+        const userId = (req.session as CustomSessionData).user?.id;
+        const courseId = parseInt(req.params.courseId);
+        const chapterId = parseInt(req.params.chapterId);
+        const lessonId = parseInt(req.params.lessonId);
+
+        if (!userId || !courseId || !chapterId || !lessonId) throw 'incomplete data sent to server';
+
+        // @ts-ignore fist check if user has enrolled for course
+        const enrolled: enrolledType = await queryEnrolled(userId, courseId)
+
+        if (!enrolled.current_lesson_number) return res.status(402).json({ status: 'accessDenied' });
+
+        const quiz: queryQuizType[] = await queryQuiz(courseId, chapterId, lessonId);
+
+        res.json({
+            message: 'succesfull',
+            quiz: quiz
+        });
+    } catch (err) {
+        console.log('error in get lectures...........', err)
+        res.status(500).json({ message: err });
+    }
+};
+
+
+// function to handle quiz submission and update user current lesson and chapter
+
+const handleQuizSubmission = async (req: Request, res: Response) => {
+    try {
+        const userId = (req.session as CustomSessionData).user?.id;
+        const courseId = parseInt(req.params.courseId);
+        const chapterId = parseInt(req.params.chapterId);
+        const lessonId = parseInt(req.params.lessonId);
+        const { percentage } = req.body;
+        let nextLessonNumber: number;
+        let nextchapterNumber: number;
+
+        if (!userId || !courseId || !chapterId || !lessonId || !percentage) throw 'incomplete data sent to server';
+
+        //@ts-ignore
+        const enrolled: enrolledType = await queryEnrolled(userId, courseId);
+
+        if (!enrolled.current_lesson_number) return res.status(403).json({ message: 'user is not enrolled for this course' });
+
+        const numOfLessonInChapter: number = await querychapterLessonNumber(chapterId);
+        const lessonData = await queryByLessonId(courseId, chapterId, lessonId);
+        nextLessonNumber = lessonData.lesson_number + 1;
+        nextchapterNumber = lessonData.chapter_number;
+
+        // first check i fuser has done lesson before
+        if (enrolled.current_chapter_number > nextchapterNumber || (enrolled.current_chapter_number === nextchapterNumber && enrolled.current_lesson_number > nextLessonNumber)) {
+            // no need to carry out any update has user have alredy done course before
+            // check if the lesson is the last lesson in the chapter if true send first lesson in next chapter
+            if (nextLessonNumber > numOfLessonInChapter) {
+                nextLessonNumber = 1;
+                nextchapterNumber = lessonData.chapter_number + 1;
+            };
+
+            console.log(courseId, nextchapterNumber, nextLessonNumber, 'in quiz submit')
+            const lesson = await queryLessonByChapterAndNUmber(courseId, nextchapterNumber, nextLessonNumber);
+
+            res.json({
+                courseId: courseId,
+                chapterId: lesson.chapter_id,
+                chapterNumber: nextchapterNumber,
+                lessonNumber: nextLessonNumber
+            });
+            console.log('user alreddy did course before no update made');
+            return;
+        };
+
+        if (nextLessonNumber > numOfLessonInChapter) {
+            nextLessonNumber = 1;
+            nextchapterNumber = lessonData.chapter_number + 1;
+            const numOfChapterInCourse: number = await queryCourseChapterNumber(courseId);
+
+            if (nextchapterNumber > numOfChapterInCourse) {
+                // user has completed course 
+                // update user enrolled......
+                return res.json({ message: 'user has completed course....' });
+            };
+        };
+
+        // make query to get  currentChapterId, nextLessonId
+        const lesson = await queryLessonByChapterAndNUmber(courseId, nextchapterNumber, nextLessonNumber);
+
+        // update user enrollment data
+        const update: boolean = await updateUserEnrolledCurrentLessonAndChapter(userId, courseId, lesson.chapter_id, lesson.lesson_id, nextchapterNumber, nextLessonNumber, (percentage + enrolled.quiz_performance) / 2);
+
+        //@ts-ignore
+        if (update) {
+            res.json({
+                courseId: courseId,
+                chapterId: lesson.chapter_id,
+                chapterNumber: nextchapterNumber,
+                lessonNumber: nextLessonNumber
+            });
+            return;
+        };
+
+        throw 'somthig went wromg';
+    } catch (err) {
+        console.log('error in get submit quiz...........', err)
+        res.status(500).json({ message: err });
+    };
+};
+
+
 export {
-    getLecture
+    getLecture,
+    getQuiz,
+    handleQuizSubmission
 }

@@ -12,6 +12,7 @@ import {
 } from "../controllers/courses";
 import { getUserProfileData } from "../controllers/profie";
 import { CustomSessionData } from "../types/session-types";
+import { handleFreeEnroll } from "../controllers/enrollments";
 
 const router = Router();
 
@@ -49,6 +50,9 @@ router.put('/quiz-submit/:courseId/:chapterId/:lessonId', (req: Request, res: Re
 router.get('/profile-data', (req: Request, res: Response) => getUserProfileData(req, res));
 
 router.get('/get-price/:courseId', (req: Request, res: Response)=> getCoursePrice(req, res));
+
+// route to handle free course enrollment
+router.get('/enroll-free/:courseId', (req: Request, res:Response)=> handleFreeEnroll(req, res));
 
 // router.post('/change-email', (req: Request, res: Response)=> changeEmail(req, res));
 

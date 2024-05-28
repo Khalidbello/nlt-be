@@ -16,6 +16,7 @@ import {
     queryLessonByChapterAndNUmber,
 } from './user-queries-2'; //  all this import are re-exported from this file
 
+import { queryNewEnrollment } from './user-query-3';
 
 // function to check if user exists
 const checkUserExist = async (email: string | undefined): Promise<[checkUserExistType]> => {
@@ -200,7 +201,8 @@ export {
     queryQuiz,
     queryByLessonId,
     updateUserEnrolledCurrentLessonAndChapter,
-    queryLessonByChapterAndNUmber
+    queryLessonByChapterAndNUmber,
+    queryNewEnrollment,
 }
 
 export type {

@@ -35,13 +35,13 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
 
             for (let index = 0; index < chapters.length; index++) {
                 const lessonNumber: number = await querychapterLessonNumber(chapters[index].chapter_id);
-                
+
                 lessonNumbers[chapters[index].chapter_number] = lessonNumber;
                 totalLessonNumber += lessonNumber;
             };
 
             // get lesson completed
-            if (enrolledData?.current_lesson_number) {
+            if (enrolledData?.payment_type) {
                 enrolled = true
                 for (let i = 1; i < enrolledData.current_chapter_number + 1; i++) {
                     console.log('in last loop', i);

@@ -43,7 +43,7 @@ const getLecture = async (req: Request, res: Response) => {
         } else if (enrolled.payment_type === 'free') {
             // check if requesng lesson is only from chapter one
             if (chapterNumber > 1) {
-                return res.status(403).json({ status: 'freeOfFree' });
+                return res.status(401).json({ status: 'endOfFree' });
             } else {
                 return getLectureHelper(res, userId, courseId, enrolled.current_chapter_number, enrolled.current_lesson_number, chapterNumber, chapterId, lessonNumber);
             }
@@ -51,7 +51,7 @@ const getLecture = async (req: Request, res: Response) => {
             const halfCourseLenght: number = Math.floor(numberOfChapters / 2);
 
             if (chapterNumber > halfCourseLenght) {
-                return res.status(403).json({ status: 'makeFullPayment' });
+                return res.status(401).json({ status: 'makeFullPayment' });
             }
         } else if (enrolled.payment_type === 'full') {
             return getLectureHelper(res, userId, courseId, enrolled.current_chapter_number, enrolled.current_lesson_number, chapterNumber, chapterId, lessonNumber);

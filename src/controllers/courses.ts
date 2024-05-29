@@ -11,17 +11,18 @@ import {
     enrolledType,
     queryCourse,
     courseType,
+    updateRecentCourse,
 } from "../services/user-queries";
 import calcProgress, { calcProgressType } from "../modules/course-progress-calc";
 import { getLecture, getQuiz, handleQuizSubmission, getCoursePrice } from "./course2";
 
 const continueLast = async (req: Request, res: Response) => {
     try {
-        const email = (req.session as CustomSessionData).user?.email;
         const userId = (req.session as CustomSessionData).user?.id;
         let enrolledData: enrolledType; // variablr to hold course enrolled data
         let courseData: courseType; // variable to hold course data
-        const recent: recentType = await queryRecentcourse(email);  // get recent course_id and dates from user table
+        // @ts-ignore
+        const recent: recentType = await queryRecentcourse(userId);  // get recent course_id and dates from user table
 
         if (!recent.recent_course_id) return res.json({ data: null, messag: 'no recent course' });
 
@@ -138,6 +139,9 @@ const getCourseView = async (req: Request, res: Response) => {
     try {
         const userId = (req.session as CustomSessionData).user?.id;
         const { courseId } = req.params;
+
+        if (!userId || !courseId) return res.status(401).json({ message: 'insuficient data sent to user' });
+
         const courseData: courseType = await queryCourse(parseInt(courseId));
         // @ts-ignore
         const details: calcProgressType = await calcProgress(parseInt(userId), parseInt(courseId))
@@ -155,6 +159,9 @@ const getCourseView = async (req: Request, res: Response) => {
             chapters: details.chapters,
             lessonNumbers: details.lessonNumbers,
         })
+        // update the course reccrnt
+        const recentUpdate: boolean = await updateRecentCourse(userId, parseInt(courseId));
+        console.log('recent update in getCourse', recentUpdate)
     } catch (err) {
         console.log('error get course view...........', err)
         res.status(500).json({ message: err });

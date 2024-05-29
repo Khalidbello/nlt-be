@@ -16,7 +16,10 @@ import {
     queryLessonByChapterAndNUmber,
 } from './user-queries-2'; //  all this import are re-exported from this file
 
-import { queryNewEnrollment } from './user-query-3';
+import {
+    queryNewEnrollment,
+    updateRecentCourse,
+} from './user-query-3';
 
 // function to check if user exists
 const checkUserExist = async (email: string | undefined): Promise<[checkUserExistType]> => {
@@ -68,11 +71,11 @@ const queryCourse = async (courseId: number): Promise<courseType> => {
 }
 
 // query user to get recent course and date
-const queryRecentcourse = async (email: string | undefined): Promise<recentType> => {
+const queryRecentcourse = async (userId: number): Promise<recentType> => {
     return new Promise<recentType>((resolve, reject) => {
-        const query = 'SELECT user_id, recent_course_id, recent_course_date FROM users WHERE email = ?';
+        const query = 'SELECT recent_course_id, recent_course_date FROM users WHERE user_id = ?';
 
-        pool.query(query, [email], (err, result) => {
+        pool.query(query, [userId], (err, result) => {
             if (err) {
                 reject(err);
             } else {
@@ -203,6 +206,7 @@ export {
     updateUserEnrolledCurrentLessonAndChapter,
     queryLessonByChapterAndNUmber,
     queryNewEnrollment,
+    updateRecentCourse
 }
 
 export type {

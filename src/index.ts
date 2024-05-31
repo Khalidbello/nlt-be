@@ -1,14 +1,26 @@
+//ngrok http --domain=weekly-settled-falcon.ngrok-free.app 5000
+
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import cors from 'cors';
 import { initiateDbConnection } from './modules/connnect-db';
 import auth from './routes/auth';
 import users from './routes/users';
+import paymentGateWay from './routes/payment-gateway';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // Create an Express application
 const app = express();
 const port = 5000;
 
+
+// environment configurations
+if (process.env.NODE_ENV === 'development') {
+    process.env.FLW_PB_KEY = process.env.FLW_TEST_PB_KEY;
+    process.env.FLW_SCRT_KEY = process.env.FLW_TEST_SCRT_KEY;
+    process.env.FLW_H = process.env.FLW_H_TEST;
+}
 
 // lockingin middle wears
 // cors config
@@ -37,6 +49,7 @@ app.use(session(sessinOption))
 // adding routes as middle wears
 app.use('/auth', auth);
 app.use('/users', users);
+app.use('/gateway', paymentGateWay);
 
 
 // Define a route handler for the root path

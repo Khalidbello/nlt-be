@@ -40,8 +40,8 @@ const checkUserExist = async (email: string | undefined): Promise<[checkUserExis
 
 
 // function to create new user
-const createNewUser = async (firstName: string, lastName: string, email: string, password: string, phoneNumber: string, gender: string, joined: string): Promise<[]> => {
-    return new Promise<[]>((resolve, reject) => {
+const createNewUser = async (firstName: string, lastName: string, email: string, password: string, phoneNumber: string, gender: string, joined: string): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
         const query = 'INSERT INTO users (first_name, last_name, email, password, phone_number, gender, joined) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
         pool.query(query, [firstName, lastName, email, password, phoneNumber, gender, joined], (err, result) => {
@@ -49,7 +49,7 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
                 console.log('an eror occured in create User', err);
                 reject(err);
             } else {
-                resolve(result);
+                resolve(result.affectedRows > 0);
             }
         })
     });
@@ -58,7 +58,7 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
 // query to fetch a specifc course data
 const queryCourse = async (courseId: number): Promise<courseType> => {
     return new Promise<courseType>((resolve, reject) => {
-        const query = 'SELECT course_name, course_id, course_title, course_description, created_at, price FROM courses WHERE course_id = ?';
+        const query = 'SELECT course_name, course_id, course_title, course_description, created_at, price, full_price_discount FROM courses WHERE course_id = ?';
 
         pool.query(query, [courseId], (err, result) => {
             if (err) {
@@ -158,6 +158,7 @@ interface courseType {
     created_at: string;
     course_id: number;
     price: number;
+    full_price_discount: number;
 }
 
 interface recentType {

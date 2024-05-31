@@ -30,6 +30,7 @@ router.use((req: Request, res: Response, next: NextFunction) => {
     };
 });
 
+router.get('/profile', (req:Request, res: Response)=> getUserProfileData(req, res));
 
 router.get('/continue-last', (req: Request, res: Response) => continueLast(req, res))
 

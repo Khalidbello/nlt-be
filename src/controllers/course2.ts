@@ -39,6 +39,7 @@ const getLecture = async (req: Request, res: Response) => {
                 message: 'user has not enrolled for course yet',
                 status: 'notEnrolled'
             });
+
             return;
         } else if (enrolled.payment_type === 'free') {
             // check if requesng lesson is only from chapter one
@@ -50,13 +51,14 @@ const getLecture = async (req: Request, res: Response) => {
         } else if (enrolled.payment_type === 'half') {
             const halfCourseLenght: number = Math.floor(numberOfChapters / 2);
 
-            if (chapterNumber > halfCourseLenght) {
-                return res.status(401).json({ status: 'makeFullPayment' });
-            }
+            if (chapterNumber > halfCourseLenght) return res.status(401).json({ status: 'makeFullPayment' });
+
+            return getLectureHelper(res, userId, courseId, enrolled.current_chapter_number, enrolled.current_lesson_number, chapterNumber, chapterId, lessonNumber);
         } else if (enrolled.payment_type === 'full') {
             return getLectureHelper(res, userId, courseId, enrolled.current_chapter_number, enrolled.current_lesson_number, chapterNumber, chapterId, lessonNumber);
-        }
-        throw 'somthing went wrong';
+        };
+
+        throw 'somthing went wrong yeah its here';
     } catch (err) {
         console.log('error in get lectures...........', err)
         res.status(500).json({ message: err });
@@ -227,7 +229,10 @@ const getCoursePrice = async (req: Request, res: Response) => {
         const courseId = parseInt(req.params.courseId);
 
         const courseData = await queryCourse(courseId);
-        res.json({ price: courseData.price })
+        res.json({
+            price: courseData.price,
+            discount: courseData.full_price_discount
+        });
     } catch (err) {
         console.log('error in get submit quiz...........', err)
         res.status(500).json({ message: err });

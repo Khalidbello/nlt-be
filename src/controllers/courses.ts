@@ -24,7 +24,7 @@ const continueLast = async (req: Request, res: Response) => {
         // @ts-ignore
         const recent: recentType = await queryRecentcourse(userId);  // get recent course_id and dates from user table
 
-        if (!recent.recent_course_id) return res.json({ data: null, messag: 'no recent course' });
+        if (!recent?.recent_course_id) return res.json({ data: null, messag: 'no recent course' });
 
         enrolledData = await queryEnrolled(recent.user_id, recent.recent_course_id);
         courseData = await queryCourse(recent.recent_course_id);

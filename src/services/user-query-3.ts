@@ -1,14 +1,23 @@
 import pool from "../modules/connnect-db";
 
 interface queryUserProfileType {
-
+    user_id: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    joined: string;
+    phone_number: string;
+    password: string;
+    gender: string;
+    recent_course_id: number;
+    recent_course_date: string;
 }
 
-const queryUserProfile = () => {
-    return new Promise((resolve, reject) => {
-        const query = '';
+const queryUserProfile = (userId: number): Promise<queryUserProfileType> => {
+    return new Promise<queryUserProfileType>((resolve, reject) => {
+        const query = 'SELECT * FROM users WHERE user_id = ?';
 
-        pool.query(query, [], (err, result) => {
+        pool.query(query, [userId], (err, result) => {
             if (err) {
                 reject(err)
             } else {
@@ -19,8 +28,8 @@ const queryUserProfile = () => {
 }
 
 
-const queryNewEnrollment = (userId: number, courseId: number, payment: 'free' | 'half' | 'full', chapterId: number, lessonId: number) => {
-    return new Promise((resolve, reject) => {
+const queryNewEnrollment = (userId: number, courseId: number, payment: 'free' | 'half' | 'full', chapterId: number, lessonId: number): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
         const nowDate = new Date();
         const stringDate = nowDate.toISOString();
 
@@ -30,11 +39,31 @@ const queryNewEnrollment = (userId: number, courseId: number, payment: 'free' | 
             if (err) {
                 reject(err)
             } else {
-                resolve(result)
+                resolve(result.affectedRows > 0)
             }
         })
     })
 }
+
+
+// query to update course enrollment payment type
+const updateEnrollmentPaymentType = (userId: number, courseId: number, payment: 'half' | 'full') => {
+    return new Promise<boolean>((resolve, reject) => {
+        const nowDate = new Date();
+        const stringDate = nowDate.toISOString();
+
+        const query = `UPDATE enrolled SET payment_type = ? WHERE user_id = ? AND course_id = ?`;
+
+        pool.query(query, [payment, userId, courseId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result.affectedRows > 0)
+            }
+        })
+    })
+}
+
 
 // query to update users recent course
 const updateRecentCourse = (userId: number, courseId: number): Promise<boolean> => {
@@ -58,6 +87,7 @@ export {
     queryUserProfile,
     queryNewEnrollment,
     updateRecentCourse,
+    updateEnrollmentPaymentType,
 }
 
 export type {

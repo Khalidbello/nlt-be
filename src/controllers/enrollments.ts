@@ -10,8 +10,8 @@ const handleFreeEnroll = async (req: Request, res: Response) => {
 
         if (!userId || !courseId) return res.status(401).json({ message: 'incomplete data sent to server' })
 
-            // get course current lesson id and chapter id
-            const courseData = await queryLessonByChapterAndNUmber(courseId, 1, 1)
+        // get course current lesson id and chapter id
+        const courseData = await queryLessonByChapterAndNUmber(courseId, 1, 1)
         const result = await queryNewEnrollment(userId, courseId, 'free', courseData.chapter_id, courseData.lesson_id);
 
         console.log('in enroll free hNDER', result);

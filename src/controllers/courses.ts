@@ -11,35 +11,34 @@ import {
     enrolledType,
     queryCourse,
     courseType,
-    updateRecentCourse,
+    updateLastVisited,
 } from "../services/user-queries";
 import calcProgress, { calcProgressType } from "../modules/course-progress-calc";
 import { getLecture, getQuiz, handleQuizSubmission, getCoursePrice } from "./course2";
 
+
 const continueLast = async (req: Request, res: Response) => {
     try {
         const userId = (req.session as CustomSessionData).user?.id;
-        let enrolledData: enrolledType; // variablr to hold course enrolled data
+        // @ts-ignore
+        let enrolledData: enrolledType = await queryRecentcourse(userId);  // get recent course_id and dates from user table
         let courseData: courseType; // variable to hold course data
-        // @ts-ignore
-        const recent: recentType = await queryRecentcourse(userId);  // get recent course_id and dates from user table
 
-        if (!recent?.recent_course_id) return res.json({ data: null, messag: 'no recent course' });
+        if (!enrolledData) return res.json({ data: null, messag: 'no recent course' });
 
-        enrolledData = await queryEnrolled(recent.user_id, recent.recent_course_id);
-        courseData = await queryCourse(recent.recent_course_id);
+        courseData = await queryCourse(enrolledData.course_id);
 
         // @ts-ignore
-        const details: calcProgressType = await calcProgress(userId, recent.recent_course_id)
+        const details: calcProgressType = await calcProgress(userId, enrolledData.course_id)
 
-        console.log('detals', details);
+        console.log('details', details);
 
         res.json({
             data: {
                 courseName: courseData.course_name,
                 title: courseData.course_title,
-                courseId: recent.recent_course_id,
-                lastVisited: recent.recent_course_date,
+                courseId: enrolledData.course_id,
+                lastVisited: enrolledData.last_visited,
                 chapter: details.currentChapter,
                 lesson: details.currentLesson,
                 progress: details.percentageCompletion,
@@ -159,9 +158,12 @@ const getCourseView = async (req: Request, res: Response) => {
             chapters: details.chapters,
             lessonNumbers: details.lessonNumbers,
         })
-        // update the course reccrnt
-        const recentUpdate: boolean = await updateRecentCourse(userId, parseInt(courseId));
-        console.log('recent update in getCourse', recentUpdate)
+        // update the course last visted if user has enrolled for course
+
+        if (details.enrolled) {
+            const recentUpdate: boolean = await updateLastVisited(userId, parseInt(courseId));
+            console.log('last visited updated..........', recentUpdate);
+        }
     } catch (err) {
         console.log('error get course view...........', err)
         res.status(500).json({ message: err });

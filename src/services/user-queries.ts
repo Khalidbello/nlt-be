@@ -18,7 +18,7 @@ import {
 
 import {
     queryNewEnrollment,
-    updateRecentCourse,
+    updateLastVisited,
 } from './user-query-3';
 
 // function to check if user exists
@@ -71,10 +71,9 @@ const queryCourse = async (courseId: number): Promise<courseType> => {
 }
 
 // query user to get recent course and date
-const queryRecentcourse = async (userId: number): Promise<recentType> => {
-    return new Promise<recentType>((resolve, reject) => {
-        const query = 'SELECT recent_course_id, recent_course_date FROM users WHERE user_id = ?';
-
+const queryRecentcourse = async (userId: number): Promise<enrolledType> => {
+    return new Promise<enrolledType>((resolve, reject) => {
+        const query = 'SELECT * FROM enrolled WHERE user_id = ? ORDER BY last_visited DESC LIMIT 1';
         pool.query(query, [userId], (err, result) => {
             if (err) {
                 reject(err);
@@ -207,7 +206,7 @@ export {
     updateUserEnrolledCurrentLessonAndChapter,
     queryLessonByChapterAndNUmber,
     queryNewEnrollment,
-    updateRecentCourse
+    updateLastVisited
 }
 
 export type {

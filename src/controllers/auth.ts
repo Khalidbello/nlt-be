@@ -39,15 +39,15 @@ const createAccountHandler = async (req: Request, res: Response) => {
             return res.status(409).json({ message: 'user exist' });
         };
 
-        const created: boolean = await createNewUser(firstName, lastName, email, password, phoneNumber, gender, date.toISOString());
-        console.log(created, 'createdddddd');
+        const created = await createNewUser(firstName, lastName, email, password, phoneNumber, gender, date);
+        console.log(created, 'createdddddd', created.insertId);
 
-        if (created) {
+        if (created.affectedRows > 0) {
             (req.session as CustomSessionData).user = {
                 email: email,
                 type: 'normal',
                 // @ts-ignore
-                userId: created[0]?.userId
+                id: created.insertId
             };
             return res.json({ message: 'account created successfully' });
         };

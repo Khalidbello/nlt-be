@@ -11,6 +11,7 @@ interface queryUserProfileType {
     gender: string;
     recent_course_id: number;
     recent_course_date: string;
+    email_verified: boolean;
 }
 
 const queryUserProfile = (userId: number): Promise<queryUserProfileType> => {
@@ -82,11 +83,62 @@ const updateLastVisited = (userId: number, courseId: number): Promise<boolean> =
     })
 }
 
+
+// const function to change user email verified to true
+const querySaveEmailVerify = (userId: number, email: string): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE users SET email_verified = ?, email = ? WHERE user_id = ?';
+
+        pool.query(query, [true, email, userId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result.affectedRows > 0)
+            }
+        })
+    })
+}
+
+
+// query to update user password
+const queryUpdatePassword = (userId: number, newPassword: string): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE users SET password = ? WHERE user_id = ?';
+
+        pool.query(query, [newPassword, userId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result.affectedRows > 0)
+            }
+        })
+    })
+}
+
+
+// query to handle to change user name
+const queryUpdateUserNames = (userId: number, firstName: string, lastName: string): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE users SET first_name = ?, last_name = ? WHERE user_id = ?';
+
+        pool.query(query, [firstName, lastName, userId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result.affectedRows > 0)
+            }
+        })
+    })
+}
+
 export {
     queryUserProfile,
     queryNewEnrollment,
     updateLastVisited,
     updateEnrollmentPaymentType,
+    querySaveEmailVerify,
+    queryUpdatePassword,
+    queryUpdateUserNames,
 }
 
 export type {

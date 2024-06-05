@@ -1,0 +1,22 @@
+[
+  {
+    "message": {
+      "code": "ER_ACCESS_DENIED_ERROR",
+      "errno": 1045,
+      "sqlMessage": "Access denied for user 'root'@'localhost' (using password: NO)",
+      "sqlState": "28000",
+      "fatal": true
+    },
+    "timestamp": "June 5, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_ACCESS_DENIED_ERROR",
+      "errno": 1045,
+      "sqlMessage": "Access denied for user 'root'@'localhost' (using password: NO)",
+      "sqlState": "28000",
+      "fatal": true
+    },
+    "timestamp": "June 5, 2024"
+  }
+]

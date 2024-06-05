@@ -1,5 +1,10 @@
 //ngrok http --domain=weekly-settled-falcon.ngrok-free.app 5000
 
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+
 import express, { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import cors from 'cors';
@@ -7,8 +12,6 @@ import { initiateDbConnection } from './modules/connnect-db';
 import auth from './routes/auth';
 import users from './routes/users';
 import paymentGateWay from './routes/payment-gateway';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 // Create an Express application
 const app = express();
@@ -29,21 +32,22 @@ const corsOption = {
     credentials: true,
 };
 
-const sessinOption = {
+const sessionOption = {
     secret: 'vnevnkldcfofeoe;v ijruivr',
     resave: true,
     saveUninitialized: false,
     cookie: {
-        secure: false,
+        secure: false, // Ensure this is false for HTTP
         httpOnly: true,
-        maxAge: 0.5 * 60 * 60 * 1000
+        maxAge: 0.5 * 60 * 60 * 1000,
+        domain: 'localhost' // Corrected domain
     }
 };
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors(corsOption));
-app.use(session(sessinOption))
+app.use(session(sessionOption))
 
 
 // adding routes as middle wears

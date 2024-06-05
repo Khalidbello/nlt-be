@@ -27,7 +27,7 @@ const generateOneTimeAcc = async (req: Request, res: Response) => {
         }
 
         const details = {
-            tx_ref: generateRandomAlphanumericCode(10),
+            tx_ref: generateRandomAlphanumericCode(10, false),
             amount: price,
             email: userInfo.email,
             fullname: userInfo.first_name + ' ' + userInfo.last_name,

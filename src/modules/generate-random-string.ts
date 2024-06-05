@@ -1,5 +1,5 @@
-const generateRandomAlphanumericCode = (length: number): string => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const generateRandomAlphanumericCode = (length: number, onlyNumber: boolean): string | number => {
+    let characters = onlyNumber ? '1234567890' : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     const charactersLength = characters.length;
 
@@ -7,7 +7,8 @@ const generateRandomAlphanumericCode = (length: number): string => {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     };
 
-    return result;
+    const toReturn: string | number = onlyNumber ? parseInt(result) : result;
+    return toReturn;
 }
 
 export default generateRandomAlphanumericCode;

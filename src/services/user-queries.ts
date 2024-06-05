@@ -40,8 +40,8 @@ const checkUserExist = async (email: string | undefined): Promise<[checkUserExis
 
 
 // function to create new user
-const createNewUser = async (firstName: string, lastName: string, email: string, password: string, phoneNumber: string, gender: string, joined: Date): Promise<boolean> => {
-    return new Promise<boolean>((resolve, reject) => {
+const createNewUser = async (firstName: string, lastName: string, email: string, password: string, phoneNumber: string, gender: string, joined: Date): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
         const query = 'INSERT INTO users (first_name, last_name, email, password, phone_number, gender, joined, email_verified) VALUES (?, ?, ?, ?, ?, ?, ?, false)';
 
         pool.query(query, [firstName, lastName, email, password, phoneNumber, gender, joined], (err, result) => {
@@ -49,7 +49,7 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
                 console.log('an eror occured in create User', err);
                 reject(err);
             } else {
-                resolve(result.affectedRows > 0);
+                resolve(result);
             }
         })
     });

@@ -10,9 +10,10 @@ import {
     handleQuizSubmission,
     getCoursePrice,
 } from "../controllers/courses";
-import { getUserProfileData } from "../controllers/profie";
+import { getUserProfileData, handleChangeNames, handleChangePassword } from "../controllers/profie";
 import { CustomSessionData } from "../types/session-types";
 import { handleFreeEnroll } from "../controllers/enrollments";
+import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/email-verification";
 
 const router = Router();
 
@@ -30,7 +31,7 @@ router.use((req: Request, res: Response, next: NextFunction) => {
     };
 });
 
-router.get('/profile', (req:Request, res: Response)=> getUserProfileData(req, res));
+router.get('/profile', (req: Request, res: Response) => getUserProfileData(req, res));
 
 router.get('/continue-last', (req: Request, res: Response) => continueLast(req, res))
 
@@ -50,13 +51,35 @@ router.put('/quiz-submit/:courseId/:chapterId/:lessonId', (req: Request, res: Re
 
 router.get('/profile-data', (req: Request, res: Response) => getUserProfileData(req, res));
 
-router.get('/get-price/:courseId', (req: Request, res: Response)=> getCoursePrice(req, res));
+router.get('/get-price/:courseId', (req: Request, res: Response) => getCoursePrice(req, res));
 
 // route to handle free course enrollment
-router.get('/enroll-free/:courseId', (req: Request, res:Response)=> handleFreeEnroll(req, res));
+router.get('/enroll-free/:courseId', (req: Request, res: Response) => handleFreeEnroll(req, res));
 
-// router.post('/change-email', (req: Request, res: Response)=> changeEmail(req, res));
 
-// router.post('/change-password')
+// user profile related
+
+router.get('/check-email-verify', (req: Request, res: Response) => getCheckEmailVerify(req, res));
+
+router.post('/confirm-email-otp', (req: Request, res: Response) => confirmEmailOtp(req, res));
+
+router.post('/send-email-confirm-otp', (req: Request, res: Response) => generateConfirmEmailOtp(req, res));
+
+router.post('/change-password', (req: Request, res: Response) => handleChangePassword(req, res));
+
+router.post('/change-names', (req: Request, res: Response) => handleChangeNames(req, res));
+
+
+// log out route
+router.get('/logout', (req: Request, res: Response) => {
+    try {
+        req.session.destroy(() => {
+            res.json({ message: 'Logged out' });
+        });
+    } catch (err) {
+        console.log('erorr loging out');
+        res.status(500).json({ message: 'Failed to logout' });
+    }
+})
 
 export default router;

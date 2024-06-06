@@ -27,26 +27,27 @@ if (process.env.NODE_ENV === 'development') {
 
 // lockingin middle wears
 // cors config
+// cors config
 const corsOption = {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'http://site.botsub.com.ng/', 'https://weekly-settled-falcon.ngrok-free.app'],
     credentials: true,
 };
-
 const sessionOption = {
     secret: 'vnevnkldcfofeoe;v ijruivr',
     resave: true,
     saveUninitialized: false,
     cookie: {
-        secure: false, // Ensure this is false for HTTP
-        httpOnly: true,
         maxAge: 0.5 * 60 * 60 * 1000,
-        domain: 'localhost' // Corrected domain
+        httpOnly: true, // Helps mitigate XSS attacks
+        secure: false, // Set to true if using HTTPS
+        sameSite: 'None'
     }
 };
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors(corsOption));
+// @ts-ignore
 app.use(session(sessionOption))
 
 

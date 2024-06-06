@@ -1,3 +1,4 @@
+import storeErrorMessage from "../../error-recorder";
 import transporter from "./email-transporter";
 
 const sendEmail = async (userName: string, password: string, reciever: string, subject: string, htmlContent: string) => {
@@ -13,8 +14,10 @@ const sendEmail = async (userName: string, password: string, reciever: string, s
     try {
         const info = await transport.sendMail(mailOptions);
         console.log('Email sent successfully:', info.response);
+        storeErrorMessage('email sent,,,,,, ' + info.response);
     } catch (error) {
         console.error('Error sending email:', error);
+        storeErrorMessage('Error sending email:::::::::::::' + error);
     }
 };
 

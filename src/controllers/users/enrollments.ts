@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import { CustomSessionData } from "../types/session-types"
-import { queryLessonByChapterAndNUmber, queryNewEnrollment } from "../services/user-queries";
+import { CustomSessionData } from "../../types/session-types"
+import { queryLessonByChapterAndNUmber, queryNewEnrollment } from "../../services/users/user-queries";
 
 
 const handleFreeEnroll = async (req: Request, res: Response) => {

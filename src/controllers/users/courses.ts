@@ -1,5 +1,5 @@
 import { Request, Response, query } from "express"
-import { CustomSessionData } from "../types/session-types";
+import { CustomSessionData } from "../../types/session-types";
 import {
     queryRecentcourse,
     queryCourses,
@@ -12,8 +12,8 @@ import {
     queryCourse,
     courseType,
     updateLastVisited,
-} from "../services/user-queries";
-import calcProgress, { calcProgressType } from "../modules/course-progress-calc";
+} from "../../services/users/user-queries";
+import calcProgress, { calcProgressType } from "../../modules/course-progress-calc";
 import { getLecture, getQuiz, handleQuizSubmission, getCoursePrice } from "./course2";
 
 
@@ -59,6 +59,7 @@ interface coursesType extends courseType {
     lastVisited: string;
     progress: number;
     image: string;
+    course_id: number;
 }
 
 const getCourses = async (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
-import pool from '../modules/connnect-db';
-import { checkUserExistType } from '../types/general';
+import pool from '../../modules/connnect-db';
+import { checkUserExistType } from '../../types/general';
 import {
     queryCourseLessonNumber,
     queryCourseChapterNumber,
@@ -19,7 +19,7 @@ import {
 import {
     queryNewEnrollment,
     updateLastVisited,
-} from './user-query-3';
+} from '../users/user-query-3';
 
 // function to check if user exists
 const checkUserExist = async (email: string | undefined): Promise<[checkUserExistType]> => {
@@ -58,7 +58,7 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
 // query to fetch a specifc course data
 const queryCourse = async (courseId: number): Promise<courseType> => {
     return new Promise<courseType>((resolve, reject) => {
-        const query = 'SELECT course_name, course_id, course_title, course_description, created_at, price, full_price_discount FROM courses WHERE course_id = ?';
+        const query = 'SELECT course_name, course_id, image, course_title, course_description, created_at, price, full_price_discount FROM courses WHERE course_id = ?';
 
         pool.query(query, [courseId], (err, result) => {
             if (err) {
@@ -135,7 +135,7 @@ const queryEnrolled = (userId: number, courseId: number): Promise<enrolledType> 
 // query to get recomended courses for user
 const queryCourses = (pagin: number, limit: number): Promise<courseType[]> => {
     return new Promise<courseType[]>((resolve, reject) => {
-        const query = 'SELECT course_id, course_name, course_title, course_description, created_at FROM courses ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
+        const query = 'SELECT course_id, image, course_name, course_title, course_description, created_at FROM courses ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
 
         pool.query(query, [limit, pagin], (err, result) => {
             if (err) {
@@ -152,6 +152,7 @@ const queryCourses = (pagin: number, limit: number): Promise<courseType[]> => {
 // types defination
 interface courseType {
     course_name: string;
+    image: string;
     course_title: string;
     course_description: string;
     created_at: string;

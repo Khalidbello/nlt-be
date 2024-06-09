@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { CustomSessionData } from "../types/session-types";
-import { queryUserProfile } from "../services/user-query-3";
-import { queryCourse } from "../services/user-queries";
+import { queryUserProfile } from "../services/users/user-query-3";
+import { queryCourse } from "../services/users/user-queries";
 import generateRandomAlphanumericCode from "../modules/generate-random-string";
-import { handleFreeEnroll } from "./enrollments";
+import { handleFreeEnroll } from "./users/enrollments";
 import enrollUser from "../modules/course-enroller";
 const Flutterwave = require('flutterwave-node-v3');
 

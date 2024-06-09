@@ -1,5 +1,5 @@
 
-import pool from "../modules/connnect-db";
+import pool from "../../modules/connnect-db";
 import { enrolledType } from "./user-queries";
 
 //get course number of lesons

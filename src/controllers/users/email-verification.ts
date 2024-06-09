@@ -1,9 +1,10 @@
 import { Request, Response, query } from "express";
-import { CustomSessionData } from "../types/session-types";
-import { queryUserProfile, querySaveEmailVerify } from "../services/user-query-3";
-import otpGenerator from "../modules/otp-generator";
-import emailOtpSender from "../modules/email/emailers/email-otp";
-import { queryDeleteOtp, queryOtp } from "../services/otp-queries";
+import { CustomSessionData } from "../../types/session-types";
+import { queryUserProfile, querySaveEmailVerify } from "../../services/users/user-query-3";
+import otpGenerator from "../../modules/otp-generator";
+import emailOtpSender from "../../modules/emailers/email-otp";
+import { queryDeleteOtp, queryOtp } from "../../services/otp-queries";
+import storeErrorMessage from "../../modules/error-recorder";
 
 
 const getCheckEmailVerify = async (req: Request, res: Response) => {
@@ -35,10 +36,12 @@ const generateConfirmEmailOtp = async (req: Request, res: Response) => {
         // @ts-ignore
         const opt: number = await otpGenerator(userId);
         // send otp email
+        storeErrorMessage('above send email function call in generate otp confirmation');
         emailOtpSender(email, profileData.first_name, opt)
         res.json({ status: 'ok' })
     } catch (err) {
         console.error('eror generstimg otp', err)
+        storeErrorMessage(err)
         res.status(500).json({ message: err });
     }
 }

@@ -10,6 +10,7 @@ import session from 'express-session';
 import cors from 'cors';
 import { initiateDbConnection } from './modules/connnect-db';
 import auth from './routes/auth';
+import admin from './routes/admin';
 import users from './routes/users';
 import paymentGateWay from './routes/payment-gateway';
 
@@ -29,23 +30,24 @@ if (process.env.NODE_ENV === 'development') {
 // cors config
 // cors config
 const corsOption = {
-    origin: ['http://localhost:3000', 'http://site.botsub.com.ng/', 'https://weekly-settled-falcon.ngrok-free.app'],
-    credentials: true,
+    origin: ['https://weekly-settled-falcon.ngrok-free.app', 'http://localhost:3000', 'https://site.botsub.com.ng'], // Replace with your frontend's origin
+    credentials: true
 };
+
 const sessionOption = {
-    secret: 'vnevnkldcfofeoe;v ijruivr',
-    resave: true,
+    secret: 'yourSecretKey',
+    resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 0.5 * 60 * 60 * 1000,
-        httpOnly: true, // Helps mitigate XSS attacks
-        secure: false, // Set to true if using HTTPS
-        sameSite: 'None'
+        maxAge: 1000 * 60 * 60 * 0.5, // 1 minute for example
+        httpOnly: true,
+        secure: false, // Must be false for local development without HTTPS
+        sameSite: "none"
     }
 };
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb'}));
 app.use(cors(corsOption));
 // @ts-ignore
 app.use(session(sessionOption))
@@ -54,6 +56,7 @@ app.use(session(sessionOption))
 // adding routes as middle wears
 app.use('/auth', auth);
 app.use('/users', users);
+app.use('/admin', admin);
 app.use('/gateway', paymentGateWay);
 
 

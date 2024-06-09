@@ -2,15 +2,16 @@ const handleBars = require('handlebars');
 const fs = require('fs');
 import sendEmail from "./email-sender";
 
-const emailOtpSender = async (userEmail: string, firstName: string, otp: number) => {
+const courseEnrollEmailSender = async (userEmail: string, firstName: string, paymentType: string, courseName: string) => {
     try {
-        let courseEnrollTemp: string = await fs.promises.readFile('src/modules/email/email-templates/email-otp-template.hbs', 'utf8',);
+        let courseEnrollTemp: string = await fs.promises.readFile('email-templates/course-enroll-template.hbs', 'utf8',);
 
         console.log('temp', courseEnrollTemp)
         const compiledTemp = handleBars.compile(courseEnrollTemp);
         const html = compiledTemp({
             name: firstName,
-            otp: otp
+            courseName: courseName,
+            paymentType: paymentType
         });
         console.log('html', html)
 
@@ -21,4 +22,4 @@ const emailOtpSender = async (userEmail: string, firstName: string, otp: number)
     }
 }
 
-export default emailOtpSender;
+export default courseEnrollEmailSender;

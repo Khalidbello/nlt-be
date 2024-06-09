@@ -1,4 +1,4 @@
-import pool from "../modules/connnect-db";
+import pool from "../../modules/connnect-db";
 
 interface queryUserProfileType {
     user_id: number;

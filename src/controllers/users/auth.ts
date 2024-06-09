@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { checkUserExist, createNewUser } from '../services/user-queries';
-import { CustomSessionData } from './../types/session-types';
-import { checkUserExistType } from '../types/general';
+import { checkUserExist, createNewUser } from '../../services/users/user-queries';
+import { CustomSessionData } from '../../types/session-types';
+import { checkUserExistType } from '../../types/general';
 
 
 // function to handle user login

@@ -1,4 +1,4 @@
-import { CustomSessionData } from "../types/session-types";
+import { CustomSessionData } from "../../types/session-types";
 import { Request, Response } from "express";
 import {
     enrolledType,
@@ -15,7 +15,7 @@ import {
     queryByLessonId,
     queryLessonByChapterAndNUmber,
     updateUserEnrolledCurrentLessonAndChapter,
-} from "../services/user-queries";
+} from "../../services/users/user-queries";
 
 
 

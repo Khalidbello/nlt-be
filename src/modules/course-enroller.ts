@@ -1,6 +1,6 @@
-import { queryCourse, queryEnrolled, queryLessonByChapterAndNUmber, queryNewEnrollment } from "../services/user-queries";
-import { queryUserProfile, updateEnrollmentPaymentType } from "../services/user-query-3";
-import courseEnrollEmailSender from "./email/emailers/course-enroll";
+import { queryCourse, queryEnrolled, queryLessonByChapterAndNUmber, queryNewEnrollment } from "../services/users/user-queries";
+import { queryUserProfile, updateEnrollmentPaymentType } from "../services/users/user-query-3";
+import courseEnrollEmailSender from "./emailers/course-enroll";
 
 
 const enrollUser = async (data: any) => {

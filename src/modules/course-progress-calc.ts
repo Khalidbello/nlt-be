@@ -1,4 +1,4 @@
-import { chaptersType, enrolledType, getChapters, queryEnrolled, querychapterLessonNumber } from "../services/user-queries";
+import { chaptersType, enrolledType, getChapters, queryEnrolled, querychapterLessonNumber } from "../services/users/user-queries";
 
 interface calcProgressType {
     numOfChapter: number;

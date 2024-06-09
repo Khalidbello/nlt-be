@@ -9,11 +9,11 @@ import {
     getQuiz,
     handleQuizSubmission,
     getCoursePrice,
-} from "../controllers/courses";
-import { getUserProfileData, handleChangeNames, handleChangePassword } from "../controllers/profie";
+} from "../controllers/users/courses";
+import { getUserProfileData, handleChangeNames, handleChangePassword } from "../controllers/users/profie";
 import { CustomSessionData } from "../types/session-types";
-import { handleFreeEnroll } from "../controllers/enrollments";
-import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/email-verification";
+import { handleFreeEnroll } from "../controllers/users/enrollments";
+import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
 
 const router = Router();
 

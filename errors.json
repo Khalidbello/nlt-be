@@ -1,22 +1,14 @@
 [
   {
-    "message": {
-      "code": "ER_ACCESS_DENIED_ERROR",
-      "errno": 1045,
-      "sqlMessage": "Access denied for user 'root'@'localhost' (using password: NO)",
-      "sqlState": "28000",
-      "fatal": true
-    },
-    "timestamp": "June 5, 2024"
+    "message": "Error sending email:::::::::::::Error: getaddrinfo ENOTFOUND mail.botsub.com.ng",
+    "timestamp": "June 6, 2024"
   },
   {
-    "message": {
-      "code": "ER_ACCESS_DENIED_ERROR",
-      "errno": 1045,
-      "sqlMessage": "Access denied for user 'root'@'localhost' (using password: NO)",
-      "sqlState": "28000",
-      "fatal": true
-    },
-    "timestamp": "June 5, 2024"
+    "message": "above send email function call in generate otp confirmation",
+    "timestamp": "June 6, 2024"
+  },
+  {
+    "message": "email sent,,,,,, 250 OK id=1sFGHh-0000000CWk1-3qFd",
+    "timestamp": "June 6, 2024"
   }
 ]

@@ -1,4 +1,4 @@
-import storeErrorMessage from "../../error-recorder";
+import storeErrorMessage from "../error-recorder";
 import transporter from "./email-transporter";
 
 const sendEmail = async (userName: string, password: string, reciever: string, subject: string, htmlContent: string) => {

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { queryUpdatePassword, queryUpdateUserNames, queryUserProfile } from "../services/user-query-3";
-import { CustomSessionData } from "../types/session-types";
+import { queryUpdatePassword, queryUpdateUserNames, queryUserProfile } from "../../services/users/user-query-3";
+import { CustomSessionData } from "../../types/session-types";
 
 const getUserProfileData = async (req: Request, res: Response) => {
     try {

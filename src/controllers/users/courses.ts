@@ -81,7 +81,7 @@ const getCourses = async (req: Request, res: Response) => {
             courses[i].isEnrolled = details.enrolled;
             courses[i].lastVisited = details.lastVisited;
             courses[i].progress = details.percentageCompletion;
-            courses[i].image = '/images/e-learning-1.jpg';
+            courses[i].image = Buffer.from(courses[i].image).toString('base64');
             courses[i].enrolledStudents = await queryCourseEnrolledStudent(courseId);
         };
 
@@ -119,7 +119,7 @@ const getEnrolledCourses = async (req: Request, res: Response) => {
             courses[i].isEnrolled = details.enrolled;
             courses[i].lastVisited = details.lastVisited;
             courses[i].progress = details.percentageCompletion;
-            courses[i].image = '/images/e-learning-1.jpg';
+            courses[i].image = Buffer.from(courses[i].image).toString('base64');
             courses[i].enrolledStudents = await queryCourseEnrolledStudent(courseId);
             i++;
         };
@@ -143,6 +143,8 @@ const getCourseView = async (req: Request, res: Response) => {
         if (!userId || !courseId) return res.status(401).json({ message: 'insuficient data sent to user' });
 
         const courseData: courseType = await queryCourse(parseInt(courseId));
+        // set image
+        courseData.image = Buffer.from(courseData.image).toString('base64')
         // @ts-ignore
         const details: calcProgressType = await calcProgress(parseInt(userId), parseInt(courseId))
 
@@ -151,6 +153,7 @@ const getCourseView = async (req: Request, res: Response) => {
             courseName: courseData.course_name,
             about: courseData.course_description,
             enrolled: details.enrolled,
+            image: courseData.image,
             quizPerfomace: details.quiz,
             progress: details.percentageCompletion,
             currentChapter: details.currentChapter,

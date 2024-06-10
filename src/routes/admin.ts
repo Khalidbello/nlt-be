@@ -1,17 +1,18 @@
 import { Router, Request, Response } from "express";
 import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCourseData } from "../controllers/admin/courses";
 import { queryCreateNewCourse } from "../services/admin/course-queries";
+import { createChapter } from "../controllers/admin/course-2";
 const multer = require("multer");
 
 const router = Router();
 
 //const upload = multer({ dest: '/uploads' });
 
-router.use((req, res, next) => {
-    console.log(req.headers);
-    console.log(req.body);
-    next();
-});
+// router.use((req, res, next) => {
+//     console.log(req.headers);
+//     console.log(req.body);
+//     next();
+// });
 
 
 const upload = multer({ dest: '/uploads' });
@@ -26,6 +27,8 @@ router.get('/courses/:pagin/:limit', (req: Request, res: Response) => adminGetCo
 router.get('/course/:courseId', (req: Request, res:Response)=> getCourseData(req, res));
 
 router.get('/chapters/:courseId', (req: Request, res: Response)=> getChaptersData(req, res));
+
+router.post('/create-chapter/:courseId', (req: Request, res: Response)=> createChapter(req, res));
 
 
 export default router;

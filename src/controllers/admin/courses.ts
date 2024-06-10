@@ -112,7 +112,6 @@ const getChaptersData = async (req: Request, res: Response) => {
     try {
         const data: any[] = [];
         const courseId = parseInt(req.params.courseId);
-
         const chapters = await getChapters(courseId);
         const chaptersLength = chapters.length;
 
@@ -120,6 +119,7 @@ const getChaptersData = async (req: Request, res: Response) => {
             data[i] = {};
             data[i].chapterId = chapters[i].chapter_id;
             data[i].title = chapters[i].chapter_title;
+            data[i].chapterNumber = chapters[i].chapter_number;
             data[i].numberOfLessons = await querychapterLessonNumber(chapters[i].chapter_id);
         };
 

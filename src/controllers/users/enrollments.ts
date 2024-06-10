@@ -19,6 +19,7 @@ const handleFreeEnroll = async (req: Request, res: Response) => {
 
         throw 'something went wrong';
     } catch (err) {
+        console.log('error in enroll for free', err);
         res.status(500).json({ error: err });
     }
 }

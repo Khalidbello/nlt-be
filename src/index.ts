@@ -42,7 +42,6 @@ const sessionOption = {
         maxAge: 1000 * 60 * 60 * 0.5, // 1 minute for example
         httpOnly: true,
         secure: false, // Must be false for local development without HTTPS
-        sameSite: "none"
     }
 };
 

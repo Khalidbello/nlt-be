@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { adminGetCourses, createNewCourse, getChaptersData, getCourseData } from "../controllers/admin/courses";
+import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCourseData } from "../controllers/admin/courses";
 import { queryCreateNewCourse } from "../services/admin/course-queries";
 const multer = require("multer");
 
@@ -17,7 +17,9 @@ router.use((req, res, next) => {
 const upload = multer({ dest: '/uploads' });
 
 // Create endpoint to handle file upload
-router.post('/create-course', upload.single('image'), async (req: Request, res: Response) => createNewCourse(req, res));
+router.post('/create-course', upload.single('image'), (req: Request, res: Response) => createNewCourse(req, res));
+
+router.post('/edit-course/:courseId', upload.single('image'), (req: Request, res: Response)=> editCourse(req, res));
 
 router.get('/courses/:pagin/:limit', (req: Request, res: Response) => adminGetCourses(req, res));
 

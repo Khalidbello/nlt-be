@@ -54,9 +54,46 @@ const queryChapterExist = (courseId: number, chapterNum: number): Promise<boolea
 };
 
 
+interface queryChapterType {
+    chapter_id: number;
+    course_id: number;
+    chapter_title: string;
+    chapter_number: number
+};
+
+// query to get course data
+const queryChapter = (courseId: number, chapterId: number): Promise<queryChapterType> => {
+    return new Promise<queryChapterType>((resolve, reject) => {
+        const query = 'SELECT chapter_id, course_id, chapter_title, chapter_number FROM chapters WHERE course_id = ? AND chapter_id = ?';
+
+        pool.query(query, [courseId, chapterId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result[0]);
+        });
+    });
+};
+
+
+// query to update chapter
+const queryUpdateChapter = (courseId: number, chapterId: number, chapterNumber: number, chapterTitle: string): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE chapters SET chapter_title = ?, chapter_number = ? WHERE course_id = ? AND chapter_id = ?';
+
+        pool.query(query, [chapterTitle, chapterNumber, courseId, chapterId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
+
+
 export {
     queryCreateNewCourse,
     queryUpdateCourse,
     queryCreteChapter,
     queryChapterExist,
+    queryChapter,
+    queryUpdateChapter,
 }

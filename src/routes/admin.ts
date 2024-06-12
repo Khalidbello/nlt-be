@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCourseData } from "../controllers/admin/courses";
 import { queryCreateNewCourse } from "../services/admin/course-queries";
-import { createChapter, getChapter, updateChapter } from "../controllers/admin/course-2";
+import { adminGetLessons, createChapter, getChapter, updateChapter } from "../controllers/admin/course-2";
 const multer = require("multer");
 
 const router = Router();
@@ -33,6 +33,8 @@ router.post('/create-chapter/:courseId', (req: Request, res: Response) => create
 router.get('/chapter/:courseId/:chapterId', (req: Request, res: Response) => getChapter(req, res));
 
 router.post('/update-chapter/:courseId/:chapterId', (req: Request, res: Response) => updateChapter(req, res));
+
+router.get('/lessons/:courseId/:chapterId', (req: Request, res: Response) => adminGetLessons(req, res))
 
 
 export default router;

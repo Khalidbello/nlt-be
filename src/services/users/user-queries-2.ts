@@ -79,7 +79,7 @@ const queryLessons = (courseId: number, chapterId: number): Promise<queryLessons
 
         pool.query(query, [courseId, chapterId], (err, result) => {
             if (err) {
-                reject(err)
+                reject(err), ''
             } else {
                 resolve(result);
             }

@@ -1,6 +1,6 @@
 import { Request, Response, query } from "express";
 import { queryChapter, queryChapterExist, queryCreteChapter, queryUpdateChapter } from "../../services/admin/course-queries";
-import { queryCourse, querychapterLessonNumber } from "../../services/users/user-queries";
+import { queryCourse, queryLessons, querychapterLessonNumber } from "../../services/users/user-queries";
 
 const createChapter = async (req: Request, res: Response) => {
     try {
@@ -75,9 +75,28 @@ const updateChapter = (req: Request, res: Response) => {
     };
 };
 
+// function to get lessons for admin
+const adminGetLessons = async (req: Request, res: Response) => {
+    try {
+        const courseId = parseInt(req.params.courseId);
+        const chapterId = parseInt(req.params.chapterId);
+
+        if (!courseId || !chapterId) return res.status(400).json({ message: 'incomplete data sent to server for processing' });
+
+        const lessons = await queryLessons(courseId, chapterId);
+       
+        res.json({ lessons: lessons });
+    } catch (err) {
+        console.log('error in geting lessons admin...', err);
+        res.status(500).json({ message: err });
+    };
+};
+
+
 
 export {
     createChapter,
     getChapter,
     updateChapter,
+    adminGetLessons,
 }

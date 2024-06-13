@@ -1,6 +1,7 @@
 import { Request, Response } from "express-serve-static-core";
 import * as fs from 'fs/promises';
 import { queryAdminCreateLesson, queryAdminLectureExist, queryChapter } from "../../services/admin/course-queries";
+import { queryCourse } from "../../services/users/user-queries";
 
 const createNewLecture = async (req: Request, res: Response) => {
     try {
@@ -31,6 +32,32 @@ const createNewLecture = async (req: Request, res: Response) => {
 };
 
 
+// function to get lesson data
+const adminGetLessonData = async (req: Request, res: Response) => {
+    try {
+        const courseId = parseInt(req.params.courseId);
+        const chapterId = parseInt(req.params.chapterId);
+        const lessonId = parseInt(req.params.lessonId);
+
+        if (!courseId || !chapterId || !lessonId) return res.status(400).json({ message: 'Incomplete data  sent to server for processing.' });
+
+        const courseData = await queryCourse(courseId);
+        const chapterData = await queryChapter(courseId, chapterId);
+
+        if (!courseData || !chapterData) throw 'Something went wrong fetching datas';
+
+        res.json({
+            courseName: courseData.course_name,
+            chapterTitle: chapterData.chapter_title,
+            chapterNumber: chapterData.chapter_number
+        });
+    } catch (err) {
+        console.log('erro rin create new lessons', err);
+        res.status(500).json({ mesage: err });
+    };
+};
+
 export {
-    createNewLecture
+    createNewLecture,
+    adminGetLessonData,
 }

@@ -97,7 +97,7 @@ const queryAdminLectureExist = (courseId: number, chapterId: number, lessonNumbe
         pool.query(query, [courseId, chapterId, lessonNumber], (err, result) => {
             if (err) return reject(err);
 
-            resolve(result.lenth > 0);
+            resolve(result.length > 0);
         });
     });
 };

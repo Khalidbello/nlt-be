@@ -75,6 +75,7 @@ const updateChapter = (req: Request, res: Response) => {
     };
 };
 
+
 // function to get lessons for admin
 const adminGetLessons = async (req: Request, res: Response) => {
     try {

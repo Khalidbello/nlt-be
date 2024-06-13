@@ -87,7 +87,6 @@ const queryLessons = (courseId: number, chapterId: number): Promise<queryLessons
     })
 }
 
-
 interface lectureType {
     open_note: string;
     close_note: string;
@@ -102,7 +101,7 @@ interface lectureType {
 
 const queryLecture = (courseId: number, chapterNumber: number, lessonNumber: number): Promise<lectureType> => {
     return new Promise<lectureType>((resolve, reject) => {
-        const query = 'SELECT open_note, close_note, course_id, chapter_id, chapter_number, lesson_number, lesson_title, lesson_id, audio FROM lessons WHERE course_id = ? AND chapter_number = ? AND lesson_number = ?';
+        const query = 'SELECT opening_note, closing_note, course_id, chapter_id, chapter_number, lesson_number, lesson_title, lesson_id, audio FROM lessons WHERE course_id = ? AND chapter_number = ? AND lesson_number = ?';
 
         pool.query(query, [courseId, chapterNumber, lessonNumber], (err, result) => {
             if (err) {

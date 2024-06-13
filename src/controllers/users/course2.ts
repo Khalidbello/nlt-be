@@ -104,11 +104,13 @@ const fetchLesson = async (res: Response, courseId: number, chapterNumber: numbe
     const lecture = await queryLecture(courseId, chapterNumber, lessonNumber);
     //@ts-ignore
     lecture.course_name = courseData.course_name;
+    // @ts-ignore
+    lecture.audio = Buffer.from(lecture.audio).toString('base64');
 
     res.json({
         messsage: 'success',
         data: lecture
-    })
+    });
 };
 
 

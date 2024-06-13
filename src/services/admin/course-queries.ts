@@ -89,6 +89,33 @@ const queryUpdateChapter = (courseId: number, chapterId: number, chapterNumber: 
 };
 
 
+// query to check if lecture exist
+const queryAdminLectureExist = (courseId: number, chapterId: number, lessonNumber: number): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'SELECT lesson_id FROM lessons WHERE course_id = ? AND chapter_id = ? AND lesson_number = ?';
+
+        pool.query(query, [courseId, chapterId, lessonNumber], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.lenth > 0);
+        });
+    });
+};
+
+// query to created new lesson
+const queryAdminCreateLesson = (courseId: number, chapterId: number, chapterNumber: number, lessonNumber: number, lessonTitle: string, openingNote: string, closingNote: string, audio: Buffer) => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'INSERT INTO lessons (course_id, chapter_id, chapter_number, lesson_number, lesson_title, opening_note, closing_note, audio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+
+        pool.query(query, [courseId, chapterId, chapterNumber, lessonNumber, lessonTitle, openingNote, closingNote, audio], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
+
+
 export {
     queryCreateNewCourse,
     queryUpdateCourse,
@@ -96,4 +123,6 @@ export {
     queryChapterExist,
     queryChapter,
     queryUpdateChapter,
+    queryAdminLectureExist,
+    queryAdminCreateLesson,
 }

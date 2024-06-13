@@ -116,6 +116,31 @@ const queryAdminCreateLesson = (courseId: number, chapterId: number, chapterNumb
 };
 
 
+interface lectureType {
+    opening_note: string;
+    closing_note: string;
+    chapter_number: number;
+    lesson_number: number;
+    lesson_title: string;
+    course_id: number;
+    chapter_id: number;
+    lesson_id: number;
+    audio: Blob;
+}
+
+const queryAdminLecture = (courseId: number, chapterId: number, lessonId: number): Promise<lectureType> => {
+    return new Promise<lectureType>((resolve, reject) => {
+        const query = 'SELECT opening_note, closing_note, course_id, chapter_id, chapter_number, lesson_number, lesson_title, lesson_id, audio FROM lessons WHERE course_id = ? AND chapter_id = ? AND lesson_id = ?';
+
+        pool.query(query, [courseId, chapterId, lessonId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result[0]);
+            }
+        })
+    })
+}
 export {
     queryCreateNewCourse,
     queryUpdateCourse,
@@ -125,4 +150,5 @@ export {
     queryUpdateChapter,
     queryAdminLectureExist,
     queryAdminCreateLesson,
+    queryAdminLecture,
 }

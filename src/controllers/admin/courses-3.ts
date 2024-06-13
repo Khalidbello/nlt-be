@@ -1,6 +1,6 @@
 import { Request, Response } from "express-serve-static-core";
 import * as fs from 'fs/promises';
-import { queryAdminCreateLesson, queryAdminLectureExist, queryChapter } from "../../services/admin/course-queries";
+import { queryAdminCreateLesson, queryAdminLecture, queryAdminLectureExist, queryChapter } from "../../services/admin/course-queries";
 import { queryCourse } from "../../services/users/user-queries";
 
 const createNewLecture = async (req: Request, res: Response) => {
@@ -52,12 +52,39 @@ const adminGetLessonData = async (req: Request, res: Response) => {
             chapterNumber: chapterData.chapter_number
         });
     } catch (err) {
-        console.log('erro rin create new lessons', err);
+        console.log('erro in lesson data', err);
         res.status(500).json({ mesage: err });
     };
 };
 
+
+// function to retrieve lecture content
+const admiGetLessonContent = async (req: Request, res: Response) => {
+    try {
+        const courseId = parseInt(req.params.courseId);
+        const chapterId = parseInt(req.params.chapterId);
+        const lessonId = parseInt(req.params.lessonId);
+
+        if (!courseId || !chapterId || !lessonId) return res.status(400).json({ message: 'Incomplete data  sent to server for processing.' });
+
+        const lessonData = await queryAdminLecture(courseId, chapterId, lessonId);
+
+        if (!lessonData) return res.json({});
+
+        res.json({
+            openingNote: lessonData.opening_note,
+            closingNote: lessonData.closing_note,
+            lessonNumber: lessonData.lesson_number,
+            audio: lessonData.audio
+        })
+    } catch (err) {
+        console.log('erro get lesson content', err);
+        res.status(500).json({ mesage: err });
+    }
+}
+
 export {
     createNewLecture,
     adminGetLessonData,
+    admiGetLessonContent,
 }

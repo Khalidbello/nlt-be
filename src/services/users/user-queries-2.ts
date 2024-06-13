@@ -88,8 +88,8 @@ const queryLessons = (courseId: number, chapterId: number): Promise<queryLessons
 }
 
 interface lectureType {
-    open_note: string;
-    close_note: string;
+    opening_note: string;
+    closing_note: string;
     chapter_number: number;
     lesson_number: number;
     lesson_title: string;

@@ -75,7 +75,8 @@ const admiGetLessonContent = async (req: Request, res: Response) => {
             openingNote: lessonData.opening_note,
             closingNote: lessonData.closing_note,
             lessonNumber: lessonData.lesson_number,
-            audio: lessonData.audio
+            // @ts-ignore
+            audio: Buffer.from(lessonData.audio).toString('base64')
         })
     } catch (err) {
         console.log('erro get lesson content', err);

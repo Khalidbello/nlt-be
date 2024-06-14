@@ -115,6 +115,19 @@ const queryAdminCreateLesson = (courseId: number, chapterId: number, chapterNumb
     });
 };
 
+// cquery to update lesson
+const queryAdminLectureUpdate = (courseId: number, chapterId: number, lessonId: number, lessonNumber: number, lessonTitle: string, openingNote: string, closingNote: string, audio: Buffer) => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE lessons SET lesson_number = ?, lesson_title = ?, opening_note = ?, closing_note = ?, audio = ? WHERE course_id = ? AND chapter_id = ? AND lesson_id = ?';
+
+        pool.query(query, [lessonNumber, lessonTitle, openingNote, closingNote, audio, courseId, chapterId, lessonId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
+
 
 interface lectureType {
     opening_note: string;
@@ -137,10 +150,13 @@ const queryAdminLecture = (courseId: number, chapterId: number, lessonId: number
                 reject(err)
             } else {
                 resolve(result[0]);
-            }
-        })
-    })
-}
+            };
+        });
+    });
+};
+
+
+
 export {
     queryCreateNewCourse,
     queryUpdateCourse,
@@ -151,4 +167,5 @@ export {
     queryAdminLectureExist,
     queryAdminCreateLesson,
     queryAdminLecture,
+    queryAdminLectureUpdate
 }

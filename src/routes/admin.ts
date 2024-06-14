@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCourseData } from "../controllers/admin/courses";
 import { queryCreateNewCourse } from "../services/admin/course-queries";
 import { adminGetLessons, createChapter, getChapter, updateChapter } from "../controllers/admin/course-2";
-import { admiGetLessonContent, adminGetLessonData, createNewLecture } from "../controllers/admin/courses-3";
+import { admiGetLessonContent, adminEditLecure, adminGetLessonData, createNewLecture } from "../controllers/admin/courses-3";
 const multer = require("multer");
 
 const router = Router();
@@ -38,6 +38,8 @@ router.post('/update-chapter/:courseId/:chapterId', (req: Request, res: Response
 router.get('/lessons/:courseId/:chapterId', (req: Request, res: Response) => adminGetLessons(req, res));
 
 router.post('/create-lecture/:courseId/:chapterId', upload.single('lecture'), (req: Request, res: Response) => createNewLecture(req, res));
+
+router.post('/edit-lecture/:courseId/:chapterId/:lessonId', upload.single('lecture'), (req: Request, res: Response) => adminEditLecure(req, res));
 
 router.get('/lesson-data/:courseId/:chapterId/:lessonId', (req: Request, res: Response) => adminGetLessonData(req, res));
 

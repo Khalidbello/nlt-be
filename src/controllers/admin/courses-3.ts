@@ -1,6 +1,6 @@
 import { Request, Response } from "express-serve-static-core";
 import * as fs from 'fs/promises';
-import { queryAdminCreateLesson, queryAdminLecture, queryAdminLectureExist, queryChapter } from "../../services/admin/course-queries";
+import { queryAdminCreateLesson, queryAdminLecture, queryAdminLectureExist, queryAdminLectureUpdate, queryChapter } from "../../services/admin/course-queries";
 import { queryCourse } from "../../services/users/user-queries";
 
 const createNewLecture = async (req: Request, res: Response) => {
@@ -75,17 +75,50 @@ const admiGetLessonContent = async (req: Request, res: Response) => {
             openingNote: lessonData.opening_note,
             closingNote: lessonData.closing_note,
             lessonNumber: lessonData.lesson_number,
+            lessonId: lessonData.lesson_id,
+            lessonTitle: lessonData.lesson_title,
             // @ts-ignore
             audio: Buffer.from(lessonData.audio).toString('base64')
-        })
+        });
     } catch (err) {
         console.log('erro get lesson content', err);
         res.status(500).json({ mesage: err });
-    }
-}
+    };
+};
+
+// function to edit lecture
+const adminEditLecure = async (req: Request, res: Response) => {
+    try {
+        const courseId = parseInt(req.params.courseId);
+        const chapterId = parseInt(req.params.chapterId);
+        const lessonId = parseInt(req.params.lessonId);
+        // @ts-ignore
+        const lecture = req.file;
+        const { lessonNumber, lessonTitle, openingNote, closingNote } = req.body;
+
+        if (!courseId || !chapterId || !lessonNumber || !lessonNumber || !lessonTitle || !openingNote || !closingNote || !lecture) return res.status(400).json({ message: 'incomplete data sent to server for procesing' });
+
+        const lessonExist = await queryAdminLecture(courseId, chapterId, lessonNumber);
+
+        if (lessonExist && lessonExist.lesson_id !== lessonId) return res.status(401).json({ message: 'lesson with number alredy exists' });
+
+        const audio = await fs.readFile(lecture.path);
+        const updated = await queryAdminLectureUpdate(courseId, chapterId, lessonId, lessonNumber, lessonTitle, openingNote, closingNote, audio);
+
+        if (!updated) throw 'erro updting lesson';
+
+        res.json({ message: 'lesson updated successfully' });
+    } catch (err) {
+        console.log('error admin edit lecture', err);
+        res.status(500).json({ mesage: err });
+    };
+};
+
+
 
 export {
     createNewLecture,
     adminGetLessonData,
     admiGetLessonContent,
+    adminEditLecure
 }

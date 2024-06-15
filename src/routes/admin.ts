@@ -1,20 +1,26 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCourseData } from "../controllers/admin/courses";
 import { queryCreateNewCourse } from "../services/admin/course-queries";
 import { adminGetLessons, createChapter, getChapter, updateChapter } from "../controllers/admin/course-2";
 import { admiGetLessonContent, adminEditLecure, adminGetLessonData, createNewLecture } from "../controllers/admin/courses-3";
 import { adminDeleteQuestion, adminEditQuiz, adminGetQuiz, createQuiz } from "../controllers/admin/quiz";
+import { CustomSessionData } from "../types/session-types";
 const multer = require("multer");
 
 const router = Router();
 
-//const upload = multer({ dest: '/uploads' });
 
-// router.use((req, res, next) => {
-//     console.log(req.headers);
-//     console.log(req.body);
-//     next();
-// });
+// check if user has permission
+router.use((req: Request, res: Response, next: NextFunction) => {
+    if (
+        (req.session as CustomSessionData).user?.email && (
+            (req.session as CustomSessionData).user?.type === 'admin'
+        )) {
+        next()
+    } else {
+        res.status(403).json({ message: 'you do not have permission to view this document' });
+    };
+});
 
 
 const upload = multer({ dest: '/uploads' });

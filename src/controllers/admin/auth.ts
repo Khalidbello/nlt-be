@@ -12,7 +12,7 @@ const adminLoginHandler = async (req: Request, res: Response) => {
             (req.session as CustomSessionData).user = {
                 email: email,
                 type: 'admin',
-                id: response[0].user_id
+                id: response[0].id
             }
             return res.status(200).json({ message: 'logged in succesfully' });
         };

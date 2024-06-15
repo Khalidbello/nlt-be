@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { queryAdminCreateQuiz } from "../../services/admin/quiz-queries";
+import { queryAdminCreateQuiz, queryAdminEditQustion } from "../../services/admin/quiz-queries";
 import { queryQuiz } from "../../services/users/user-queries-2";
 
 
@@ -42,10 +42,38 @@ const adminGetQuiz = async (req: Request, res: Response) => {
     } catch (err) {
         console.log('error fetching quiz', err);
         res.status(500).json({ mesage: err });
-    }
-}
+    };
+};
+
+
+// function to edit quiz
+const adminEditQuiz = async (req: Request, res: Response) => {
+    try {
+        const courseId = parseInt(req.params.courseId);
+        const chapterId = parseInt(req.params.chapterId);
+        const lessonId = parseInt(req.params.lessonId);
+        const questionId = parseInt(req.params.questionId);
+        const { question, option1, option2, option3, option4, answer } = req.body;
+
+        if (!courseId || !chapterId || !lessonId || !questionId || !question || !option1 || !option2 || !option3 || !option4 || !answer) {
+            return res.status(400).json({ message: 'Incomplete data sent to server for processing' });
+        };
+
+        const edited = await queryAdminEditQustion(questionId, question, option1, option2, option3, option4, answer);
+
+        if (!edited) throw 'somethign went wrong trying to update question';
+
+        res.json({ message: 'question edited sucessfully.' });
+    } catch (err) {
+        console.log('error editing questions', err);
+        res.status(500).json({ mesage: err });
+    };
+};
+
+
 
 export {
     createQuiz,
     adminGetQuiz,
+    adminEditQuiz,
 }

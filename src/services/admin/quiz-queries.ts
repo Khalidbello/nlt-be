@@ -15,6 +15,23 @@ const queryAdminCreateQuiz = (
     });
 };
 
+
+// query to edit question
+const queryAdminEditQustion = (questionId: number, question: string, option1: string, option2: string, option3: string, option4: string, answer: string) => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE questions SET question = ?, option_a = ?, option_b = ?, option_c = ?, option_d = ?, correct_option = ? WHERE question_id = ?';
+
+        pool.query(query, [question, option1, option2, option3, option4, answer, questionId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
+
+
+
 export {
-    queryAdminCreateQuiz
+    queryAdminCreateQuiz,
+    queryAdminEditQustion,
 }

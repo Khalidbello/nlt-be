@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { queryAdminCreateQuiz, queryAdminEditQustion } from "../../services/admin/quiz-queries";
+import { queryAdminCreateQuiz, queryAdminDeleteQuestion, queryAdminEditQustion } from "../../services/admin/quiz-queries";
 import { queryQuiz } from "../../services/users/user-queries-2";
 
 
@@ -71,9 +71,27 @@ const adminEditQuiz = async (req: Request, res: Response) => {
 };
 
 
+// function to delete question
+const adminDeleteQuestion = async (req: Request, res: Response) => {
+    try {
+        const questionId = parseInt(req.params.questionId);
+
+        const deleted = await queryAdminDeleteQuestion(questionId);
+
+        if (!deleted) throw 'error deleting question';
+
+        res.json({ message: 'deleted successfully' });
+    } catch (err) {
+        console.log('error deleting question', err);
+        res.status(500).json({ mesage: err });
+    };
+};
+
+
 
 export {
     createQuiz,
     adminGetQuiz,
     adminEditQuiz,
+    adminDeleteQuestion,
 }

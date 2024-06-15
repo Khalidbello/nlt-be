@@ -3,7 +3,7 @@ import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCours
 import { queryCreateNewCourse } from "../services/admin/course-queries";
 import { adminGetLessons, createChapter, getChapter, updateChapter } from "../controllers/admin/course-2";
 import { admiGetLessonContent, adminEditLecure, adminGetLessonData, createNewLecture } from "../controllers/admin/courses-3";
-import { adminEditQuiz, adminGetQuiz, createQuiz } from "../controllers/admin/quiz";
+import { adminDeleteQuestion, adminEditQuiz, adminGetQuiz, createQuiz } from "../controllers/admin/quiz";
 const multer = require("multer");
 
 const router = Router();
@@ -50,6 +50,8 @@ router.post('/create-quiz/:courseId/:chapterId/:lessonId', (req: Request, res: R
 
 router.post('/edit-quiz/:courseId/:chapterId/:lessonId/:questionId', (req: Request, res: Response) => adminEditQuiz(req, res));
 
-router.get('/quiz/:courseId/:chapterId/:lessonId', (req: Request, res: Response) => adminGetQuiz(req, res))
+router.get('/quiz/:courseId/:chapterId/:lessonId', (req: Request, res: Response) => adminGetQuiz(req, res));
+
+router.delete('/delete-quiz/:questionId', (req: Request, res: Response) => adminDeleteQuestion(req, res));
 
 export default router;

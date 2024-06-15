@@ -30,8 +30,22 @@ const queryAdminEditQustion = (questionId: number, question: string, option1: st
 };
 
 
+// query to delete question
+const queryAdminDeleteQuestion = (questionId: number) => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'DELETE FROM questions WHERE question_id = ?';
+
+        pool.query(query, [questionId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        })
+    });
+};
+
 
 export {
     queryAdminCreateQuiz,
     queryAdminEditQustion,
+    queryAdminDeleteQuestion,
 }

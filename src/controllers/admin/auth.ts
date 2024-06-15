@@ -18,10 +18,11 @@ const adminLoginHandler = async (req: Request, res: Response) => {
         };
         res.status(404).json({ message: 'admin with cridentials not found' });
     } catch (err) {
+        console.log('error signing in admin', err);
         res.status(500).json({ message: err });
     };
 };
 
 export {
-    adminLoginHandler
+    adminLoginHandler,
 };

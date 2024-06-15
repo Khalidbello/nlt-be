@@ -8,7 +8,7 @@ const queryAdminByEmail = (email: string) => {
         pool.query(query, [email], (err, result) => {
             if (err) return reject(err);
 
-            resolve(result[0]);
+            resolve(result);
         })
     });
 };

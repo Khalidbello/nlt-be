@@ -5,6 +5,8 @@ import { queryCourse } from "../../services/users/user-queries";
 import emailOtpSender from "../../modules/emailers/email-otp";
 import otpGenerator from "../../modules/otp-generator";
 import { CustomSessionData } from "../../types/session-types";
+import { queryOtp } from "../../services/otp-queries";
+import { queryAdminDelChapterByCourseId, queryAdminDelEnrolledDatas, queryAdminDeleteCourse, queryAdminDeleteLessonByCourseId } from "../../services/admin/delete-queries";
 
 const createNewLecture = async (req: Request, res: Response) => {
     try {
@@ -126,7 +128,6 @@ const requestCourseDelOtp = async (req: Request, res: Response) => {
         // @ts-ignore
         const opt: number = await otpGenerator(userId);
 
-
         // @ts-ignore
         emailOtpSender(email, 'Admin', opt);
         res.json();
@@ -136,10 +137,37 @@ const requestCourseDelOtp = async (req: Request, res: Response) => {
     };
 };
 
+
+// function to hnadle course delete
+const handleCourseDelete = async (req: Request, res: Response) => {
+    try {
+        const courseId = parseInt(req.params.courseId);
+        const opt = parseInt(req.params.otp);
+        const otp = (req.session as CustomSessionData).user?.id;
+
+        // @ts-ignore chaeck if opt is valid
+        const actualOtp = await queryOtp(otp);
+
+        if (actualOtp.otp !== opt) return res.status(401).json({ message: 'invalid otp entered.' });
+
+        await queryAdminDeleteCourse(courseId);
+        await queryAdminDelChapterByCourseId(courseId);
+        await queryAdminDeleteLessonByCourseId(courseId);
+        await queryAdminDelEnrolledDatas(courseId);
+
+        res.json();
+    } catch (err) {
+        console.log('error sending delete otp', err);
+        res.status(500).json({ mesage: err });
+    };
+};
+
+
 export {
     createNewLecture,
     adminGetLessonData,
     admiGetLessonContent,
     adminEditLecure,
     requestCourseDelOtp,
+    handleCourseDelete,
 }

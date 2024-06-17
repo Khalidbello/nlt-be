@@ -55,6 +55,32 @@ const queryAdminDelEnrolledDatas = (courseId: number): Promise<boolean> => {
 };
 
 
+// function to delete hapter by id
+const queryAdminDeleteChapterById = (chapterId: number): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'DELETE FROM chapters WHERE chapter_id = ?';
+
+        pool.query(query, [chapterId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
+
+
+// funciton to delete lessons by id
+const queryAdminDeleteLessonByChapterId = (chapterId: number): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'DELETE FROM lessons WHERE chapter_id = ?';
+
+        pool.query(query, [chapterId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
 
 
 export {
@@ -62,4 +88,6 @@ export {
     queryAdminDelChapterByCourseId,
     queryAdminDeleteLessonByCourseId,
     queryAdminDelEnrolledDatas,
+    queryAdminDeleteChapterById,
+    queryAdminDeleteLessonByChapterId,
 }

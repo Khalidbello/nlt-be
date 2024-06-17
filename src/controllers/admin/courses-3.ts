@@ -6,7 +6,7 @@ import emailOtpSender from "../../modules/emailers/email-otp";
 import otpGenerator from "../../modules/otp-generator";
 import { CustomSessionData } from "../../types/session-types";
 import { queryOtp } from "../../services/otp-queries";
-import { queryAdminDelChapterByCourseId, queryAdminDelEnrolledDatas, queryAdminDeleteCourse, queryAdminDeleteLessonByCourseId } from "../../services/admin/delete-queries";
+import { queryAdminDelChapterByCourseId, queryAdminDelEnrolledDatas, queryAdminDeleteChapterById, queryAdminDeleteCourse, queryAdminDeleteLessonByChapterId, queryAdminDeleteLessonByCourseId } from "../../services/admin/delete-queries";
 
 const createNewLecture = async (req: Request, res: Response) => {
     try {
@@ -157,11 +157,26 @@ const handleCourseDelete = async (req: Request, res: Response) => {
 
         res.json();
     } catch (err) {
-        console.log('error sending delete otp', err);
+        console.log('error in handle course delete', err);
         res.status(500).json({ mesage: err });
     };
 };
 
+
+// functioin to handl chapter delete
+const handleDeleteChapter = async (req: Request, res: Response) => {
+    try {
+        const chapterId = parseInt(req.params.chapterId);
+
+        await queryAdminDeleteChapterById(chapterId);
+        await queryAdminDeleteLessonByChapterId(chapterId);
+
+        res.json();
+    } catch (err) {
+        console.log('error deleting otp', err);
+        res.status(500).json({ mesage: err });
+    }
+}
 
 export {
     createNewLecture,
@@ -170,4 +185,5 @@ export {
     adminEditLecure,
     requestCourseDelOtp,
     handleCourseDelete,
+    handleDeleteChapter,
 }

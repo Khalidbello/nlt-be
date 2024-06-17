@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCourseData } from "../controllers/admin/courses";
 import { queryCreateNewCourse } from "../services/admin/course-queries";
 import { adminGetLessons, createChapter, getChapter, updateChapter } from "../controllers/admin/course-2";
-import { admiGetLessonContent, adminEditLecure, adminGetLessonData, createNewLecture, handleCourseDelete, requestCourseDelOtp } from "../controllers/admin/courses-3";
+import { admiGetLessonContent, adminEditLecure, adminGetLessonData, createNewLecture, handleCourseDelete, handleDeleteChapter, requestCourseDelOtp } from "../controllers/admin/courses-3";
 import { adminDeleteQuestion, adminEditQuiz, adminGetQuiz, createQuiz } from "../controllers/admin/quiz";
 import { CustomSessionData } from "../types/session-types";
 const multer = require("multer");
@@ -64,6 +64,7 @@ router.get('/request-course-del-otp', (req: Request, res: Response) => requestCo
 
 router.delete('/delete-course/:courseId/:otp', (req: Request, res: Response) => handleCourseDelete(req, res));
 
+router.delete('/delete-chapter/:chapterId', (req: Request, res: Response) => handleDeleteChapter(req, res));
 
 
 export default router;

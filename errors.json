@@ -10,5 +10,22 @@
   {
     "message": "email sent,,,,,, 250 OK id=1sFGHh-0000000CWk1-3qFd",
     "timestamp": "June 6, 2024"
+  },
+  {
+    "message": {
+      "errno": -4058,
+      "code": "ENOENT",
+      "syscall": "open",
+      "path": "C:\\Users\\Eren Jaeger\\Documents\\codes\\OFIC\\nlt\\nlt-be\\email-templates\\email-otp-template.hbs"
+    },
+    "timestamp": "June 17, 2024"
+  },
+  {
+    "message": "email sent,,,,,, 250 OK id=1sJJHw-00000002s1c-41S6",
+    "timestamp": "June 17, 2024"
+  },
+  {
+    "message": "email sent,,,,,, 250 OK id=1sJJJH-00000002sO2-01GK",
+    "timestamp": "June 17, 2024"
   }
 ]

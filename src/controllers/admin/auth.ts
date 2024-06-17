@@ -25,4 +25,4 @@ const adminLoginHandler = async (req: Request, res: Response) => {
 
 export {
     adminLoginHandler,
-};
+};       

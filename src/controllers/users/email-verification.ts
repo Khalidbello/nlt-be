@@ -36,8 +36,7 @@ const generateConfirmEmailOtp = async (req: Request, res: Response) => {
         // @ts-ignore
         const opt: number = await otpGenerator(userId);
         // send otp email
-        storeErrorMessage('above send email function call in generate otp confirmation');
-        emailOtpSender(email, profileData.first_name, opt)
+        emailOtpSender(email, profileData.first_name, opt);
         res.json({ status: 'ok' })
     } catch (err) {
         console.error('eror generstimg otp', err)

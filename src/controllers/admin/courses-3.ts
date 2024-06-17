@@ -2,6 +2,9 @@ import { Request, Response } from "express-serve-static-core";
 import * as fs from 'fs/promises';
 import { queryAdminCreateLesson, queryAdminLecture, queryAdminLectureExist, queryAdminLectureUpdate, queryChapter } from "../../services/admin/course-queries";
 import { queryCourse } from "../../services/users/user-queries";
+import emailOtpSender from "../../modules/emailers/email-otp";
+import otpGenerator from "../../modules/otp-generator";
+import { CustomSessionData } from "../../types/session-types";
 
 const createNewLecture = async (req: Request, res: Response) => {
     try {
@@ -115,10 +118,28 @@ const adminEditLecure = async (req: Request, res: Response) => {
 };
 
 
+// funciton to delete course otp
+const requestCourseDelOtp = async (req: Request, res: Response) => {
+    try {
+        const email = (req.session as CustomSessionData).user?.email;
+        const userId = (req.session as CustomSessionData).user?.id;
+        // @ts-ignore
+        const opt: number = await otpGenerator(userId);
+
+
+        // @ts-ignore
+        emailOtpSender(email, 'Admin', opt);
+        res.json();
+    } catch (err) {
+        console.log('error sending delete otp', err);
+        res.status(500).json({ mesage: err });
+    };
+};
 
 export {
     createNewLecture,
     adminGetLessonData,
     admiGetLessonContent,
-    adminEditLecure
+    adminEditLecure,
+    requestCourseDelOtp,
 }

@@ -42,12 +42,12 @@ const sessionOption = {
         maxAge: 1000 * 60 * 60 * 0.5, // 1 minute for example
         httpOnly: true,
         secure: false, // Must be false for local development without HTTPS
-        sameSite: "none"
+        
     }
 };
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '10mb'}));
 app.use(cors(corsOption));
 // @ts-ignore
 app.use(session(sessionOption))

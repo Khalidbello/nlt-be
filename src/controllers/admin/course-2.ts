@@ -1,5 +1,5 @@
 import { Request, Response, query } from "express";
-import { queryChapter, queryChapterExist, queryCreteChapter, queryUpdateChapter } from "../../services/admin/course-queries";
+import { queryChapter, queryChapterExist, queryCreteChapter, queryLessonChapNumUpdate, queryUpdateChapter } from "../../services/admin/course-queries";
 import { queryCourse, queryLessons, querychapterLessonNumber } from "../../services/users/user-queries";
 
 const createChapter = async (req: Request, res: Response) => {
@@ -65,8 +65,10 @@ const updateChapter = (req: Request, res: Response) => {
         if (!courseId || !chapterId || !chapterNum || !chapterTitle) return res.status(400).json({ message: 'incomplete data sent to server for processing' });
 
         const updated = queryUpdateChapter(courseId, chapterId, chapterNum, chapterTitle);
-
         if (!updated) throw 'something went wrong';
+
+        const lessonChaptNumUpdate = queryLessonChapNumUpdate(courseId, chapterId, chapterNum);
+        if (!lessonChaptNumUpdate) throw 'something went wrong';
 
         res.json({ status: updated });
     } catch (err) {
@@ -85,7 +87,7 @@ const adminGetLessons = async (req: Request, res: Response) => {
         if (!courseId || !chapterId) return res.status(400).json({ message: 'incomplete data sent to server for processing' });
 
         const lessons = await queryLessons(courseId, chapterId);
-       
+
         res.json({ lessons: lessons });
     } catch (err) {
         console.log('error in geting lessons admin...', err);

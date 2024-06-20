@@ -143,7 +143,6 @@ const getQuiz = async (req: Request, res: Response) => {
 
 
 // function to handle quiz submission and update user current lesson and chapter
-
 const handleQuizSubmission = async (req: Request, res: Response) => {
     try {
         const userId = (req.session as CustomSessionData).user?.id;

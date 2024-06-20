@@ -88,6 +88,18 @@ const queryUpdateChapter = (courseId: number, chapterId: number, chapterNumber: 
     });
 };
 
+// query to update lessons under a specific chapter when the chapter is updated
+const queryLessonChapNumUpdate = (courseId: number, chapterId: number, chapterNumber: number): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE lessons SET chapter_number = ? WHERE course_id = ? AND chapter_id = ?';
+
+        pool.query(query, [chapterNumber, courseId, chapterId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
 
 // query to check if lecture exist
 const queryAdminLectureExist = (courseId: number, chapterId: number, lessonNumber: number): Promise<boolean> => {
@@ -167,5 +179,6 @@ export {
     queryAdminLectureExist,
     queryAdminCreateLesson,
     queryAdminLecture,
-    queryAdminLectureUpdate
+    queryAdminLectureUpdate,
+    queryLessonChapNumUpdate
 }

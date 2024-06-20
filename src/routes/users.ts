@@ -10,7 +10,7 @@ import {
     handleQuizSubmission,
     getCoursePrice,
 } from "../controllers/users/courses";
-import { getUserProfileData, handleChangeNames, handleChangePassword, userDpUpload } from "../controllers/users/profie";
+import { getUserDp, getUserProfileData, handleChangeNames, handleChangePassword, userDpUpload } from "../controllers/users/profie";
 import { CustomSessionData } from "../types/session-types";
 import { handleFreeEnroll } from "../controllers/users/enrollments";
 import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
@@ -71,6 +71,7 @@ router.post('/change-password', (req: Request, res: Response) => handleChangePas
 
 router.post('/change-names', (req: Request, res: Response) => handleChangeNames(req, res));
 
+router.get('/user-dp', (req: Request, res: Response) => getUserDp(req, res));
 
 // log out route
 router.get('/logout', (req: Request, res: Response) => {

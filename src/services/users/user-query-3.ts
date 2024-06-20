@@ -132,14 +132,14 @@ const queryUpdateUserNames = (userId: number, firstName: string, lastName: strin
 }
 
 // query chck if user has dp
-const queryUserDpExist = (userId: number): Promise<boolean> => {
-    return new Promise<boolean>((resolve, reject) => {
+const queryUserDp = (userId: number): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
         const query = 'SELECT * FROM user_dp WHERE user_id = ? LIMIT 1';
 
         pool.query(query, [userId], (err, result) => {
             if (err) return reject(err);
 
-            resolve(result.length > 0);
+            resolve(result[0]);
         });
     });
 };
@@ -182,7 +182,7 @@ export {
     queryUpdateUserNames,
     queryUserSaveDp,
     queryUpdateUserDp,
-    queryUserDpExist,
+    queryUserDp,
 }
 
 export type {

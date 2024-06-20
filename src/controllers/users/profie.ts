@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { queryUpdatePassword, queryUpdateUserDp, queryUpdateUserNames, queryUserProfile, queryUserSaveDp, queryUserDpExist } from "../../services/users/user-query-3";
+import { queryUpdatePassword, queryUpdateUserDp, queryUpdateUserNames, queryUserProfile, queryUserSaveDp, queryUserDp } from "../../services/users/user-query-3";
 import { CustomSessionData } from "../../types/session-types";
 import * as fs from 'fs/promises';
 
@@ -72,7 +72,7 @@ const userDpUpload = async (req: Request, res: Response) => {
 
         const imageBuffer = await fs.readFile(file.path);
         // @ts-ignore
-        const dpExists = await queryUserDpExist(parseInt(userId));
+        const dpExists = await queryUserDp(parseInt(userId));
         let saved;
 
         if (dpExists) {
@@ -87,13 +87,34 @@ const userDpUpload = async (req: Request, res: Response) => {
     } catch (err) {
         console.log('error user image upload', err);
         res.status(500).json({ message: err });
-    }
-}
+    };
+};
+
+
+// route to retunr user profile pucture 
+const getUserDp = async (req: Request, res: Response) => {
+    try {
+        const userId = (req.session as CustomSessionData).user?.id;
+        // @ts-ignore
+        const userDp = await queryUserDp(userId);
+
+        if (!userDp) return res.status(404).json({ message: 'not dp found' });
+
+        userDp.dp = Buffer.from(userDp.dp).toString('base64');
+
+        res.json(userDp);
+    } catch (err) {
+        console.log('error user image upload', err);
+        res.status(500).json({ message: err });
+    };
+};
+
 
 
 export {
     getUserProfileData,
     handleChangePassword,
     handleChangeNames,
-    userDpUpload
+    userDpUpload,
+    getUserDp,
 }

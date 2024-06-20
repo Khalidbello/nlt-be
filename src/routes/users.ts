@@ -10,10 +10,11 @@ import {
     handleQuizSubmission,
     getCoursePrice,
 } from "../controllers/users/courses";
-import { getUserProfileData, handleChangeNames, handleChangePassword } from "../controllers/users/profie";
+import { getUserProfileData, handleChangeNames, handleChangePassword, userDpUpload } from "../controllers/users/profie";
 import { CustomSessionData } from "../types/session-types";
 import { handleFreeEnroll } from "../controllers/users/enrollments";
 import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
+const multer = require("multer");
 
 const router = Router();
 
@@ -56,6 +57,9 @@ router.get('/enroll-free/:courseId', (req: Request, res: Response) => handleFree
 
 
 // user profile related
+const upload = multer({ dest: '/uploads' });
+
+router.post('/edit-dp', upload.single('dp'), (req: Request, res: Response) => userDpUpload(req, res));
 
 router.get('/check-email-verify', (req: Request, res: Response) => getCheckEmailVerify(req, res));
 

@@ -131,6 +131,47 @@ const queryUpdateUserNames = (userId: number, firstName: string, lastName: strin
     })
 }
 
+// query chck if user has dp
+const queryUserDpExist = (userId: number): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'SELECT * FROM user_dp WHERE user_id = ? LIMIT 1';
+
+        pool.query(query, [userId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.length > 0);
+        });
+    });
+};
+
+// query to upload user image
+const queryUserSaveDp = (userId: number, imageBuffer: Buffer) => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'INSERT INTO user_dp (user_id, dp) VALUES (?, ?)';
+
+        pool.query(query, [userId, imageBuffer], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
+
+// to update user dp
+const queryUpdateUserDp = (userId: number, imageBuffer: Buffer) => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE user_dp SET dp = ? WHERE user_id = ?';
+
+        pool.query(query, [imageBuffer, userId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
+
+
+
 export {
     queryUserProfile,
     queryNewEnrollment,
@@ -139,6 +180,9 @@ export {
     querySaveEmailVerify,
     queryUpdatePassword,
     queryUpdateUserNames,
+    queryUserSaveDp,
+    queryUpdateUserDp,
+    queryUserDpExist,
 }
 
 export type {

@@ -16,6 +16,9 @@ import {
     queryLessonByChapterAndNUmber,
     updateUserEnrolledCurrentLessonAndChapter,
 } from "../../services/users/user-queries";
+import { queryCourseCompletion } from "../../services/users/enrolled-queries";
+import { getCourseData } from "../admin/courses";
+import { queryUserProfile } from "../../services/users/user-query-3";
 
 
 
@@ -195,7 +198,17 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
             if (nextchapterNumber > numOfChapterInCourse) {
                 // user has completed course 
                 // update user enrolled......
-                return res.json({ message: 'user has completed course....' });
+                const updated = await queryCourseCompletion(userId, courseId)
+                if (!updated) throw 'error updating user completion';
+
+                const courseData = await queryCourse(courseId);
+                const userData = await queryUserProfile(userId);
+
+                return res.json({
+                    status: 'completed',
+                    courseName: courseData.course_name,
+                    userName: userData.first_name,
+                });
             };
         };
 

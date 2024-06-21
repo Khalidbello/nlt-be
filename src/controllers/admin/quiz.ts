@@ -21,7 +21,7 @@ const createQuiz = async (req: Request, res: Response) => {
 
         res.json({ message: 'quiz created succesfully.' });
     } catch (err) {
-        console.log('error creating quiz', err);
+        console.error('error creating quiz', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -40,7 +40,7 @@ const adminGetQuiz = async (req: Request, res: Response) => {
 
         res.json(quiz);
     } catch (err) {
-        console.log('error fetching quiz', err);
+        console.error('error fetching quiz', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -65,7 +65,7 @@ const adminEditQuiz = async (req: Request, res: Response) => {
 
         res.json({ message: 'question edited sucessfully.' });
     } catch (err) {
-        console.log('error editing questions', err);
+        console.error('error editing questions', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -82,7 +82,7 @@ const adminDeleteQuestion = async (req: Request, res: Response) => {
 
         res.json({ message: 'deleted successfully' });
     } catch (err) {
-        console.log('error deleting question', err);
+        console.error('error deleting question', err);
         res.status(500).json({ mesage: err });
     };
 };

@@ -19,7 +19,7 @@ const createChapter = async (req: Request, res: Response) => {
 
         res.json({ message: 'Chapter creatred sucesfully' });
     } catch (err) {
-        console.log('error in creating chapter chapter', err);
+        console.error('error in creating chapter chapter', err);
         res.status(500).json({ message: err });
     };
 };
@@ -49,7 +49,7 @@ const getChapter = async (req: Request, res: Response) => {
             courseName: courseData.course_name
         });
     } catch (err) {
-        console.log('error in getting chapter data admin', err);
+        console.error('error in getting chapter data admin', err);
         res.status(500).json({ message: err });
     };
 };
@@ -72,7 +72,7 @@ const updateChapter = (req: Request, res: Response) => {
 
         res.json({ status: updated });
     } catch (err) {
-        console.log('error in updating course admin...', err);
+        console.error('error in updating course admin...', err);
         res.status(500).json({ message: err });
     };
 };
@@ -90,7 +90,7 @@ const adminGetLessons = async (req: Request, res: Response) => {
 
         res.json({ lessons: lessons });
     } catch (err) {
-        console.log('error in geting lessons admin...', err);
+        console.error('error in geting lessons admin...', err);
         res.status(500).json({ message: err });
     };
 };

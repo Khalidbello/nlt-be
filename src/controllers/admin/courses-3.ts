@@ -7,31 +7,42 @@ import otpGenerator from "../../modules/otp-generator";
 import { CustomSessionData } from "../../types/session-types";
 import { queryOtp } from "../../services/otp-queries";
 import { queryAdminDelChapterByCourseId, queryAdminDelEnrolledDatas, queryAdminDeleteChapterById, queryAdminDeleteCourse, queryAdminDeleteLessonByChapterId, queryAdminDeleteLessonByCourseId } from "../../services/admin/delete-queries";
+import formidable from 'formidable';
+
+const form = formidable();
 
 const createNewLecture = async (req: Request, res: Response) => {
     try {
+        const data: any = await new Promise((resolve, reject) => {
+            form.parse(req, (err: Error, formFields: any, formFiles: any) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve({ fields: formFields, files: formFiles });
+            });
+        });
+
         const courseId = parseInt(req.params.courseId);
         const chapterId = parseInt(req.params.chapterId);
-        // @ts-ignore
-        const lecture = req.file;
-        const { openingNote, closingNote, lessonNumber, lessonTitle } = req.body;
-        console.log(openingNote, closingNote, courseId, chapterId, lecture, lessonTitle);
+        const lecture = data.files.lecture[0];
+        const { openingNote, closingNote, lessonNumber, lessonTitle } = data.fields;
+        //console.error(openingNote, closingNote, courseId, chapterId, lecture, lessonTitle);
 
         if (!courseId || !chapterId || !lecture || !openingNote || !closingNote || !lessonNumber || !lessonTitle) return res.status(400).json({ message: 'mcomplete data sent to server for processing.' });
 
-        const lessonExist = await queryAdminLectureExist(courseId, chapterId, lessonNumber);
+        const lessonExist = await queryAdminLectureExist(courseId, chapterId, lessonNumber[0]);
 
         if (lessonExist) return res.status(401).json({ message: 'lesson with smae number in this chapter already exist' });
 
         const chapter = await queryChapter(courseId, chapterId);
-        const audio = await fs.readFile(lecture.path);
-        const lessonCreated = await queryAdminCreateLesson(courseId, chapterId, chapter.chapter_number, lessonNumber, lessonTitle, openingNote, closingNote, audio);
+        const audio = await fs.readFile(lecture.filepath);
+        const lessonCreated = await queryAdminCreateLesson(courseId, chapterId, chapter.chapter_number, lessonNumber[0], lessonTitle[0], openingNote[0], closingNote[0], audio);
 
         if (!lessonCreated) throw 'something went wrong';
 
         res.json({ message: 'lesson created successfuly.' });
     } catch (err) {
-        console.log('erro rin create new lessons', err);
+        console.error('erro rin create new lessons', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -57,7 +68,7 @@ const adminGetLessonData = async (req: Request, res: Response) => {
             chapterNumber: chapterData.chapter_number
         });
     } catch (err) {
-        console.log('erro in lesson data', err);
+        console.error('erro in lesson data', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -86,7 +97,7 @@ const admiGetLessonContent = async (req: Request, res: Response) => {
             audio: Buffer.from(lessonData.audio).toString('base64')
         });
     } catch (err) {
-        console.log('erro get lesson content', err);
+        console.error('erro get lesson content', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -94,27 +105,35 @@ const admiGetLessonContent = async (req: Request, res: Response) => {
 // function to edit lecture
 const adminEditLecure = async (req: Request, res: Response) => {
     try {
+        const data: any = await new Promise((resolve, reject) => {
+            form.parse(req, (err: Error, formFields: any, formFiles: any) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve({ fields: formFields, files: formFiles });
+            });
+        });
+
         const courseId = parseInt(req.params.courseId);
         const chapterId = parseInt(req.params.chapterId);
         const lessonId = parseInt(req.params.lessonId);
-        // @ts-ignore
-        const lecture = req.file;
-        const { lessonNumber, lessonTitle, openingNote, closingNote } = req.body;
+        const lecture = data.files.lecture[0];
+        const { lessonNumber, lessonTitle, openingNote, closingNote } = data.fields;
 
         if (!courseId || !chapterId || !lessonNumber || !lessonNumber || !lessonTitle || !openingNote || !closingNote || !lecture) return res.status(400).json({ message: 'incomplete data sent to server for procesing' });
 
-        const lessonExist = await queryAdminLecture(courseId, chapterId, lessonNumber);
+        const lessonExist = await queryAdminLecture(courseId, chapterId, parseInt(lessonNumber[0]));
 
         if (lessonExist && lessonExist.lesson_id !== lessonId) return res.status(401).json({ message: 'lesson with number alredy exists' });
 
-        const audio = await fs.readFile(lecture.path);
-        const updated = await queryAdminLectureUpdate(courseId, chapterId, lessonId, lessonNumber, lessonTitle, openingNote, closingNote, audio);
+        const audio = await fs.readFile(lecture.filepath);
+        const updated = await queryAdminLectureUpdate(courseId, chapterId, lessonId, lessonNumber[0], lessonTitle[0], openingNote[0], closingNote[0], audio);
 
         if (!updated) throw 'erro updting lesson';
 
         res.json({ message: 'lesson updated successfully' });
     } catch (err) {
-        console.log('error admin edit lecture', err);
+        console.error('error admin edit lecture', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -132,7 +151,7 @@ const requestCourseDelOtp = async (req: Request, res: Response) => {
         emailOtpSender(email, 'Admin', opt);
         res.json();
     } catch (err) {
-        console.log('error sending delete otp', err);
+        console.error('error sending delete otp', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -157,7 +176,7 @@ const handleCourseDelete = async (req: Request, res: Response) => {
 
         res.json();
     } catch (err) {
-        console.log('error in handle course delete', err);
+        console.error('error in handle course delete', err);
         res.status(500).json({ mesage: err });
     };
 };
@@ -173,7 +192,7 @@ const handleDeleteChapter = async (req: Request, res: Response) => {
 
         res.json();
     } catch (err) {
-        console.log('error deleting otp', err);
+        console.error('error deleting otp', err);
         res.status(500).json({ mesage: err });
     }
 }

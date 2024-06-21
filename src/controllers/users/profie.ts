@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { queryUpdatePassword, queryUpdateUserDp, queryUpdateUserNames, queryUserProfile, queryUserSaveDp, queryUserDp } from "../../services/users/user-query-3";
 import { CustomSessionData } from "../../types/session-types";
 import * as fs from 'fs/promises';
+import formidable from 'formidable';
+
+const form = formidable();
 
 
 const getUserProfileData = async (req: Request, res: Response) => {
@@ -64,13 +67,22 @@ const handleChangeNames = async (req: Request, res: Response) => {
 // funcition to haanle user dp upload
 const userDpUpload = async (req: Request, res: Response) => {
     try {
+        const data: any = await new Promise((resolve, reject) => {
+            form.parse(req, (err: Error, formFields: any, formFiles: any) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve({ fields: formFields, files: formFiles });
+            });
+        });
+
         const userId = (req.session as CustomSessionData).user?.id;
         // @ts-ignore
-        const file = req.file;
+        const file = data.files.dp[0];
 
         if (!userId || !file) return res.status(400).json({ message: 'Incomplete data sent to server for processing' });
 
-        const imageBuffer = await fs.readFile(file.path);
+        const imageBuffer = await fs.readFile(file.filepath);
         // @ts-ignore
         const dpExists = await queryUserDp(parseInt(userId));
         let saved;

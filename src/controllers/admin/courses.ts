@@ -2,24 +2,34 @@ import { Request, Response } from "express";
 import { getChapters, queryCourse, queryCourseChapterNumber, queryCourseEnrolledStudent, queryCourseLessonNumber, queryCourses, queryEnrolled, queryLessons, querychapterLessonNumber } from "../../services/users/user-queries";
 import { queryCreateNewCourse, queryUpdateCourse } from "../../services/admin/course-queries";
 import * as fs from 'fs/promises';
+import formidable from 'formidable';
+
+const form = formidable();
 
 
 // functio to handle creation of new course
 const createNewCourse = async (req: Request, res: Response) => {
     try {
-        // @ts-ignore
-        const image = req.file!;
-        const { courseName, title, aboutCourse, price, discount } = req.body;
+        const data: any = await new Promise((resolve, reject) => {
+            form.parse(req, (err: Error, formFields: any, formFiles: any) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve({ fields: formFields, image: formFiles });
+            });
+        });
 
+        const image = data.image.image[0]
+        const { courseName, title, aboutCourse, price, discount } = data.fields;
+       
         if (!image || !courseName || !title || !aboutCourse) return res.status(400).json({ message: 'incomplete data sent to server for processing' });
 
-
-        const imageBuffer = await fs.readFile(image.path);
-        const courseSaved = await queryCreateNewCourse(imageBuffer, courseName, title, aboutCourse, parseInt(price), parseInt(discount));
+        const imageBuffer = await fs.readFile(image.filepath);
+        const courseSaved = await queryCreateNewCourse(imageBuffer, courseName[0], title[0], aboutCourse[0], parseInt(price[0]), parseInt(discount[0]));
 
         res.json({ data: courseSaved })
     } catch (err) {
-        console.log('error in data', err);
+        console.error('error in data', err);
         res.status(500).json({ message: err });
     };
 };
@@ -28,29 +38,36 @@ const createNewCourse = async (req: Request, res: Response) => {
 // function to handle creationof new course
 const editCourse = async (req: Request, res: Response) => {
     try {
-        const courseId = parseInt(req.params.courseId);
-        // @ts-ignore
-        const image = req.file;
-        const { courseName, title, aboutCourse, price, discount } = req.body;
+        const data: any = await new Promise((resolve, reject) => {
+            form.parse(req, (err: Error, formFields: any, formFiles: any) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve({ fields: formFields, image: formFiles });
+            });
+        });
 
+        const courseId = parseInt(req.params.courseId);
+        const image = data.image.image[0];
+        const { courseName, title, aboutCourse, price, discount } = data.fields;
+       
         if (!courseId || !image || !courseName || !title || !aboutCourse) return res.status(400).json({ message: 'incomplete data sent to server for processing' });
 
-        console.log('this is the image locationnnnnnnnnnnn, ', image.path);
-        const imageBuffer = await fs.readFile(image.path);
-        const courseUpdated = await queryUpdateCourse(courseId, imageBuffer, courseName, title, aboutCourse, parseInt(price), parseInt(discount));
+        const imageBuffer = await fs.readFile(image.filepath);
+        const courseUpdated = await queryUpdateCourse(courseId, imageBuffer, courseName[0], title[0], aboutCourse[0], parseInt(price[0]), parseInt(discount[0]));
 
         if (!courseUpdated) throw 'something went wrong updatin course data';
 
         res.json({ status: courseUpdated });
     } catch (err) {
-        console.log('error in updating course data', err);
+        console.error('error in updating course data', err);
         res.status(500).json({ message: err });
     };
 };
 
 // function to fetch courses for admin
 const adminGetCourses = async (req: Request, res: Response) => {
-    console.log('in get courses admin.................')
+    console.error('in get courses admin.................')
     try {
         const data: any = [];
         const pagin = parseInt(req.params.pagin);
@@ -76,7 +93,7 @@ const adminGetCourses = async (req: Request, res: Response) => {
 
         res.json(data);
     } catch (err) {
-        console.log('error in data', err);
+        console.error('error in data', err);
         res.status(500).json({ message: err });
     }
 };
@@ -101,7 +118,7 @@ const getCourseData = async (req: Request, res: Response) => {
             courseId: course.course_id,
         });
     } catch (err) {
-        console.log('error in getCoursedata', err);
+        console.error('error in getCoursedata', err);
         res.status(500).json({ message: err });
     };
 };
@@ -126,7 +143,7 @@ const getChaptersData = async (req: Request, res: Response) => {
 
         res.json(data);
     } catch (err) {
-        console.log('error in get course chapter', err);
+        console.error('error in get course chapter', err);
         res.status(500).json({ message: err });
     };
 };

@@ -14,7 +14,6 @@ import { getUserDp, getUserProfileData, handleChangeNames, handleChangePassword,
 import { CustomSessionData } from "../types/session-types";
 import { handleFreeEnroll } from "../controllers/users/enrollments";
 import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
-const multer = require("multer");
 
 const router = Router();
 
@@ -57,9 +56,8 @@ router.get('/enroll-free/:courseId', (req: Request, res: Response) => handleFree
 
 
 // user profile related
-const upload = multer({ dest: '/uploads' });
 
-router.post('/edit-dp', upload.single('dp'), (req: Request, res: Response) => userDpUpload(req, res));
+router.post('/edit-dp', (req: Request, res: Response) => userDpUpload(req, res));
 
 router.get('/check-email-verify', (req: Request, res: Response) => getCheckEmailVerify(req, res));
 

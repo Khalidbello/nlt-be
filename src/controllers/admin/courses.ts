@@ -35,6 +35,7 @@ const editCourse = async (req: Request, res: Response) => {
 
         if (!courseId || !image || !courseName || !title || !aboutCourse) return res.status(400).json({ message: 'incomplete data sent to server for processing' });
 
+        console.log('this is the image locationnnnnnnnnnnn, ', image.path);
         const imageBuffer = await fs.readFile(image.path);
         const courseUpdated = await queryUpdateCourse(courseId, imageBuffer, courseName, title, aboutCourse, parseInt(price), parseInt(discount));
 

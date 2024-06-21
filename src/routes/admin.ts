@@ -6,6 +6,7 @@ import { admiGetLessonContent, adminEditLecure, adminGetLessonData, createNewLec
 import { adminDeleteQuestion, adminEditQuiz, adminGetQuiz, createQuiz } from "../controllers/admin/quiz";
 import { CustomSessionData } from "../types/session-types";
 const multer = require("multer");
+const path = require('path');
 
 const router = Router();
 
@@ -23,7 +24,16 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 
-const upload = multer({ dest: '/uploads' });
+// Configure Multer storage with proper path
+const storage = multer.diskStorage({
+    destination: path.join(__dirname, 'uploads'), // Ensure parent directories exist
+    filename: function (req: any, file: any, cb: any) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
 
 // Create endpoint to handle file upload
 router.post('/create-course', upload.single('image'), (req: Request, res: Response) => createNewCourse(req, res));

@@ -40,8 +40,24 @@ const userQueryUpdateNoteToViewed = (userId: number) => {
 };
 
 
+// query to add new notificatiion
+const queryAddNewNotification = (userId: number, message: string, type: string): Promise<boolean> => {
+    return new Promise<boolean>((resolve, reject) => {
+        const date = new Date();
+        const query = 'INSERT INTO notifications (userId, message, type, created_at) VALUES (?, ?, ?, ?)';
+
+        pool.query(query, [userId, message, type, date], (err, resuult) => {
+            if (err) return reject(err);
+
+            resolve(resuult.affectedRows > 0);
+        });
+    });
+};
+
+
 export {
     queryUserCountUnViewedNoti,
     queryUserNotifications,
     userQueryUpdateNoteToViewed,
+    queryAddNewNotification,
 }

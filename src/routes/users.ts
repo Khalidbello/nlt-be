@@ -14,6 +14,7 @@ import { getUserDp, getUserProfileData, handleChangeNames, handleChangePassword,
 import { CustomSessionData } from "../types/session-types";
 import { handleFreeEnroll } from "../controllers/users/enrollments";
 import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
+import { checkUnViewedNotiication } from "../controllers/users/notification";
 
 const router = Router();
 
@@ -70,6 +71,11 @@ router.post('/change-password', (req: Request, res: Response) => handleChangePas
 router.post('/change-names', (req: Request, res: Response) => handleChangeNames(req, res));
 
 router.get('/user-dp', (req: Request, res: Response) => getUserDp(req, res));
+
+
+// notification related 
+router.get('/unvied-notification', (req: Request, res: Response) => checkUnViewedNotiication(req, res));
+
 
 // log out route
 router.get('/logout', (req: Request, res: Response) => {

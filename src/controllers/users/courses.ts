@@ -161,6 +161,7 @@ const getCourseView = async (req: Request, res: Response) => {
             currentChapterId: details.currentChapterId,
             chapters: details.chapters,
             lessonNumbers: details.lessonNumbers,
+            completed: details.completed
         })
         // update the course last visted if user has enrolled for course
 

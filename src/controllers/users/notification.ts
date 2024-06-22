@@ -28,6 +28,7 @@ const getNotifications = async (req: Request, res: Response) => {
         const notificaions = await queryUserNotifications(userId, limit, pagin);
 
         res.json(notificaions);
+        userQueryUpdateNoteToViewed(userId);
     } catch (err) {
         console.error('an error occured fetch lessons', err);
         res.status(500).json({ message: err });

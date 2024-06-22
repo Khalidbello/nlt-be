@@ -41,10 +41,10 @@ const userQueryUpdateNoteToViewed = (userId: number) => {
 
 
 // query to add new notificatiion
-const queryAddNewNotification = (userId: number, message: string, type: string): Promise<boolean> => {
+const queryAddNewNotification = (userId: number, message: string, type: 'info' | 'success' | 'error'): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
         const date = new Date();
-        const query = 'INSERT INTO notifications (userId, message, type, created_at) VALUES (?, ?, ?, ?)';
+        const query = 'INSERT INTO notifications (user_id, message, type, created_at, viewed) VALUES (?, ?, ?, ?, false)';
 
         pool.query(query, [userId, message, type, date], (err, resuult) => {
             if (err) return reject(err);

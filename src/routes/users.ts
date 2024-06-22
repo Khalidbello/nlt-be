@@ -75,7 +75,7 @@ router.get('/user-dp', (req: Request, res: Response) => getUserDp(req, res));
 
 // notification related 
 
-router.get('/unvied-notification', (req: Request, res: Response) => checkUnViewedNotiication(req, res));
+router.get('/unviewed-notification', (req: Request, res: Response) => checkUnViewedNotiication(req, res));
 
 router.get('/notifications/:limit/:pagin', (req: Request, res: Response) => getNotifications(req, res));
 

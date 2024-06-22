@@ -204,6 +204,14 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
                 const courseData = await queryCourse(courseId);
                 const userData = await queryUserProfile(userId);
 
+                // make query to get  currentChapterId, nextLessonId
+                const lesson = await queryLessonByChapterAndNUmber(courseId, nextchapterNumber - 1, numOfLessonInChapter);
+
+                // update user enrollment data
+                const updated2: boolean = await updateUserEnrolledCurrentLessonAndChapter(userId, courseId, lesson.chapter_id, lesson.lesson_id, nextchapterNumber - 1, numOfLessonInChapter, (percentage + enrolled.quiz_performance) / 2);
+
+                if (!updated2) throw 'error updating user course progress';
+
                 return res.json({
                     status: 'completed',
                     courseName: courseData.course_name,
@@ -217,6 +225,7 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
 
         // update user enrollment data
         const update: boolean = await updateUserEnrolledCurrentLessonAndChapter(userId, courseId, lesson.chapter_id, lesson.lesson_id, nextchapterNumber, nextLessonNumber, (percentage + enrolled.quiz_performance) / 2);
+
 
         //@ts-ignore
         if (update) {

@@ -12,6 +12,7 @@ interface calcProgressType {
     lastVisited: string;
     chapters: chaptersType[];
     lessonNumbers: { [key: number]: number };
+    completed: boolean;
 }
 
 const calcProgress = async (userId: number, courseId: number): Promise<calcProgressType> => {
@@ -27,8 +28,6 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
             let enrolled: boolean = false;
 
             enrolledData = await queryEnrolled(userId, courseId);
-
-            console.log('enrolled response in calc progress', enrolledData);
 
             // get all chapters ordered by chapter number
             const chapters: chaptersType[] = await getChapters(courseId); // ordered in accordanc with chapter number
@@ -70,6 +69,7 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
                 lastVisited: enrolledData?.last_visited,
                 chapters: chapters,
                 lessonNumbers: lessonNumbers,
+                completed: enrolledData?.completed,
             })
         }
         catch (error) {

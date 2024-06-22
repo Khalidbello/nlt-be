@@ -35,5 +35,21 @@
   {
     "message": "email sent,,,,,, 250 OK id=1sJKJJ-0000000398N-1O8J",
     "timestamp": "June 17, 2024"
+  },
+  {
+    "message": "Error sending email:::::::::::::Error: read ECONNRESET",
+    "timestamp": "June 22, 2024"
+  },
+  {
+    "message": "Error sending email:::::::::::::Error: connect ECONNABORTED 51.77.92.66:465",
+    "timestamp": "June 22, 2024"
+  },
+  {
+    "message": "email sent,,,,,, 250 OK id=1sL8LM-000000016om-0bU3",
+    "timestamp": "June 22, 2024"
+  },
+  {
+    "message": "Error sending email:::::::::::::Error: connect ETIMEDOUT 51.77.92.66:465",
+    "timestamp": "June 22, 2024"
   }
 ]

@@ -119,7 +119,7 @@ const querychapterLessonNumber = (chapterId: number): Promise<number> => {
 // query enrolled to get wherre user stopped in their study
 const queryEnrolled = (userId: number, courseId: number): Promise<enrolledType> => {
     return new Promise<enrolledType>((resolve, reject) => {
-        const query = 'SELECT payment_type, current_lesson_id, current_chapter_id, current_lesson_number, current_chapter_number, quiz_performance, enrolled_at, last_visited FROM enrolled WHERE user_id = ? AND course_id = ?';
+        const query = 'SELECT * FROM enrolled WHERE user_id = ? AND course_id = ?';
 
         pool.query(query, [userId, courseId], (err, result) => {
             if (err) {
@@ -184,6 +184,7 @@ interface enrolledType {
     quiz_performance: number;
     enrolled_at: string;
     last_visited: string;
+    completed: boolean;
 }
 
 export {

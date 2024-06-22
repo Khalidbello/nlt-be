@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CustomSessionData } from "../../types/session-types";
-import { queryUserCountUnViewedNoti, queryUserNotifications } from "../../services/users/notificaion-queries";
+import { queryUserCountUnViewedNoti, queryUserNotifications, userQueryUpdateNoteToViewed } from "../../services/users/notificaion-queries";
 
 const checkUnViewedNotiication = async (req: Request, res: Response) => {
     try {
@@ -34,7 +34,24 @@ const getNotifications = async (req: Request, res: Response) => {
     };
 };
 
+
+// function to set all user notification to viewed
+const setNotToViewed = (req: Request, res: Response) => {
+    try {
+        // @ts-ignore
+        const userId: number = (req.session as CustomSessionData).user?.id;
+        const updated = userQueryUpdateNoteToViewed(userId);
+
+        res.json({ message: 'notifications updated' });
+    } catch (err) {
+        console.error('error in updating all notifiaion to viwed', err);
+        res.status(500).json({ message: err });
+    };
+};
+
+
 export {
     checkUnViewedNotiication,
     getNotifications,
+    setNotToViewed
 }

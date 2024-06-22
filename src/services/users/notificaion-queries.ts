@@ -27,7 +27,21 @@ const queryUserNotifications = (userId: number, limit: number, pagin: number): P
 };
 
 
+// query to set all unviewed notification to viewd
+const userQueryUpdateNoteToViewed = (userId: number) => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE notifications SET viewed = true WHERE user_id = ? AND viewed = false ';
+        pool.query(query, [userId], (err, result) => {
+            if (err) return reject(err);
+
+            resolve(true);
+        });
+    });
+};
+
+
 export {
     queryUserCountUnViewedNoti,
     queryUserNotifications,
+    userQueryUpdateNoteToViewed,
 }

@@ -14,7 +14,7 @@ import { getUserDp, getUserProfileData, handleChangeNames, handleChangePassword,
 import { CustomSessionData } from "../types/session-types";
 import { handleFreeEnroll } from "../controllers/users/enrollments";
 import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
-import { checkUnViewedNotiication } from "../controllers/users/notification";
+import { checkUnViewedNotiication, getNotifications } from "../controllers/users/notification";
 
 const router = Router();
 
@@ -74,7 +74,11 @@ router.get('/user-dp', (req: Request, res: Response) => getUserDp(req, res));
 
 
 // notification related 
+
 router.get('/unvied-notification', (req: Request, res: Response) => checkUnViewedNotiication(req, res));
+
+router.get('/notifications/:limit/:pagin', (req: Request, res: Response) => getNotifications(req, res));
+
 
 
 // log out route

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CustomSessionData } from "../../types/session-types";
-import { queryUserCountUnViewedNoti } from "../../services/users/notificaion-queries";
+import { queryUserCountUnViewedNoti, queryUserNotifications } from "../../services/users/notificaion-queries";
 
 const checkUnViewedNotiication = async (req: Request, res: Response) => {
     try {
@@ -17,9 +17,17 @@ const checkUnViewedNotiication = async (req: Request, res: Response) => {
     };
 };
 
-const getNotifications = async (rea: Request, res: Response) => {
-    try {
 
+const getNotifications = async (req: Request, res: Response) => {
+    try {
+        // @ts-ignore
+        const userId: number = (req.session as CustomSessionData).user?.id;
+        const limit = parseInt(req.params.limit);
+        const pagin = parseInt(req.params.pagin);
+
+        const notificaions = await queryUserNotifications(userId, limit, pagin);
+
+        res.json(notificaions);
     } catch (err) {
         console.error('an error occured fetch lessons', err);
         res.status(500).json({ message: err });
@@ -28,5 +36,5 @@ const getNotifications = async (rea: Request, res: Response) => {
 
 export {
     checkUnViewedNotiication,
-
+    getNotifications,
 }

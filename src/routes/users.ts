@@ -15,8 +15,13 @@ import { CustomSessionData } from "../types/session-types";
 import { handleFreeEnroll } from "../controllers/users/enrollments";
 import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
 import { checkUnViewedNotiication, getNotifications, setNotToViewed } from "../controllers/users/notification";
+import { NewsLetter } from "../controllers/users/news-letter";
 
 const router = Router();
+
+
+// news letter route
+router.post('/news-letter', (req: Request, res: Response) => NewsLetter(req, res));
 
 // check if user has permission
 router.use((req: Request, res: Response, next: NextFunction) => {

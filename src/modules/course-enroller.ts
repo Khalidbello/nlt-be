@@ -1,3 +1,4 @@
+import { queryAddNewNotification } from "../services/users/notificaion-queries";
 import { queryCourse, queryEnrolled, queryLessonByChapterAndNUmber, queryNewEnrollment } from "../services/users/user-queries";
 import { queryUserProfile, updateEnrollmentPaymentType } from "../services/users/user-query-3";
 import courseEnrollEmailSender from "./emailers/course-enroll";
@@ -28,13 +29,16 @@ const enrollUser = async (data: any) => {
             // update user query
             await updateEnrollmentPaymentType(userId, courseId, payment);
             courseEnrollEmailSender(userEmail, userData.first_name, paymentType, courseData.course_name);
+            queryAddNewNotification(userId, `Your enrollment for ${courseData.course_name} has been updated. Enrollment type: ${paymentType}`, "info");
         } else {
             // new enrollemt 
             const firtLessonInfo = await queryLessonByChapterAndNUmber(courseId, 1, 1);
 
             await queryNewEnrollment(userId, courseId, payment, firtLessonInfo.chapter_id, firtLessonInfo.chapter_id);
             courseEnrollEmailSender(userEmail, userData.first_name, paymentType, courseData.course_name);
-        }
+            queryAddNewNotification(userId, `You have successfully enrolled for ${courseData.course_name}. Enrollment type: ${paymentType}`, "success");
+        };
+
     } catch (err) {
         console.log('error in course enroller', err);
     };

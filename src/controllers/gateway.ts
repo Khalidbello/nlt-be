@@ -5,6 +5,7 @@ import { queryCourse } from "../services/users/user-queries";
 import generateRandomAlphanumericCode from "../modules/generate-random-string";
 import { handleFreeEnroll } from "./users/enrollments";
 import enrollUser from "../modules/course-enroller";
+import { queryAddNewNotification } from "../services/users/notificaion-queries";
 const Flutterwave = require('flutterwave-node-v3');
 
 const generateOneTimeAcc = async (req: Request, res: Response) => {
@@ -93,9 +94,14 @@ const webhookHandler = async (req: Request, res: Response) => {
 
         if (response.data.status !== "successful") return console.log("transaction not successfully carried out: in wallet top up");
 
+        queryAddNewNotification(
+            response.data.meta.userId,
+            `Your payment of ₦ ${response.amount} have been succesfully recieved`,
+            "success"
+        );
         enrollUser(response.data);
     } catch (err) {
-        console.log('error in webhook', err);
+        console.error('error in webhook', err);
     };
 };
 

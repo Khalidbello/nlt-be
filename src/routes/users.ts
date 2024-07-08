@@ -16,12 +16,20 @@ import { handleFreeEnroll } from "../controllers/users/enrollments";
 import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
 import { checkUnViewedNotiication, getNotifications, setNotToViewed } from "../controllers/users/notification";
 import { NewsLetter } from "../controllers/users/news-letter";
+import { getReviews, getUserDpforReview } from "../controllers/users/reviews";
 
 const router = Router();
 
 
 // news letter route
 router.post('/news-letter', (req: Request, res: Response) => NewsLetter(req, res));
+
+// route to fetch custmre review for landig page
+router.get('/reviews/:pagin/:limit', (req: Request, res: Response) => getReviews(req, res));
+
+// review user dp
+router.get('/user-review-dp/:userId', (req: Request, res: Response) => getUserDpforReview(req, res));
+
 
 // check if user has permission
 router.use((req: Request, res: Response, next: NextFunction) => {

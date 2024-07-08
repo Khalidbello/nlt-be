@@ -15,6 +15,7 @@ interface calcProgressType {
     completed: boolean;
 }
 
+// this function calculates the course progress and also returns somw vital data
 const calcProgress = async (userId: number, courseId: number): Promise<calcProgressType> => {
     return new Promise<calcProgressType>(async (resolve, reject) => {
         try {

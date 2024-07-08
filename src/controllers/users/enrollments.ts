@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { CustomSessionData } from "../../types/session-types"
-import { queryCourse, queryLessonByChapterAndNUmber, queryNewEnrollment } from "../../services/users/user-queries";
+import { queryCourse, queryEnrolled, queryLessonByChapterAndNUmber, queryNewEnrollment } from "../../services/users/user-queries";
 import { queryAddNewNotification } from "../../services/users/notificaion-queries";
 
 
@@ -13,6 +13,12 @@ const handleFreeEnroll = async (req: Request, res: Response) => {
         if (!userId || !courseId) return res.status(401).json({ message: 'incomplete data sent to server' })
 
         const courseInfo = await queryCourse(courseId);
+
+        const isEnrolled = await queryEnrolled(userId, courseId);
+
+        // @ts-ignore
+        if (isEnrolled) return res.json({ message: 'user alredy enrolled free' });
+
         // get course current lesson id and chapter id
         const courseData = await queryLessonByChapterAndNUmber(courseId, 1, 1)
         const result = await queryNewEnrollment(userId, courseId, 'free', courseData.chapter_id, courseData.lesson_id);

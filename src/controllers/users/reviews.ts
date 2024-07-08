@@ -19,7 +19,7 @@ const getReviews = async (req: Request, res: Response) => {
 // route to retunr user profile pucture for review
 const getUserDpforReview = async (req: Request, res: Response) => {
     try {
-        const userId = parseInt(req.param.userId);
+        const userId = parseInt(req.params.userId);
         const userDp = await queryUserDp(userId);
 
         if (!userDp) return res.status(404).json({ message: 'not dp found' });

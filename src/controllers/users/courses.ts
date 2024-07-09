@@ -157,6 +157,7 @@ const getCourseView = async (req: Request, res: Response) => {
             about: courseData.course_description,
             enrolled: details.enrolled,
             image: courseData.image,
+            status: courseData.status,
             quizPerfomace: details.quiz,
             progress: details.percentageCompletion,
             currentChapter: details.currentChapter,

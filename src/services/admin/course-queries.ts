@@ -168,6 +168,18 @@ const queryAdminLecture = (courseId: number, chapterId: number, lessonId: number
 };
 
 
+const queryUpdateCourseStatus = (courseId: number, status: string) => {
+    return new Promise<boolean>((resolve, reject) => {
+        const query = 'UPDATE courses SET status = ? WHERE course_id = ?';
+
+        pool.query(query, [status, courseId], (err, result)=>{
+            if (err) return reject(err);
+
+            resolve(result.affectedRows > 0);
+        });
+    });
+};
+
 
 export {
     queryCreateNewCourse,
@@ -180,5 +192,6 @@ export {
     queryAdminCreateLesson,
     queryAdminLecture,
     queryAdminLectureUpdate,
-    queryLessonChapNumUpdate
+    queryLessonChapNumUpdate,
+    queryUpdateCourseStatus,
 }

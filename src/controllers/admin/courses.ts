@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getChapters, queryCourse, queryCourseChapterNumber, queryCourseEnrolledStudent, queryCourseLessonNumber, queryCourses, queryEnrolled, queryLessons, querychapterLessonNumber } from "../../services/users/user-queries";
-import { queryCreateNewCourse, queryUpdateCourse } from "../../services/admin/course-queries";
+import { queryCreateNewCourse, queryUpdateCourse, queryUpdateCourseStatus } from "../../services/admin/course-queries";
 import * as fs from 'fs/promises';
 import formidable from 'formidable';
 
@@ -21,7 +21,7 @@ const createNewCourse = async (req: Request, res: Response) => {
 
         const image = data.image.image[0]
         const { courseName, title, aboutCourse, price, discount } = data.fields;
-       
+
         if (!image || !courseName || !title || !aboutCourse) return res.status(400).json({ message: 'incomplete data sent to server for processing' });
 
         const imageBuffer = await fs.readFile(image.filepath);
@@ -50,7 +50,7 @@ const editCourse = async (req: Request, res: Response) => {
         const courseId = parseInt(req.params.courseId);
         const image = data.image.image[0];
         const { courseName, title, aboutCourse, price, discount } = data.fields;
-       
+
         if (!courseId || !image || !courseName || !title || !aboutCourse) return res.status(400).json({ message: 'incomplete data sent to server for processing' });
 
         const imageBuffer = await fs.readFile(image.filepath);
@@ -116,6 +116,7 @@ const getCourseData = async (req: Request, res: Response) => {
             discount: course.full_price_discount,
             image: Buffer.from(course.image).toString('base64'),
             courseId: course.course_id,
+            status: course.status
         });
     } catch (err) {
         console.error('error in getCoursedata', err);
@@ -149,10 +150,27 @@ const getChaptersData = async (req: Request, res: Response) => {
 };
 
 
+// function to set course status 
+const setCourseStatus = async (req: Request, res: Response) => {
+    try {
+        const { courseId, status } = req.body;
+        if (!courseId || !status) return res.status(401).json({ message: 'incomplete data sent to sever for processing.' });
+
+        const updated = await queryUpdateCourseStatus(courseId, status);
+
+        if (!updated) throw 'Something went wrong updating course status';
+        res.json({ message: 'Course status successfully updated' });
+    } catch (err) {
+        console.error('error in set course status', err);
+        res.status(500).json({ message: err });
+    };
+};
+
 export {
     adminGetCourses,
     createNewCourse,
     getCourseData,
     getChaptersData,
     editCourse,
+    setCourseStatus,
 }

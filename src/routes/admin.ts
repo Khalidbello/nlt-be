@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCourseData } from "../controllers/admin/courses";
+import { adminGetCourses, createNewCourse, editCourse, getChaptersData, getCourseData, setCourseStatus } from "../controllers/admin/courses";
 import { queryCreateNewCourse } from "../services/admin/course-queries";
 import { adminGetLessons, createChapter, getChapter, updateChapter } from "../controllers/admin/course-2";
 import { admiGetLessonContent, adminEditLecure, adminGetLessonData, createNewLecture, handleCourseDelete, handleDeleteChapter, requestCourseDelOtp } from "../controllers/admin/courses-3";
@@ -26,8 +26,9 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 
 
 
-// Create endpoint to handle file upload
 router.post('/create-course', (req: Request, res: Response) => createNewCourse(req, res));
+
+router.post('/set-course-status', (req: Request, res: Response) => setCourseStatus(req, res));
 
 router.post('/edit-course/:courseId', (req: Request, res: Response) => editCourse(req, res));
 

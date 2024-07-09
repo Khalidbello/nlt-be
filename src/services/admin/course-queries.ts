@@ -1,17 +1,32 @@
 import pool from "../../modules/connnect-db";
+import { courseType } from "../users/user-queries";
 
 const queryCreateNewCourse = (imageBuffer: any, courseName: string, title: string, aboutCourse: string, price: number, discount: number) => {
     return new Promise<any>((resolve, reject) => {
-        const query = 'INSERT INTO courses (image, course_name, course_title, course_description, price, full_price_discount, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO courses (image, course_name, course_title, course_description, price, full_price_discount, created_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         const date = new Date();
 
-        pool.query(query, [imageBuffer, courseName, title, aboutCourse, price, discount, date], (err, result) => {
+        pool.query(query, [imageBuffer, courseName, title, aboutCourse, price, discount, date, 'deactivated'], (err, result) => {
             if (err) return reject(err);
 
             resolve(result);
         })
     })
 };
+
+
+// query to get recomended courses for for admin
+const queryAdminCourses = (pagin: number, limit: number): Promise<courseType[]> => {
+    return new Promise<courseType[]>((resolve, reject) => {
+        const query = 'SELECT course_id, image, course_name, course_title, course_description, created_at, status FROM courses ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
+
+        pool.query(query, [limit, pagin], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
+
 
 // query to update course data 
 const queryUpdateCourse = (courseId: number, imageBuffer: Buffer, courseName: string, title: string, aboutCourse: string, price: number, discount: number): Promise<boolean> => {
@@ -172,7 +187,7 @@ const queryUpdateCourseStatus = (courseId: number, status: string) => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE courses SET status = ? WHERE course_id = ?';
 
-        pool.query(query, [status, courseId], (err, result)=>{
+        pool.query(query, [status, courseId], (err, result) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -185,6 +200,7 @@ export {
     queryCreateNewCourse,
     queryUpdateCourse,
     queryCreteChapter,
+    queryAdminCourses,
     queryChapterExist,
     queryChapter,
     queryUpdateChapter,

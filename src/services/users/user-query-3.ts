@@ -71,17 +71,12 @@ const updateLastVisited = (userId: number, courseId: number): Promise<boolean> =
         const query = 'UPDATE enrolled SET last_visited = ? WHERE user_id = ? and course_id = ?';
         const date = new Date();
 
-
-        console.log('in update recent', userId, courseId)
         pool.query(query, [date, userId, courseId], (err, result) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(result)
-            }
-        })
-    })
-}
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
 
 
 // const function to change user email verified to true

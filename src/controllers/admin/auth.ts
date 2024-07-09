@@ -4,10 +4,9 @@ import { queryAdminByEmail } from "../../services/admin/auth";
 
 const adminLoginHandler = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    console.log(req.body, 'request body in oginnnnnnnnn');
+
     try {
         const response = await queryAdminByEmail(email);
-        console.log('response for log  in', response);
         if (response.length > 0 && response[0].password === password) {
             (req.session as CustomSessionData).user = {
                 email: email,

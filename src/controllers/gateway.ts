@@ -55,7 +55,7 @@ const generateOneTimeAcc = async (req: Request, res: Response) => {
             throw 'error in creating virtual acount'
         }
     } catch (err) {
-        console.log('error in generate one time account number', err);
+        console.error('error in generate one time account number', err);
         res.status(500).json({ message: err });
     }
 }
@@ -64,19 +64,16 @@ const generateOneTimeAcc = async (req: Request, res: Response) => {
 // function to responsd ti webhok event
 const webhookHandler = async (req: Request, res: Response) => {
     try {
-        console.log('am in webhook');
         const signature = req.headers['verif-hash'];
         let payload;
         let meta;
 
         if (!signature || signature != process.env.FLW_H) {
             // This request isn't from Flutterwave; discard
-            console.log('webhook rejectd not from a trusted source');
             return res.status(401).end();
         };
 
         payload = req.body;
-        console.log('webhook payload', payload);
 
         if (payload.status !== "successful") return console.log('payment failed..... in webhook handler.......');
 
@@ -88,7 +85,7 @@ const webhookHandler = async (req: Request, res: Response) => {
         const flw = new Flutterwave(process.env.FLW_PB_KEY, process.env.FLW_SCRT_KEY);
 
         const response = await flw.Transaction.verify({ id: id });
-        console.log('transaction details', response);
+        //console.log('transaction details', response);
 
         if (response.status !== 'success') return console.log('error occured while confirming tansacion');
 

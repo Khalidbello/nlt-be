@@ -46,12 +46,11 @@ const createNewUser = async (firstName: string, lastName: string, email: string,
 
         pool.query(query, [firstName, lastName, email, password, phoneNumber, gender, joined], (err, result) => {
             if (err) {
-                console.log('an eror occured in create User', err);
                 reject(err);
             } else {
                 resolve(result);
-            }
-        })
+            };
+        });
     });
 };
 
@@ -135,18 +134,14 @@ const queryEnrolled = (userId: number, courseId: number): Promise<enrolledType> 
 // query to get recomended courses for user
 const queryCourses = (pagin: number, limit: number): Promise<courseType[]> => {
     return new Promise<courseType[]>((resolve, reject) => {
-        const query = 'SELECT course_id, image, course_name, course_title, course_description, created_at FROM courses ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
+        const query = 'SELECT course_id, image, course_name, course_title, course_description, created_at, status FROM courses WHERE status = ? OR ? ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
 
-        pool.query(query, [limit, pagin], (err, result) => {
-            if (err) {
-                reject(err)
-            } else {
-                console.log('in  count query', result);
-                resolve(result)
-            }
-        })
-    })
-}
+        pool.query(query, ['active', 'pending', limit, pagin], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
 
 
 // types defination

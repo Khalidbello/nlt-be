@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getChapters, queryCourse, queryCourseChapterNumber, queryCourseEnrolledStudent, queryCourseLessonNumber, queryCourses, queryEnrolled, queryLessons, querychapterLessonNumber } from "../../services/users/user-queries";
-import { queryCreateNewCourse, queryUpdateCourse, queryUpdateCourseStatus } from "../../services/admin/course-queries";
+import { getChapters, queryCourse, queryCourseChapterNumber, queryCourseEnrolledStudent, queryCourseLessonNumber, querychapterLessonNumber } from "../../services/users/user-queries";
+import { queryAdminCourses, queryCreateNewCourse, queryUpdateCourse, queryUpdateCourseStatus } from "../../services/admin/course-queries";
 import * as fs from 'fs/promises';
 import formidable from 'formidable';
 
@@ -73,7 +73,7 @@ const adminGetCourses = async (req: Request, res: Response) => {
         const pagin = parseInt(req.params.pagin);
         const limit = parseInt(req.params.limit);
 
-        const courses = await queryCourses(pagin, limit);
+        const courses = await queryAdminCourses(pagin, limit);
         const length = courses.length;
 
         for (let i = 0; i < length; i++) {
@@ -88,6 +88,7 @@ const adminGetCourses = async (req: Request, res: Response) => {
             data[i].numberOfEnrolledStudents = await queryCourseEnrolledStudent(courseId);
             data[i].numberOfLessons = await queryCourseLessonNumber(courseId);
             data[i].numberOfChapters = await queryCourseChapterNumber(courseId);
+            data[i].status = courses[i].status;
         };
 
 

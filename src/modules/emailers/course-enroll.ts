@@ -6,20 +6,18 @@ const courseEnrollEmailSender = async (userEmail: string, firstName: string, pay
     try {
         let courseEnrollTemp: string = await fs.promises.readFile('email-templates/course-enroll-template.hbs', 'utf8',);
 
-        console.log('temp', courseEnrollTemp)
         const compiledTemp = handleBars.compile(courseEnrollTemp);
         const html = compiledTemp({
             name: firstName,
             courseName: courseName,
             paymentType: paymentType
         });
-        console.log('html', html)
 
         // @ts-ignore
         sendEmail(process.env.ADMIN_EMAIL, process.env.ADMIN_MAIL_P, userEmail, 'Succesfull Course Enrollment', html)
     } catch (err) {
-        console.log('errror sending email in corse enroll email', err);
-    }
-}
+        console.error('errror sending email in corse enroll email', err);
+    };
+};
 
 export default courseEnrollEmailSender;

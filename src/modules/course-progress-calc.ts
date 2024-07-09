@@ -20,8 +20,6 @@ interface calcProgressType {
 const calcProgress = async (userId: number, courseId: number): Promise<calcProgressType> => {
     return new Promise<calcProgressType>(async (resolve, reject) => {
         try {
-            console.log('in calc progress userID, courseId', userId, courseId)
-
             const lessonNumbers: { [key: number]: number } = {}; // key is chapter number valueis number of lessons
             let totalLessonNumber: number = 0;
             let completedLessonNumber: number = 0;
@@ -45,7 +43,6 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
             if (enrolledData?.payment_type) {
                 enrolled = true
                 for (let i = 1; i < enrolledData.current_chapter_number + 1; i++) {
-                    console.log('in last loop', i);
                     if (i === enrolledData.current_chapter_number) {
                         chapters[i - 1].completed = 'ongoing';
                         completedLessonNumber += enrolledData.current_lesson_number - 1;

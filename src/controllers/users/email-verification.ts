@@ -20,7 +20,7 @@ const getCheckEmailVerify = async (req: Request, res: Response) => {
             res.json({ status: false, email: profieData.email })
         };
     } catch (err) {
-        console.log('error in check if email verified', err);
+        console.error('error in check if email verified', err);
         res.status(500).json({ message: err });
     }
 }
@@ -67,7 +67,7 @@ const confirmEmailOtp = async (req: Request, res: Response) => {
         await queryDeleteOtp(userId)
         res.json({ status: equal })
     } catch (err) {
-        console.log('error in confirm email OTP', err);
+        console.error('error in confirm email OTP', err);
         res.status(500).json({ message: err })
     }
 }

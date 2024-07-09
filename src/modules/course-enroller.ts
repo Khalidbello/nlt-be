@@ -40,7 +40,7 @@ const enrollUser = async (data: any) => {
         };
 
     } catch (err) {
-        console.log('error in course enroller', err);
+        console.error('error in course enroller', err);
     };
 };
 

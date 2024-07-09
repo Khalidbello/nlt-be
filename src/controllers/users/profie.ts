@@ -15,7 +15,7 @@ const getUserProfileData = async (req: Request, res: Response) => {
 
         res.json(userData);
     } catch (err) {
-        console.log('error in get user prodile data', err)
+        console.error('error in get user prodile data', err)
         res.status(500).json({ messagge: err })
     }
 };
@@ -40,7 +40,7 @@ const handleChangePassword = async (req: Request, res: Response) => {
         res.json({ status: updated });
 
     } catch (err) {
-        console.log('error changing user password', err);
+        console.error('error changing user password', err);
         res.status(500).json({ message: err });
     }
 }
@@ -59,7 +59,7 @@ const handleChangeNames = async (req: Request, res: Response) => {
 
         res.json({ status: updated });
     } catch (err) {
-        console.log('error in changing user names password', err);
+        console.error('error in changing user names password', err);
         res.status(500).json({ message: err });
     };
 };
@@ -97,7 +97,7 @@ const userDpUpload = async (req: Request, res: Response) => {
 
         res.json({ message: 'image uploaded succesfully' });
     } catch (err) {
-        console.log('error user image upload', err);
+        console.error('error user image upload', err);
         res.status(500).json({ message: err });
     };
 };
@@ -116,7 +116,7 @@ const getUserDp = async (req: Request, res: Response) => {
 
         res.json(userDp);
     } catch (err) {
-        console.log('error user image upload', err);
+        console.error('error user image upload', err);
         res.status(500).json({ message: err });
     };
 };

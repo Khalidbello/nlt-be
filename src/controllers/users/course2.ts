@@ -63,7 +63,7 @@ const getLecture = async (req: Request, res: Response) => {
 
         throw 'somthing went wrong yeah its here';
     } catch (err) {
-        console.log('error in get lectures...........', err)
+        console.error('error in get lectures...........', err)
         res.status(500).json({ message: err });
     }
 };
@@ -80,14 +80,14 @@ const getLectureHelper = async (
     requestedChapterId: number,
     requestedLessonNumber: number
 ) => {
-    console.log(
-        courseId,
-        currentChapterNumber,
-        currentLessonNumber,
-        requestedChapterNumber,
-        requestedChapterId,
-        requestedLessonNumber
-    )
+    // console.log(
+    //     courseId,
+    //     currentChapterNumber,
+    //     currentLessonNumber,
+    //     requestedChapterNumber,
+    //     requestedChapterId,
+    //     requestedLessonNumber
+    // )
     if (currentChapterNumber > requestedChapterNumber) {
         return fetchLesson(res, courseId, requestedChapterNumber, requestedLessonNumber, currentChapterNumber, currentLessonNumber, userId);
     } else if (currentChapterNumber === requestedChapterNumber && currentLessonNumber >= requestedLessonNumber) {
@@ -139,7 +139,7 @@ const getQuiz = async (req: Request, res: Response) => {
             quiz: quiz
         });
     } catch (err) {
-        console.log('error in get lectures...........', err)
+        console.error('error in get lectures...........', err)
         res.status(500).json({ message: err });
     }
 };
@@ -177,7 +177,7 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
                 nextchapterNumber = lessonData.chapter_number + 1;
             };
 
-            console.log(courseId, nextchapterNumber, nextLessonNumber, 'in quiz submit')
+            //console.log(courseId, nextchapterNumber, nextLessonNumber, 'in quiz submit')
             const lesson = await queryLessonByChapterAndNUmber(courseId, nextchapterNumber, nextLessonNumber);
 
             res.json({
@@ -186,7 +186,6 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
                 chapterNumber: nextchapterNumber,
                 lessonNumber: nextLessonNumber
             });
-            console.log('user alreddy did course before no update made');
             return;
         };
 
@@ -240,7 +239,7 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
 
         throw 'somthig went wromg';
     } catch (err) {
-        console.log('error in get submit quiz...........', err)
+        console.error('error in get submit quiz...........', err)
         res.status(500).json({ message: err });
     };
 };
@@ -257,7 +256,7 @@ const getCoursePrice = async (req: Request, res: Response) => {
             discount: courseData.full_price_discount
         });
     } catch (err) {
-        console.log('error in get submit quiz...........', err)
+        console.error('error in get submit quiz...........', err)
         res.status(500).json({ message: err });
     }
 };

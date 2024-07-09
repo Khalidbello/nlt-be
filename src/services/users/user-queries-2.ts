@@ -57,12 +57,12 @@ const queryEnrolledCourses = (userId: number, pagin: number, limit: number): Pro
             if (err) {
                 reject(err)
             } else {
-                console.log('user enrolled courses query', result);
                 resolve(result);
-            }
-        })
-    })
-}
+            };
+        });
+    });
+};
+
 
 interface queryLessonsType {
     lesson_id: number;
@@ -182,12 +182,11 @@ const updateUserEnrolledCurrentLessonAndChapter = (
             if (err) {
                 reject(err)
             } else {
-                console.log('in updateUserEnrolledCurrentLessonAndChapter', result);
                 resolve(result.affectedRows > 0);
-            }
-        })
-    })
-}
+            };
+        });
+    });
+};
 
 
 interface queryLessonByChapterAndNUmberType {

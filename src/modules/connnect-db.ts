@@ -12,7 +12,7 @@ const pool: Pool = mysql.createPool({
 function initiateDbConnection(app: Express, port: string | number) {
     pool.getConnection((err: MysqlError, connection) => {
         if (err) {
-            console.log('Error connecting to db', err.stack)
+            console.error('Error connecting to db', err.stack)
             storeErrorMessage(err)
             process.exit(1);
         }

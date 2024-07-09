@@ -7,10 +7,10 @@ import { checkUserExistType } from '../../types/general';
 // function to handle user login
 const logInHandler = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    console.log(req.body, 'request body in oginnnnnnnnn');
+
     try {
         const response: [checkUserExistType] = await checkUserExist(email);
-        console.log('response for log  in', response);
+
         if (response.length > 0 && response[0].password === password) {
             (req.session as CustomSessionData).user = {
                 email: email,
@@ -21,6 +21,7 @@ const logInHandler = async (req: Request, res: Response) => {
         };
         res.status(404).json({ message: 'user with cridentials not found' });
     } catch (err) {
+        console.error('error in login handler', err);
         res.status(500).json({ message: err });
     };
 };
@@ -40,7 +41,6 @@ const createAccountHandler = async (req: Request, res: Response) => {
         };
 
         const created = await createNewUser(firstName, lastName, email, password, phoneNumber, gender, date);
-        console.log(created, 'createdddddd', created.insertId);
 
         if (created.affectedRows > 0) {
             (req.session as CustomSessionData).user = {
@@ -53,6 +53,7 @@ const createAccountHandler = async (req: Request, res: Response) => {
         };
         throw 'unable to create new user';
     } catch (err) {
+        console.error('error in create accont handler', err);
         res.status(500).json({ message: 'An error occured trying to create acount' });
     };
 };

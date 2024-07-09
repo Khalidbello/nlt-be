@@ -13,6 +13,7 @@ interface calcProgressType {
     chapters: chaptersType[];
     lessonNumbers: { [key: number]: number };
     completed: boolean;
+    reviewed: boolean;
 }
 
 // this function calculates the course progress and also returns somw vital data
@@ -71,6 +72,7 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
                 chapters: chapters,
                 lessonNumbers: lessonNumbers,
                 completed: enrolledData?.completed,
+                reviewed: enrolledData?.reviewed
             })
         }
         catch (error) {

@@ -185,6 +185,7 @@ interface enrolledType {
     enrolled_at: string;
     last_visited: string;
     completed: boolean;
+    reviewed: boolean;
 }
 
 export {

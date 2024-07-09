@@ -16,7 +16,7 @@ import { handleFreeEnroll } from "../controllers/users/enrollments";
 import { confirmEmailOtp, generateConfirmEmailOtp, getCheckEmailVerify } from "../controllers/users/email-verification";
 import { checkUnViewedNotiication, getNotifications, setNotToViewed } from "../controllers/users/notification";
 import { NewsLetter } from "../controllers/users/news-letter";
-import { getReviews, getUserDpforReview } from "../controllers/users/reviews";
+import { getReviews, getUserDpforReview, reviewSubmitted } from "../controllers/users/reviews";
 
 const router = Router();
 
@@ -52,6 +52,9 @@ router.get('/courses/:pagin/:limit', (req: Request, res: Response) => getCourses
 router.get('/enrolled-courses/:pagin/:limit', (req: Request, res: Response) => getEnrolledCourses(req, res));
 
 router.get('/course-view/:courseId', (req: Request, res: Response) => getCourseView(req, res));
+
+// route for reivew submission
+router.post('/review-submit', (req: Request, res: Response) => reviewSubmitted(req, res));
 
 router.get('/lessons/:chapterId/:courseId', (req: Request, res: Response) => getLesson(req, res));
 

@@ -1,6 +1,7 @@
-import { Request, Response } from "express"
-import { queryGetReviews } from "../../services/users/reviews";
-import { queryUserDp } from "../../services/users/user-query-3";
+import { query, Request, Response } from "express"
+import { queryGetReviews, querySaveReview, queryUpdateUserReviewed } from "../../services/users/reviews-queries";
+import { queryUserDp, queryUserProfile } from "../../services/users/user-query-3";
+import { CustomSessionData } from "../../types/session-types";
 
 const getReviews = async (req: Request, res: Response) => {
     try {
@@ -28,11 +29,38 @@ const getUserDpforReview = async (req: Request, res: Response) => {
 
         res.json(userDp);
     } catch (err) {
-        console.log('error user image upload', err);
+        console.error('error getting user dp for review', err);
         res.status(500).json({ message: err });
     };
 };
+
+
+// function to handle review submision
+const reviewSubmitted = async (req: Request, res: Response) => {
+    try {
+        // @ts-ignore
+        const userId: number = (req.session as CustomSessionData).user?.id;
+        const { courseName, courseId, review } = req.body;
+        console.log('debugginggggggggg', courseName, courseId, review);
+        if (!courseName || !review || !courseId) return res.status(400).json({ message: 'Incomplete data sent to server for processing.' });
+
+        const profieData = await queryUserProfile(userId);
+
+        const saved = await querySaveReview(userId, courseName, review, profieData.first_name);
+
+        if (!saved) throw 'Something went wrong';
+
+        await queryUpdateUserReviewed(courseId, userId);
+        res.json({ message: 'Review submitted successfuly' });
+    } catch (err) {
+        console.error('error review submission', err);
+        res.status(500).json({ message: err });
+    };
+};
+
+
 export {
     getReviews,
     getUserDpforReview,
+    reviewSubmitted,
 }

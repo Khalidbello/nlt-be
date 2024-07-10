@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { checkUserExist, createNewUser } from '../../services/users/user-queries';
 import { CustomSessionData } from '../../types/session-types';
 import { checkUserExistType } from '../../types/general';
+import emailOtpSender from '../../modules/emailers/email-otp';
+import otpGenerator from '../../modules/otp-generator';
 
 
 // function to handle user login
@@ -58,4 +60,27 @@ const createAccountHandler = async (req: Request, res: Response) => {
     };
 };
 
-export { logInHandler, createAccountHandler };
+
+// function to checkif user exist 
+const passwordRecoveryCheckUser = async (req: Request, res: Response) => {
+    try {
+        const email: string = req.body.email;
+        const exist = await checkUserExist(email);
+
+
+        if (!exist[0]) return res.status(404).json({ message: 'user with credentials not found.' });
+
+        // ts-ignore
+        const opt: number = await otpGenerator(exist[0].user_id);
+        // send otp email
+        emailOtpSender(email, exist[0].first_name, opt);
+
+        res.json({ message: 'user exist' });
+    } catch (err) {
+        console.error('error in passwordRecoveryCheckUser', err);
+        res.status(500).json({ message: 'An error occured trying to create acount' });
+    };
+};
+
+
+export { logInHandler, createAccountHandler, passwordRecoveryCheckUser };

@@ -13,7 +13,7 @@ const sendEmail = async (userName: string, password: string, reciever: string, s
 
     try {
         const info = await transport.sendMail(mailOptions);
-        //console.log('Email sent successfully:', info.response);
+        console.log('Email sent successfully:', info.response);
     } catch (error) {
         console.error('Error sending email:', error);
     };

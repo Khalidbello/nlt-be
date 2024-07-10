@@ -4,6 +4,7 @@ import { CustomSessionData } from '../../types/session-types';
 import { checkUserExistType } from '../../types/general';
 import emailOtpSender from '../../modules/emailers/email-otp';
 import otpGenerator from '../../modules/otp-generator';
+import { queryOtp } from '../../services/otp-queries';
 
 
 // function to handle user login
@@ -78,9 +79,36 @@ const passwordRecoveryCheckUser = async (req: Request, res: Response) => {
         res.json({ message: 'user exist' });
     } catch (err) {
         console.error('error in passwordRecoveryCheckUser', err);
-        res.status(500).json({ message: 'An error occured trying to create acount' });
+        res.status(500).json({ message: 'An error occured trying to find account' });
     };
 };
 
 
-export { logInHandler, createAccountHandler, passwordRecoveryCheckUser };
+// function to confirm otp if valid retrun user password
+const passwordRecoveryConfirmOtp = async (req: Request, res: Response) => {
+    try {
+        const otp = req.body.otp;
+        const email = req.body.email;
+        const user = await checkUserExist(email);
+
+
+        const dbOtp = await queryOtp(user[0].user_id);
+
+        if (!email || !otp) throw 'incomlete data sent to server';
+
+        const equal: boolean = otp === dbOtp?.otp;
+
+        if (!equal) return res.json({ status: equal });
+
+        // @ts-ignore
+        await queryDeleteOtp(user[0].user_id);
+
+        res.json({ password: user[0].password });
+    } catch (err) {
+        console.error('error in passwordRecoveryCheckUser', err);
+        res.status(500).json({ message: 'An error occured tryng get user password' });
+    };
+};
+
+
+export { logInHandler, createAccountHandler, passwordRecoveryCheckUser, passwordRecoveryConfirmOtp };

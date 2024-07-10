@@ -94,7 +94,7 @@ const passwordRecoveryConfirmOtp = async (req: Request, res: Response) => {
 
         const dbOtp = await queryOtp(user[0].user_id);
 
-        if (!email || !otp) throw 'incomlete data sent to server';
+        if (!email || !otp) return res.status(400).json({ message: 'incomlete data sent to server' });
 
         const equal: boolean = otp === dbOtp?.otp;
 

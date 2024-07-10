@@ -4,7 +4,7 @@ import { CustomSessionData } from '../../types/session-types';
 import { checkUserExistType } from '../../types/general';
 import emailOtpSender from '../../modules/emailers/email-otp';
 import otpGenerator from '../../modules/otp-generator';
-import { queryOtp } from '../../services/otp-queries';
+import { queryDeleteOtp, queryOtp } from '../../services/otp-queries';
 
 
 // function to handle user login
@@ -89,18 +89,15 @@ const passwordRecoveryConfirmOtp = async (req: Request, res: Response) => {
     try {
         const otp = req.body.otp;
         const email = req.body.email;
-        const user = await checkUserExist(email);
-
-
-        const dbOtp = await queryOtp(user[0].user_id);
 
         if (!email || !otp) return res.status(400).json({ message: 'incomlete data sent to server' });
 
+        const user = await checkUserExist(email);
+        const dbOtp = await queryOtp(user[0].user_id);
         const equal: boolean = otp === dbOtp?.otp;
 
-        if (!equal) return res.json({ status: equal });
+        if (!equal) return res.status(401).json({ status: equal });
 
-        // @ts-ignore
         await queryDeleteOtp(user[0].user_id);
 
         res.json({ password: user[0].password });

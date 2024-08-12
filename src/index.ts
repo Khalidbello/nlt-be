@@ -26,28 +26,34 @@ if (process.env.NODE_ENV === 'development') {
     process.env.FLW_H = process.env.FLW_H_TEST;
 }
 
+// environment configurations
+if (process.env.NODE_ENV === 'production') {
+    process.env.FLW_PB_KEY = process.env.FLW_PB_KEY;
+    process.env.FLW_SCRT_KEY = process.env.FLW_SCRT_KEY;
+    process.env.FLW_H = process.env.FLW_H;
+}
+
 // lockingin middle wears
 // cors config
 // cors config
 const corsOption = {
-    origin: ['https://weekly-settled-falcon.ngrok-free.app', 'http://localhost:3000', 'https://site.botsub.com.ng'], // Replace with your frontend's origin
+    origin: [' http://localhost', 'https://lifestyleleverage.com.ng', 'http://lifestyleleverage.com.ng'], // Replace with your frontend's origin
     credentials: true
 };
 
 const sessionOption = {
-    secret: 'yourSecretKey',
+    secret: 'your-secret-key', // Replace with a strong secret
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 0.5, // 1 minute for example
+        secure: false, // Set to true if using HTTPS
         httpOnly: true,
-        secure: false, // Must be false for local development without HTTPS
-        
+        maxAge: 1000 * 60 * 60 * 24 // 1 day
     }
 };
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json({ limit: '10mb'}));
+app.use(express.json({ limit: '10mb' }));
 app.use(cors(corsOption));
 // @ts-ignore
 app.use(session(sessionOption))
@@ -68,7 +74,7 @@ app.get('/', (req: Request, res: Response) => {
 
 // Catch-all route to handle 404 errors
 app.use((req: Request, res: Response, next: NextFunction) => {
-    res.status(404).send('404 Not Found');
+    res.status(404).send(`404 Not Found in admin:::::::::: path ${ req.url} `);
 });
 
 

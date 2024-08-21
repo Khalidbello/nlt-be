@@ -154,6 +154,7 @@ const getCourseView = async (req: Request, res: Response) => {
 
         res.json({
             courseName: courseData.course_name,
+            courseId: courseData.course_id,
             about: courseData.course_description,
             enrolled: details.enrolled,
             image: courseData.image,

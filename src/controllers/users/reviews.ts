@@ -41,7 +41,7 @@ const reviewSubmitted = async (req: Request, res: Response) => {
         // @ts-ignore
         const userId: number = (req.session as CustomSessionData).user?.id;
         const { courseName, courseId, review } = req.body;
-
+        console.log('data for review', courseName, courseId, review);
         if (!courseName || !review || !courseId) return res.status(400).json({ message: 'Incomplete data sent to server for processing.' });
 
         const profieData = await queryUserProfile(userId);

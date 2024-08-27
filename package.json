@@ -1,7 +1,7 @@
 {
-  "name": "post2earn-be",
+  "name": "nlt be",
   "version": "1.0.0",
-  "description": "backend for post 2 earn ",
+  "description": "backend for nlt",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Khalidbello/post2earn-be.git"
+    "url": "git+https://github.com/Khalidbello/nlt-be.git"
   },
   "author": "Khalid Bello",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Khalidbello/post2earn-be/issues"
+    "url": "https://github.com/Khalidbello/nlt-be/issues"
   },
-  "homepage": "https://github.com/Khalidbello/post2earn-be#readme",
+  "homepage": "https://github.com/Khalidbello/nlt-be#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

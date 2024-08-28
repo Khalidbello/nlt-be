@@ -22,8 +22,8 @@ import {
 } from '../users/user-query-3';
 
 // function to check if user exists
-const checkUserExist = async (email: string | undefined): Promise<[checkUserExistType]> => {
-    return new Promise<[checkUserExistType]>((resolve, reject) => {
+const checkUserExist = async (email: string | undefined): Promise<checkUserExistType[]> => {
+    return new Promise<checkUserExistType[]>((resolve, reject) => {
         // Use parameterized query to prevent SQL injection
         const query = 'SELECT user_id, password, first_name, last_name FROM users WHERE email = ?';
 
@@ -32,7 +32,7 @@ const checkUserExist = async (email: string | undefined): Promise<[checkUserExis
                 console.error('An error occurred in checkUserExist:', err);
                 reject(err); // Reject the promise with the error
             } else {
-                resolve(result); // Resolve the promise with the boolean result
+                resolve(result as checkUserExistType[]); // Resolve the promise with the boolean result
             }
         });
     });
@@ -59,7 +59,7 @@ const queryCourse = async (courseId: number): Promise<courseType> => {
     return new Promise<courseType>((resolve, reject) => {
         const query = 'SELECT course_name, course_id, image, course_title, course_description, created_at, price, full_price_discount, status FROM courses WHERE course_id = ?';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) {
                 reject(err);
             } else {
@@ -73,7 +73,7 @@ const queryCourse = async (courseId: number): Promise<courseType> => {
 const queryRecentcourse = async (userId: number): Promise<enrolledType> => {
     return new Promise<enrolledType>((resolve, reject) => {
         const query = 'SELECT * FROM enrolled WHERE user_id = ? ORDER BY last_visited DESC LIMIT 1';
-        pool.query(query, [userId], (err, result) => {
+        pool.query(query, [userId], (err, result: any) => {
             if (err) {
                 reject(err);
             } else {
@@ -89,7 +89,7 @@ const getChapters = (courseId: number): Promise<chaptersType[]> => {
     return new Promise<chaptersType[]>((resolve, reject) => {
         const query = 'SELECT chapter_id, chapter_title, chapter_number FROM chapters WHERE course_id = ? ORDER BY chapter_number ASC';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -104,7 +104,7 @@ const querychapterLessonNumber = (chapterId: number): Promise<number> => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT COUNT(*) FROM lessons  WHERE chapter_id = ?'
 
-        pool.query(query, [chapterId], (err, result) => {
+        pool.query(query, [chapterId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -120,7 +120,7 @@ const queryEnrolled = (userId: number, courseId: number): Promise<enrolledType> 
     return new Promise<enrolledType>((resolve, reject) => {
         const query = 'SELECT * FROM enrolled WHERE user_id = ? AND course_id = ?';
 
-        pool.query(query, [userId, courseId], (err, result) => {
+        pool.query(query, [userId, courseId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -136,7 +136,7 @@ const queryCourses = (pagin: number, limit: number): Promise<courseType[]> => {
     return new Promise<courseType[]>((resolve, reject) => {
         const query = 'SELECT course_id, image, course_name, course_title, course_description, created_at, status FROM courses WHERE status = ? OR ? ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
 
-        pool.query(query, ['active', 'pending', limit, pagin], (err, result) => {
+        pool.query(query, ['active', 'pending', limit, pagin], (err, result: any) => {
             if (err) return reject(err);
             resolve(result);
         });

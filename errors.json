@@ -59,5 +59,94 @@
   {
     "message": "email sent,,,,,, 250 OK id=1sNutx-00000001MNt-0yXe",
     "timestamp": "June 30, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_NOT_SUPPORTED_AUTH_MODE",
+      "errno": 1251,
+      "sqlMessage": "Client does not support authentication protocol requested by server; consider upgrading MySQL client",
+      "sqlState": "08004",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_NOT_SUPPORTED_AUTH_MODE",
+      "errno": 1251,
+      "sqlMessage": "Client does not support authentication protocol requested by server; consider upgrading MySQL client",
+      "sqlState": "08004",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_NOT_SUPPORTED_AUTH_MODE",
+      "errno": 1251,
+      "sqlMessage": "Client does not support authentication protocol requested by server; consider upgrading MySQL client",
+      "sqlState": "08004",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_NOT_SUPPORTED_AUTH_MODE",
+      "errno": 1251,
+      "sqlMessage": "Client does not support authentication protocol requested by server; consider upgrading MySQL client",
+      "sqlState": "08004",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_NOT_SUPPORTED_AUTH_MODE",
+      "errno": 1251,
+      "sqlMessage": "Client does not support authentication protocol requested by server; consider upgrading MySQL client",
+      "sqlState": "08004",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_NOT_SUPPORTED_AUTH_MODE",
+      "errno": 1251,
+      "sqlMessage": "Client does not support authentication protocol requested by server; consider upgrading MySQL client",
+      "sqlState": "08004",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "errno": -3008,
+      "code": "ENOTFOUND",
+      "syscall": "getaddrinfo",
+      "hostname": "mysql-120a3089-bellokhalid74-6a4e.l.aivencloud.com",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "errno": -3008,
+      "code": "ENOTFOUND",
+      "syscall": "getaddrinfo",
+      "hostname": "mysql-120a3089-bellokhalid74-6a4e.l.aivencloud.com",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "errorno": "ETIMEDOUT",
+      "code": "ETIMEDOUT",
+      "syscall": "connect",
+      "fatal": true
+    },
+    "timestamp": "August 28, 2024"
   }
 ]

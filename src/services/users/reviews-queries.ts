@@ -19,7 +19,7 @@ const querySaveReview = (userId: number, courseName: string, review: string, nam
         const date = new Date();
         const query = 'INSERT INTO reviews (user_id, name, course_name, review, created_at) VALUES (?, ?, ?, ?, ?)';
 
-        pool.query(query, [userId, name, courseName, review, date], (err, result) => {
+        pool.query(query, [userId, name, courseName, review, date], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -33,7 +33,7 @@ const queryUpdateUserReviewed = (courseId: number, userId: number) => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE enrolled SET reviewed = ? WHERE user_id = ? AND course_id = ?';
 
-        pool.query(query, [true, userId, courseId], (err, result) => {
+        pool.query(query, [true, userId, courseId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);

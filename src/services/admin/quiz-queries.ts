@@ -7,7 +7,7 @@ const queryAdminCreateQuiz = (
     return new Promise<boolean>((resolve, reject) => {
         const query = 'INSERT INTO questions (course_id, chapter_id, lesson_id, question, option_a, option_b, option_c, option_d, correct_option) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-        pool.query(query, [courseId, chapterId, lessonId, question, option1, option2, option3, option4, answer], (err, result) => {
+        pool.query(query, [courseId, chapterId, lessonId, question, option1, option2, option3, option4, answer], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -21,7 +21,7 @@ const queryAdminEditQustion = (questionId: number, question: string, option1: st
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE questions SET question = ?, option_a = ?, option_b = ?, option_c = ?, option_d = ?, correct_option = ? WHERE question_id = ?';
 
-        pool.query(query, [question, option1, option2, option3, option4, answer, questionId], (err, result) => {
+        pool.query(query, [question, option1, option2, option3, option4, answer, questionId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -35,7 +35,7 @@ const queryAdminDeleteQuestion = (questionId: number) => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'DELETE FROM questions WHERE question_id = ?';
 
-        pool.query(query, [questionId], (err, result) => {
+        pool.query(query, [questionId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);

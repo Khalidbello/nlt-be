@@ -12,7 +12,7 @@ const logInHandler = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
-        const response: [checkUserExistType] = await checkUserExist(email);
+        const response: checkUserExistType[] = await checkUserExist(email);
 
         if (response.length > 0 && response[0].password === password) {
             (req.session as CustomSessionData).user = {
@@ -37,7 +37,7 @@ const createAccountHandler = async (req: Request, res: Response) => {
     const date = new Date();
 
     try {
-        const response: [{ password: string }] = await checkUserExist(email);
+        const response = await checkUserExist(email);
 
         if (response.length > 0) {
             return res.status(409).json({ message: 'user exist' });

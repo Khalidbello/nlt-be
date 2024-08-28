@@ -7,7 +7,7 @@ const queryCourseLessonNumber = (courseId: number): Promise<number> => {
     return new Promise<number>((resolve, reject) => {
         const query = 'SELECT COUNT(*) FROM lessons WHERE course_id = ?';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -23,7 +23,7 @@ const queryCourseChapterNumber = (courseId: number): Promise<number> => {
     return new Promise<number>((resolve, reject) => {
         const query = 'SELECT COUNT(*) FROM chapters WHERE course_id = ?';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -38,7 +38,7 @@ const queryCourseEnrolledStudent = (courseId: number): Promise<number> => {
     return new Promise<number>((resolve, reject) => {
         const query = 'SELECT COUNT(*) FROM enrolled WHERE course_id = ?';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -53,7 +53,7 @@ const queryCourseEnrolledStudent = (courseId: number): Promise<number> => {
 const queryEnrolledCourses = (userId: number, pagin: number, limit: number): Promise<enrolledType[]> => {
     return new Promise<enrolledType[]>((resolve, reject) => {
         const query = 'SELECT course_id, payment_type, current_lesson_id, current_lesson_number, current_chapter_number, quiz_performance, enrolled_at, last_visited FROM enrolled WHERE user_id = ?  ORDER BY last_visited DESC LIMIT ? OFFSET ?';
-        pool.query(query, [userId, limit, pagin], (err, result) => {
+        pool.query(query, [userId, limit, pagin], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -77,7 +77,7 @@ const queryLessons = (courseId: number, chapterId: number): Promise<queryLessons
     return new Promise<queryLessonsType[]>((resolve, reject) => {
         const query = 'SELECT lesson_id, lesson_number, lesson_title, chapter_number, course_id,chapter_id FROM lessons WHERE  course_id = ? AND chapter_id = ?  ORDER BY lesson_number ASC';
 
-        pool.query(query, [courseId, chapterId], (err, result) => {
+        pool.query(query, [courseId, chapterId], (err, result: any) => {
             if (err) {
                 reject(err), ''
             } else {
@@ -103,7 +103,7 @@ const queryLecture = (courseId: number, chapterNumber: number, lessonNumber: num
     return new Promise<lectureType>((resolve, reject) => {
         const query = 'SELECT opening_note, closing_note, course_id, chapter_id, chapter_number, lesson_number, lesson_title, lesson_id, audio FROM lessons WHERE course_id = ? AND chapter_number = ? AND lesson_number = ?';
 
-        pool.query(query, [courseId, chapterNumber, lessonNumber], (err, result) => {
+        pool.query(query, [courseId, chapterNumber, lessonNumber], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -120,7 +120,7 @@ const updateCurrentLessonAndChapter = (userId: number, courseId: number, newChap
         const query = 'UPDATE enrolled SET current_chapter_number = ?, current_lesson_number = ?, current_lesson_id = ? WHERE user_id = ? AND course_id = ?';
 
 
-        pool.query(query, [newChapter, newLesson, newLessonId, userId, courseId], (err, result) => {
+        pool.query(query, [newChapter, newLesson, newLessonId, userId, courseId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -144,7 +144,7 @@ const queryQuiz = (courseId: number, chapterId: number, lessonId: number): Promi
     return new Promise<queryQuizType[]>((resolve, reject) => {
         const query = 'SELECT question_id, question, option_a, option_b, option_c, option_d, correct_option FROM questions WHERE course_id = ? AND chapter_id = ? AND lesson_id = ?';
 
-        pool.query(query, [courseId, chapterId, lessonId], (err, result) => {
+        pool.query(query, [courseId, chapterId, lessonId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -160,7 +160,7 @@ const queryByLessonId = (courseId: number, chapterId: number, lessonId: number):
     return new Promise<queryLessonsType>((resolve, reject) => {
         const query = 'SELECT lesson_id, lesson_number, lesson_title, chapter_number, course_id,chapter_id FROM lessons WHERE  course_id = ? AND chapter_id = ? AND lesson_id = ?';
 
-        pool.query(query, [courseId, chapterId, lessonId], (err, result) => {
+        pool.query(query, [courseId, chapterId, lessonId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -178,7 +178,7 @@ const updateUserEnrolledCurrentLessonAndChapter = (
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE enrolled SET current_chapter_number = ?, current_lesson_number = ?, current_lesson_id = ?, current_chapter_id = ?, quiz_performance = ? WHERE user_id = ? AND course_id = ?';
 
-        pool.query(query, [nextchapterNumber, nextLessonNumber, nextLessonId, nextChapterId, quizPerfomace, userId, courseId], (err, result) => {
+        pool.query(query, [nextchapterNumber, nextLessonNumber, nextLessonId, nextChapterId, quizPerfomace, userId, courseId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -199,7 +199,7 @@ const queryLessonByChapterAndNUmber = (courseId: number, chapterNumber: number, 
     return new Promise<queryLessonByChapterAndNUmberType>((resolve, reject) => {
         const query = 'SELECT lesson_id, chapter_id FROM lessons WHERE  course_id = ? AND chapter_number = ? AND lesson_number = ?';
 
-        pool.query(query, [courseId, chapterNumber, lessonNumber], (err, result) => {
+        pool.query(query, [courseId, chapterNumber, lessonNumber], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {

@@ -4,7 +4,7 @@ const queryAdminDeleteCourse = (courseId: number): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'DELETE FROM courses WHERE course_id = ?';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -18,7 +18,7 @@ const queryAdminDelChapterByCourseId = (courseId: number): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'DELETE FROM chapters WHERE course_id = ?';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -32,7 +32,7 @@ const queryAdminDeleteLessonByCourseId = (courseId: number): Promise<boolean> =>
     return new Promise<boolean>((resolve, reject) => {
         const query = 'DELETE FROM lessons WHERE course_id = ?';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -46,7 +46,7 @@ const queryAdminDelEnrolledDatas = (courseId: number): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'DELETE FROM enrolled WHERE course_id = ?';
 
-        pool.query(query, [courseId], (err, result) => {
+        pool.query(query, [courseId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -60,7 +60,7 @@ const queryAdminDeleteChapterById = (chapterId: number): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'DELETE FROM chapters WHERE chapter_id = ?';
 
-        pool.query(query, [chapterId], (err, result) => {
+        pool.query(query, [chapterId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -74,7 +74,7 @@ const queryAdminDeleteLessonByChapterId = (chapterId: number): Promise<boolean> 
     return new Promise<boolean>((resolve, reject) => {
         const query = 'DELETE FROM lessons WHERE chapter_id = ?';
 
-        pool.query(query, [chapterId], (err, result) => {
+        pool.query(query, [chapterId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);

@@ -20,7 +20,7 @@ const queryAdminCourses = (pagin: number, limit: number): Promise<courseType[]> 
     return new Promise<courseType[]>((resolve, reject) => {
         const query = 'SELECT course_id, image, course_name, course_title, course_description, created_at, status FROM courses ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
 
-        pool.query(query, [limit, pagin], (err, result) => {
+        pool.query(query, [limit, pagin], (err, result: any) => {
             if (err) return reject(err);
             resolve(result);
         });
@@ -33,7 +33,7 @@ const queryUpdateCourse = (courseId: number, imageBuffer: Buffer, courseName: st
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE courses SET image = ?, course_name = ?, course_title = ?, course_description = ?, price = ?, full_price_discount = ? WHERE course_id = ? ';
 
-        pool.query(query, [imageBuffer, courseName, title, aboutCourse, price, discount, courseId], (err, result) => {
+        pool.query(query, [imageBuffer, courseName, title, aboutCourse, price, discount, courseId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0)
@@ -47,7 +47,7 @@ const queryCreteChapter = (courseId: number, chaptertitle: string, chapterNum: n
     return new Promise<boolean>((resolve, reject) => {
         const query = 'INSERT INTO chapters (course_id, chapter_title, chapter_number) VALUES (?, ?, ?)';
 
-        pool.query(query, [courseId, chaptertitle, chapterNum], (err, result) => {
+        pool.query(query, [courseId, chaptertitle, chapterNum], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -60,7 +60,7 @@ const queryChapterExist = (courseId: number, chapterNum: number): Promise<boolea
     return new Promise<boolean>((resolve, reject) => {
         const query = 'SELECT chapter_id FROM chapters WHERE course_id = ? AND chapter_number =  ?';
 
-        pool.query(query, [courseId, chapterNum], (err, result) => {
+        pool.query(query, [courseId, chapterNum], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.length > 0);
@@ -81,7 +81,7 @@ const queryChapter = (courseId: number, chapterId: number): Promise<queryChapter
     return new Promise<queryChapterType>((resolve, reject) => {
         const query = 'SELECT chapter_id, course_id, chapter_title, chapter_number FROM chapters WHERE course_id = ? AND chapter_id = ?';
 
-        pool.query(query, [courseId, chapterId], (err, result) => {
+        pool.query(query, [courseId, chapterId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result[0]);
@@ -95,7 +95,7 @@ const queryUpdateChapter = (courseId: number, chapterId: number, chapterNumber: 
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE chapters SET chapter_title = ?, chapter_number = ? WHERE course_id = ? AND chapter_id = ?';
 
-        pool.query(query, [chapterTitle, chapterNumber, courseId, chapterId], (err, result) => {
+        pool.query(query, [chapterTitle, chapterNumber, courseId, chapterId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -108,7 +108,7 @@ const queryLessonChapNumUpdate = (courseId: number, chapterId: number, chapterNu
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE lessons SET chapter_number = ? WHERE course_id = ? AND chapter_id = ?';
 
-        pool.query(query, [chapterNumber, courseId, chapterId], (err, result) => {
+        pool.query(query, [chapterNumber, courseId, chapterId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -121,7 +121,7 @@ const queryAdminLectureExist = (courseId: number, chapterId: number, lessonNumbe
     return new Promise<boolean>((resolve, reject) => {
         const query = 'SELECT lesson_id FROM lessons WHERE course_id = ? AND chapter_id = ? AND lesson_number = ?';
 
-        pool.query(query, [courseId, chapterId, lessonNumber], (err, result) => {
+        pool.query(query, [courseId, chapterId, lessonNumber], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.length > 0);
@@ -134,7 +134,7 @@ const queryAdminCreateLesson = (courseId: number, chapterId: number, chapterNumb
     return new Promise<boolean>((resolve, reject) => {
         const query = 'INSERT INTO lessons (course_id, chapter_id, chapter_number, lesson_number, lesson_title, opening_note, closing_note, audio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 
-        pool.query(query, [courseId, chapterId, chapterNumber, lessonNumber, lessonTitle, openingNote, closingNote, audio], (err, result) => {
+        pool.query(query, [courseId, chapterId, chapterNumber, lessonNumber, lessonTitle, openingNote, closingNote, audio], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -147,7 +147,7 @@ const queryAdminLectureUpdate = (courseId: number, chapterId: number, lessonId: 
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE lessons SET lesson_number = ?, lesson_title = ?, opening_note = ?, closing_note = ?, audio = ? WHERE course_id = ? AND chapter_id = ? AND lesson_id = ?';
 
-        pool.query(query, [lessonNumber, lessonTitle, openingNote, closingNote, audio, courseId, chapterId, lessonId], (err, result) => {
+        pool.query(query, [lessonNumber, lessonTitle, openingNote, closingNote, audio, courseId, chapterId, lessonId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);
@@ -172,7 +172,7 @@ const queryAdminLecture = (courseId: number, chapterId: number, lessonId: number
     return new Promise<lectureType>((resolve, reject) => {
         const query = 'SELECT opening_note, closing_note, course_id, chapter_id, chapter_number, lesson_number, lesson_title, lesson_id, audio FROM lessons WHERE course_id = ? AND chapter_id = ? AND lesson_id = ?';
 
-        pool.query(query, [courseId, chapterId, lessonId], (err, result) => {
+        pool.query(query, [courseId, chapterId, lessonId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -187,7 +187,7 @@ const queryUpdateCourseStatus = (courseId: number, status: string) => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'UPDATE courses SET status = ? WHERE course_id = ?';
 
-        pool.query(query, [status, courseId], (err, result) => {
+        pool.query(query, [status, courseId], (err, result: any) => {
             if (err) return reject(err);
 
             resolve(result.affectedRows > 0);

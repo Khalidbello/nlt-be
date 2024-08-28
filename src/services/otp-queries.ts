@@ -4,7 +4,7 @@ const queryDeleteOtp = (userId: number): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
         const query = 'DELETE FROM otp WHERE user_id = ?';
 
-        pool.query(query, [userId], (err, result) => {
+        pool.query(query, [userId], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -19,7 +19,7 @@ const querySaveOtp = async (userId: number, otp: number): Promise<boolean> => {
         const date = new Date();
         const query = 'INSERT INTO otp (user_id, otp, date) VALUES (?, ?, ?)';
 
-        pool.query(query, [userId, otp, date], (err, result) => {
+        pool.query(query, [userId, otp, date], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {
@@ -40,7 +40,7 @@ const queryOtp = async (userId: number): Promise<queryOtpType> => {
     return new Promise<queryOtpType>((resolve, reject) => {
         const query = 'SELECT user_id, otp, date FROM otp WHERE user_id = ?'
 
-        pool.query(query, [userId], (err, result) => {
+        pool.query(query, [userId], (err, result: any) => {
             if (err) {
                 reject(err);
             } else {

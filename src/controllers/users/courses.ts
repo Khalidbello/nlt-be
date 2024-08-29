@@ -31,8 +31,6 @@ const continueLast = async (req: Request, res: Response) => {
         // @ts-ignore
         const details: calcProgressType = await calcProgress(userId, enrolledData.course_id)
 
-        console.error('details', details);
-
         res.json({
             data: {
                 courseName: courseData.course_name,

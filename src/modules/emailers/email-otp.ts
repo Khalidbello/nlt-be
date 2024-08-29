@@ -16,7 +16,7 @@ const emailOtpSender = async (userEmail: string, firstName: string, otp: number)
         //console.log('html', html)
 
         // @ts-ignore
-        sendEmail(process.env.ADMIN_EMAIL, process.env.ADMIN_MAIL_P, userEmail, 'One time password', html)
+        sendEmail('noreply@lifestyleleverage.com.ng', process.env.ADMIN_MAIL_P, userEmail, 'One time password', html)
     } catch (err) {
         storeErrorMessage(err);
         console.error('errror sending email in corse enroll email', err);

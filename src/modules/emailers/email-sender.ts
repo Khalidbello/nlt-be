@@ -12,13 +12,15 @@ const sendEmail = async (userName: string, password: string, reciever: string, s
 
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail({
         to: [{ email: reciever, name: userName }],
-        sender: { email: 'bellokhalid74@gmail.com', name: 'Admin' },
+        sender: { email: 'sender@example.com', name: 'Sender Name' },
         subject: 'Your Subject Here',
         textContent: 'LifeStyleLeverage',
         htmlContent: htmlContent,
     });
 
     try {
+        console.log('sendSmtpEmail:', JSON.stringify(sendSmtpEmail, null, 2));
+
         const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
         console.log('API called successfully. Returned data: ' + JSON.stringify(data));
     } catch (error) {

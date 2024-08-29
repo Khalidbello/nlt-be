@@ -14,4 +14,4 @@ const transporter = (sender: string, password: string) => {
     return transporter;
 }
 
-export default transporter
+export default transporter;

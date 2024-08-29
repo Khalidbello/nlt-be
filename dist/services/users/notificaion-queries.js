@@ -45,10 +45,10 @@ const queryAddNewNotification = (userId, message, type) => {
     return new Promise((resolve, reject) => {
         const date = new Date();
         const query = 'INSERT INTO notifications (user_id, message, type, created_at, viewed) VALUES (?, ?, ?, ?, false)';
-        connnect_db_1.default.query(query, [userId, message, type, date], (err, resuult) => {
+        connnect_db_1.default.query(query, [userId, message, type, date], (err, result) => {
             if (err)
                 return reject(err);
-            resolve(resuult.affectedRows > 0);
+            resolve(result.affectedRows > 0);
         });
     });
 };

@@ -4,12 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initiateDbConnection = void 0;
-const mysql_1 = __importDefault(require("mysql"));
+//import mysql, { Pool, MysqlError } from 'mysql';
+const mysql = require('mysql2');
 const error_recorder_1 = __importDefault(require("./error-recorder"));
-const pool = mysql_1.default.createPool({
+const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
+    port: process.env.DB_PORT,
     database: process.env.DB_NAME,
 });
 function initiateDbConnection(app, port) {

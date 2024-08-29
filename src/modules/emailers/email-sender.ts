@@ -12,7 +12,7 @@ const sendEmail = async (userName: string, password: string, reciever: string, s
 
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail({
         to: [{ email: reciever, name: userName }],
-        sender: { email: process.env.ADMIN_EMAIL, name: 'Admin' },
+        sender: { email: 'bellokhalid74@gmail.com', name: 'Admin' },
         subject: 'Your Subject Here',
         textContent: 'LifeStyleLeverage',
         htmlContent: htmlContent,

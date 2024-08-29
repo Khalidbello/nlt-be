@@ -171,7 +171,7 @@ const getCourseView = async (req: Request, res: Response) => {
 
         if (details.enrolled) {
             const recentUpdate: boolean = await updateLastVisited(userId, parseInt(courseId));
-            console.error('last visited updated..........', recentUpdate);
+            //console.log('last visited updated..........', recentUpdate);
         }
     } catch (err) {
         console.error('error get course view...........', err)

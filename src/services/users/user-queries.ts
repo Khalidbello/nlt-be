@@ -134,9 +134,9 @@ const queryEnrolled = (userId: number, courseId: number): Promise<enrolledType> 
 // query to get recomended courses for user
 const queryCourses = (pagin: number, limit: number): Promise<courseType[]> => {
     return new Promise<courseType[]>((resolve, reject) => {
-        const query = 'SELECT course_id, image, course_name, course_title, course_description, created_at, status FROM courses WHERE status = ? OR ? ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
+        const query = 'SELECT course_id, image, course_name, course_title, course_description, created_at, status FROM  courses WHERE status != ? ORDER BY created_at DESC LIMIT  ? OFFSET  ?';
 
-        pool.query(query, ['active', 'soon', limit, pagin], (err, result: any) => {
+        pool.query(query, ['deactivated', limit, pagin], (err, result: any) => {
             if (err) return reject(err);
             resolve(result);
         });

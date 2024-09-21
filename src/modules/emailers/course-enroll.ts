@@ -14,7 +14,7 @@ const courseEnrollEmailSender = async (userEmail: string, firstName: string, pay
         });
 
         // @ts-ignore
-        sendEmail(process.env.ADMIN_EMAIL, process.env.ADMIN_MAIL_P, userEmail, 'Succesfull Course Enrollment', html)
+        sendEmail('Admin@lifestyleleverage.com.ng', process.env.ADMIN_MAIL_P, userEmail, 'Succesfull Course Enrollment', html)
     } catch (err) {
         console.error('errror sending email in corse enroll email', err);
     };

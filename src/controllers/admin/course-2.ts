@@ -18,7 +18,7 @@ const createChapter = async (req: Request, res: Response) => {
         if (!chapterCreated) throw 'something went wrong creating new chapter';
 
         res.json({ message: 'Chapter creatred sucesfully' });
-    } catch (err) {
+    } catch (err) {      
         console.error('error in creating chapter chapter', err);
         res.status(500).json({ message: err });
     };

@@ -190,6 +190,7 @@ const queryUpdateCourseStatus = (courseId: number, status: string) => {
         pool.query(query, [status, courseId], (err, result: any) => {
             if (err) return reject(err);
 
+            console.log('status update result', result);
             resolve(result.affectedRows > 0);
         });
     });

@@ -148,5 +148,269 @@
       "fatal": true
     },
     "timestamp": "August 28, 2024"
+  },
+  {
+    "message": {
+      "errno": -3008,
+      "code": "ENOTFOUND",
+      "syscall": "getaddrinfo",
+      "hostname": "mysql-120a3089-bellokhalid74-6a4e.l.aivencloud.com",
+      "fatal": true
+    },
+    "timestamp": "August 30, 2024"
+  },
+  {
+    "message": {
+      "errno": -3008,
+      "code": "ENOTFOUND",
+      "syscall": "getaddrinfo",
+      "hostname": "mysql-120a3089-bellokhalid74-6a4e.l.aivencloud.com",
+      "fatal": true
+    },
+    "timestamp": "August 30, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "errno": -3008,
+      "code": "ENOTFOUND",
+      "syscall": "getaddrinfo",
+      "hostname": "localhos",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ECONNREFUSED",
+      "fatal": true
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_ACCESS_DENIED_ERROR",
+      "errno": 1045,
+      "sqlState": "28000",
+      "sqlMessage": "Access denied for user 'avnadmin'@'localhost' (using password: YES)"
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_ACCESS_DENIED_ERROR",
+      "errno": 1045,
+      "sqlState": "28000",
+      "sqlMessage": "Access denied for user 'avnadmin'@'localhost' (using password: YES)"
+    },
+    "timestamp": "September 2, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_ACCESS_DENIED_ERROR",
+      "errno": 1045,
+      "sqlState": "28000",
+      "sqlMessage": "Access denied for user 'root'@'102.91.92.32' (using password: YES)"
+    },
+    "timestamp": "September 21, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_ACCESS_DENIED_ERROR",
+      "errno": 1045,
+      "sqlState": "28000",
+      "sqlMessage": "Access denied for user 'root'@'102.91.92.32' (using password: YES)"
+    },
+    "timestamp": "September 21, 2024"
+  },
+  {
+    "message": {
+      "code": "ER_ACCESS_DENIED_ERROR",
+      "errno": 1045,
+      "sqlState": "28000",
+      "sqlMessage": "Access denied for user 'root'@'102.91.92.32' (using password: YES)"
+    },
+    "timestamp": "September 21, 2024"
   }
 ]

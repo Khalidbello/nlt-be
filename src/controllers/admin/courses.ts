@@ -67,7 +67,6 @@ const editCourse = async (req: Request, res: Response) => {
 
 // function to fetch courses for admin
 const adminGetCourses = async (req: Request, res: Response) => {
-    console.error('in get courses admin.................')
     try {
         const data: any = [];
         const pagin = parseInt(req.params.pagin);
@@ -157,7 +156,7 @@ const setCourseStatus = async (req: Request, res: Response) => {
         const { courseId, status } = req.body;
         if (!courseId || !status) return res.status(401).json({ message: 'incomplete data sent to sever for processing.' });
 
-        const updated = await queryUpdateCourseStatus(courseId, status);
+        const updated = await queryUpdateCourseStatus(parseInt(courseId), status);
 
         if (!updated) throw 'Something went wrong updating course status';
         res.json({ message: 'Course status successfully updated' });

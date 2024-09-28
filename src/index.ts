@@ -31,6 +31,7 @@ if (process.env.NODE_ENV === 'production') {
     process.env.FLW_PB_KEY = process.env.FLW_PB_KEY;
     process.env.FLW_SCRT_KEY = process.env.FLW_SCRT_KEY;
     process.env.FLW_H = process.env.FLW_H;
+    process.env.DB_NAME = 'nlt-prod';
 }
 
 // lockingin middle wears

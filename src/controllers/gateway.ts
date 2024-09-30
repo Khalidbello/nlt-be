@@ -91,9 +91,9 @@ const webhookHandler = async (req: Request, res: Response) => {
 
         if (response.data.status !== "successful") return console.log("transaction not successfully carried out: in wallet top up");
 
-        queryAddNewNotification(
+        await queryAddNewNotification(
             response.data.meta.userId,
-            `Your payment of ₦ ${response.amount} have been succesfully recieved`,
+            `Your payment of ₦ ${response.data.amount} have been succesfully recieved`,
             "success"
         );
         enrollUser(response.data);

@@ -20,7 +20,7 @@ function initiateDbConnection(app: Express, port: string | number) {
             process.exit(1);
         }
 
-        console.log('Connected to MYSQL as ID ' + connection.threadId);
+        console.log('Connected to MYSQL as ID ' + connection.threadId, 'Db name: ' + process.env.DB_NAME);
         connection.release(); // relawease connection back to pool
 
         app.listen(port, () => {

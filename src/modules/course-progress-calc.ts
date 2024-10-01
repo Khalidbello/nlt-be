@@ -60,7 +60,7 @@ const calcProgress = async (userId: number, courseId: number): Promise<calcProgr
                 numOfChapter: chapters.length,
                 numOfLessons: totalLessonNumber,
                 quiz: enrolledData?.quiz_performance,
-                percentageCompletion,
+                percentageCompletion: Math.floor(percentageCompletion),
                 enrolled,
                 currentLesson: enrolledData?.current_lesson_number,
                 currentChapter: enrolledData?.current_chapter_number,

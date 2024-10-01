@@ -152,7 +152,7 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
         const courseId = parseInt(req.params.courseId);
         const chapterId = parseInt(req.params.chapterId);
         const lessonId = parseInt(req.params.lessonId);
-        const { percentage } = req.body;
+        const { percentage, noQuiz } = req.body;
         let nextLessonNumber: number;
         let nextchapterNumber: number;
 
@@ -223,7 +223,7 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
         const lesson = await queryLessonByChapterAndNUmber(courseId, nextchapterNumber, nextLessonNumber);
 
         // update user enrollment data
-        const update: boolean = await updateUserEnrolledCurrentLessonAndChapter(userId, courseId, lesson.chapter_id, lesson.lesson_id, nextchapterNumber, nextLessonNumber, (percentage + enrolled.quiz_performance) / 2);
+        const update: boolean = await updateUserEnrolledCurrentLessonAndChapter(userId, courseId, lesson.chapter_id, lesson.lesson_id, nextchapterNumber, nextLessonNumber, ((noQuiz ? enrolled.quiz_performance : percentage) + enrolled.quiz_performance) / 2);
 
 
         //@ts-ignore

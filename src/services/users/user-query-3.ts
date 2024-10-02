@@ -35,7 +35,7 @@ const queryNewEnrollment = (userId: number, courseId: number, payment: 'free' | 
 
         const query = `INSERT INTO enrolled (user_id, course_id, payment_type, enrolled_at, last_visited, current_lesson_id, current_chapter_id, current_lesson_number, current_chapter_number, quiz_performance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-        pool.query(query, [userId, courseId, payment, date, date, lessonId, chapterId, 1, 1, 100], (err, result: any) => {
+        pool.query(query, [userId, courseId, payment, date, date, lessonId, chapterId, 1, 1, 0], (err, result: any) => {
             if (err) {
                 reject(err)
             } else {

@@ -64,6 +64,7 @@ const generateOneTimeAcc = async (req: Request, res: Response) => {
 // function to responsd ti webhok event
 const webhookHandler = async (req: Request, res: Response) => {
     try {
+        console.log('In webhook handler');
         const signature = req.headers['verif-hash'];
         let payload;
         let meta;
@@ -73,7 +74,7 @@ const webhookHandler = async (req: Request, res: Response) => {
             return res.status(401).end();
         };
 
-        payload = req.body;
+        payload = req.body; console.log('payload n webhook handler', payload);
 
         if (payload.status !== "successful") return console.log('payment failed..... in webhook handler.......');
 

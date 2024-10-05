@@ -76,7 +76,7 @@ app.get('/', (req: Request, res: Response) => {
 
 // Catch-all route to handle 404 errors
 app.use((req: Request, res: Response, next: NextFunction) => {
-    res.status(404).send(`404 Not Found in admin:::::::::: path ${ req.url} `);
+    res.status(404).send(`404 Not Found in :::::::::: path ${ req.url} `);
 });
 
 

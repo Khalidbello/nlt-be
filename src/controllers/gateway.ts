@@ -88,7 +88,7 @@ const webhookHandler = async (req: Request, res: Response) => {
     payload = req.body;
     console.log("payload n webhook handler", payload);
 
-    if (payload.status !== "successful")
+    if (payload.status !== "successful" || payload.data.status === "successful")
       return console.log("payment failed..... in webhook handler.......");
 
     const id = payload.id;

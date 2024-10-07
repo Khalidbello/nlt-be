@@ -131,7 +131,6 @@ router.get("/enroll-free/:courseId", (req: Request, res: Response) =>
 );
 
 // user profile related
-
 router.post("/edit-dp", (req: Request, res: Response) =>
   userDpUpload(req, res)
 );

@@ -85,11 +85,17 @@ const webhookHandler = async (req: Request, res: Response) => {
       return res.status(401).end();
     }
 
+    res.json({ ok: "Ok" });
+
     payload = req.body;
     console.log("payload n webhook handler", payload);
 
-    if (payload.status !== "successful" || payload.data.status === "successful")
-      return console.log("payment failed..... in webhook handler.......");
+    // if (
+    //   payload.status !== "successful" ||
+    //   payload.data.status !== "successful"
+    // ) {
+    //   return console.log("payment failed..... in webhook handler.......");
+    // }
 
     const id = payload.id;
     const reference = Number(payload.txRef);
@@ -102,15 +108,29 @@ const webhookHandler = async (req: Request, res: Response) => {
     );
 
     const response = await flw.Transaction.verify({ id: id });
-    //console.log('transaction details', response);
+    console.log("transaction details for verification......... ", response);
 
-    if (response.status !== "success")
+    if (response.status !== "success") {
+      await queryAddNewNotification(
+        response.data.meta.userId,
+        `an error occured processing your payment of ₦ ${response.data.amount}. Please report an issue for rapid resolving.`,
+        "error"
+      );
+
       return console.log("error occured while confirming tansacion");
+    }
 
-    if (response.data.status !== "successful")
+    if (response.data.status !== "successful") {
+      await queryAddNewNotification(
+        response.data.meta.userId,
+        `an error occured processing your payment of ₦ ${response.data.amount}. Please report an issue for rapid resolving.`,
+        "error"
+      );
+
       return console.log(
         "transaction not successfully carried out: in wallet top up"
       );
+    }
 
     await queryAddNewNotification(
       response.data.meta.userId,

@@ -97,7 +97,7 @@ const webhookHandler = async (req: Request, res: Response) => {
     //   return console.log("payment failed..... in webhook handler.......");
     // }
 
-    const id = payload.id;
+    const id = payload.id || payload.data.id;
     const reference = Number(payload.txRef);
     const amount = Number(payload.amount);
 

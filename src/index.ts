@@ -45,7 +45,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // cors confi
 const corsOption = {
   origin: [
-    " http://localhost",
+    "http://localhost",
+    "https://localhost",
     "https://lifestyleleverage.com.ng",
     "http://lifestyleleverage.com.ng",
   ], // Replace with your frontend's origin
@@ -57,7 +58,7 @@ const sessionOption = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: false, // Set to true if using HTTPS
+    secure: process.env.NODE_ENV === "production", // true if in production, // Set to true if using HTTPS
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   },

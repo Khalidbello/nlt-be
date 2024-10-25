@@ -58,7 +58,7 @@ const sessionOption = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: process.env.NODE_ENV === "production", // true if in production, // Set to true if using HTTPS
+    secure: false, //process.env.NODE_ENV === "production", // true if in production, // Set to true if using HTTPS
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   },

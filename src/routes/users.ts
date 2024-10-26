@@ -9,6 +9,7 @@ import {
   getQuiz,
   handleQuizSubmission,
   getCoursePrice,
+  getCourseImage,
 } from "../controllers/users/courses";
 import {
   getUserDp,
@@ -84,6 +85,10 @@ router.get("/continue-last", (req: Request, res: Response) =>
 router.get("/courses/:pagin/:limit", (req: Request, res: Response) =>
   getCourses(req, res)
 );
+
+router.get("/course-image/:course_id", (req: Request, res: Response) => {
+  getCourseImage(req, res);
+});
 
 router.get("/enrolled-courses/:pagin/:limit", (req: Request, res: Response) =>
   getEnrolledCourses(req, res)

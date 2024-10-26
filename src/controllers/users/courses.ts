@@ -159,7 +159,6 @@ const getEnrolledCourses = async (req: Request, res: Response) => {
       courses[i].isEnrolled = details.enrolled;
       courses[i].lastVisited = details.lastVisited;
       courses[i].progress = details.percentageCompletion;
-      courses[i].image = Buffer.from(courses[i].image).toString("base64");
       courses[i].enrolledStudents = await queryCourseEnrolledStudent(courseId);
       i++;
     }
@@ -183,8 +182,6 @@ const getCourseView = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "insuficient data sent to user" });
 
     const courseData: courseType = await queryCourse(parseInt(courseId));
-    // set image
-    courseData.image = Buffer.from(courseData.image).toString("base64");
     const details: calcProgressType = await calcProgress(
       //@ts-expect-error
       parseInt(userId),
@@ -196,7 +193,6 @@ const getCourseView = async (req: Request, res: Response) => {
       courseId: courseData.course_id,
       about: courseData.course_description,
       enrolled: details.enrolled,
-      image: courseData.image,
       status: courseData.status,
       quizPerfomace: details.quiz,
       progress: details.percentageCompletion,

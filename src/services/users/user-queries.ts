@@ -72,7 +72,7 @@ const createNewUser = async (
 const queryCourse = async (courseId: number): Promise<courseType> => {
   return new Promise<courseType>((resolve, reject) => {
     const query =
-      "SELECT course_name, course_id, image, course_title, course_description, created_at, price, full_price_discount, status FROM courses WHERE course_id = ?";
+      "SELECT course_name, course_id, course_title, course_description, created_at, price, full_price_discount, status FROM courses WHERE course_id = ?";
 
     pool.query(query, [courseId], (err, result: any) => {
       if (err) {

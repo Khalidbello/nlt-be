@@ -11,6 +11,7 @@ import auth from "./routes/auth";
 import admin from "./routes/admin";
 import users from "./routes/users";
 import paymentGateWay from "./routes/payment-gateway";
+import cookieParser from "cookie-parser";
 
 // Create an Express application
 const app = express();
@@ -33,34 +34,38 @@ if (process.env.NODE_ENV === "production") {
 
 // lockingin middle wears
 
+// Use cookie-parser middleware
+app.use(cookieParser());
+
 app.use((req: Request, res: Response, next: NextFunction) => {
   console.log("Received request:", {
     method: req.method,
     url: req.url,
     headers: req.headers,
+    cookies: req.cookies, // Log cookies
   });
   next();
 });
-
-// cors confi
+// cors config
 const corsOption = {
   origin: [
+    "capacitor://localhost",
     "http://localhost",
     "https://localhost",
     "https://lifestyleleverage.com.ng",
     "http://lifestyleleverage.com.ng",
   ], // Replace with your frontend's origin
-  credentials: true,
+  credentials: true, // Allow credentials (cookies) to be included in requests
 };
 
 const sessionOption = {
-  secret: "your-secret-key", // Replace with a strong secret
+  secret: "your-secret-key",
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
-    secure: false, //process.env.NODE_ENV === "production", // true if in production, // Set to true if using HTTPS
+    secure: false,
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24, // 1 day
+    maxAge: 1000 * 60 * 60 * 24,
   },
 };
 

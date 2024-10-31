@@ -295,9 +295,12 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
             lesson.lesson_id,
             nextchapterNumber - 1,
             numOfLessonInChapter,
-            lessonData.lesson_number === 1 && lessonData.chapter_number === 1
-              ? percentage
-              : (percentage + enrolled.quiz_performance) / 2
+            computeQuizScore(
+              lessonData.lesson_number,
+              lessonData.chapter_number,
+              percentage,
+              enrolled.quiz_performance
+            )
           );
 
         if (!updated2) throw "error updating user course progress";
@@ -346,6 +349,18 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
     console.error("error in get submit quiz...........", err);
     res.status(500).json({ message: err });
   }
+};
+
+// helper function to compute quiz score
+const computeQuizScore = (
+  lessonNumber: number,
+  chapterNumber: number,
+  percentage: number,
+  prevPerformance: number
+): number => {
+  if (lessonNumber === 1 && chapterNumber === 1) return percentage;
+
+  return (percentage + prevPerformance) / 2;
 };
 
 // handler toge course price

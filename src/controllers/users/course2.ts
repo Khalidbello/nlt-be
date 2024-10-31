@@ -295,9 +295,9 @@ const handleQuizSubmission = async (req: Request, res: Response) => {
             lesson.lesson_id,
             nextchapterNumber - 1,
             numOfLessonInChapter,
-            (lessonData.lesson_number === 1 && lessonData.chapter_number === 1
+            lessonData.lesson_number === 1 && lessonData.chapter_number === 1
               ? percentage
-              : percentage + enrolled.quiz_performance) / 2
+              : (percentage + enrolled.quiz_performance) / 2
           );
 
         if (!updated2) throw "error updating user course progress";
